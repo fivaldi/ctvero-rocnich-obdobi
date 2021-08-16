@@ -1,0 +1,28 @@
+# This Dockerfile generates the project's skeleton. It's intended for initial
+# population of the repository and documents only how it was created. However,
+# you can use it for another new project in a different repository.
+# Feel free to copy it and build a vanilla Lumen project of your own.
+#
+# Commands:
+#     $ docker build -f Dockerfile-DO-NOT-USE .
+#     $ container_id=$(docker create <built_image>)
+#     $ docker cp $container_id:/new-app /my/brand/new/lumen/repo/project.git
+#
+# After this, move the new-app files and subdirectories to the root of the
+# git repository and perform any manual merges, e.g. .env, .gitignore etc.
+#
+
+FROM php:8.0-fpm-alpine
+
+WORKDIR /new-app
+
+# Install composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    # FIXME: You'll probably need to change the hash with a new version of composer... FIXME
+    php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+    php composer-setup.php && \
+    php -r "unlink('composer-setup.php');" && \
+    mv composer.phar /usr/local/bin/composer
+
+# Generate the project
+RUN composer create-project --prefer-dist laravel/lumen .
