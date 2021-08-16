@@ -1,5 +1,4 @@
 /.dev-mysql-data
-.env
 .phpunit.result.cache
 /.idea
 /vendor

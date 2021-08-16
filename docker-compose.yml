@@ -5,24 +5,31 @@
 # DO NOT USE FOR PRODUCTION !!! DO NOT USE FOR PRODUCTION !!!
 
 ---
-version: "3.3"
+version: "2.4"
 
 services:
   lumen:
-    image: php:8.0-fpm-alpine
+    build: .
     ports:
-      - "8000:8000"
+      - 8000:8000
     volumes:
       - .:/var/www/html
-    command: php -S lumen:8000 -t public
+    command: sh -c 'php artisan migrate && php -S lumen:8000 -t public'
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: mariadb:10
     restart: always
     env_file:
       - dev.env
-    command: mysqld
     volumes:
-      - ./.dev-mysql-data:/var/lib/mysql:rw
+      - ./.dev-mysql-data:/var/lib/mysql:Z
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: sh -c 'echo SELECT 1 | mysql -psecret'
+      interval: 5s
+      timeout: 5s
+      retries: 100
