@@ -1,6 +1,9 @@
-/.dev-mysql-data
 .phpunit.result.cache
+/.dev-mysql-data
 /.idea
 /vendor
 Homestead.json
 Homestead.yaml
+composer-setup.php
+composer.lock
+composer.phar

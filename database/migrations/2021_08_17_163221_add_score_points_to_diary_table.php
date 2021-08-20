@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoryTable extends Migration
+class AddScorePointsToDiaryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,8 @@ class CreateCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->string('image_src');
-            $table->timestamps();
-        });
         Schema::table('diary', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained('category');
+            $table->integer('score_points')->nullable();
         });
     }
 
@@ -32,9 +26,7 @@ class CreateCategoryTable extends Migration
     public function down()
     {
         Schema::table('diary', function (Blueprint $table) {
-            $table->dropForeign('diary_category_id_foreign');
-            $table->dropColumn('category_id');
+            $table->dropColumn('score_points');
         });
-        Schema::dropIfExists('category');
     }
 }

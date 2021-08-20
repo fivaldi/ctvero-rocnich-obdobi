@@ -1,0 +1,7 @@
+.tm-section-head a,
+.tm-section-head a:hover,
+.tm-section-head a:visited,
+.tm-section-head a:active {
+    color: inherit;
+    text-decoration: none;
+}

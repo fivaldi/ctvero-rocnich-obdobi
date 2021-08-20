@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoryTable extends Migration
+class CreateContestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,18 @@ class CreateCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('category', function (Blueprint $table) {
+        Schema::create('contest', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('image_src');
+            $table->dateTime('contest_start');
+            $table->dateTime('contest_end');
+            $table->dateTime('submission_start');
+            $table->dateTime('submission_end');
+            $table->json('options')->nullable();
             $table->timestamps();
         });
         Schema::table('diary', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained('category');
+            $table->foreignId('contest_id')->constrained('contest');
         });
     }
 
@@ -32,9 +36,9 @@ class CreateCategoryTable extends Migration
     public function down()
     {
         Schema::table('diary', function (Blueprint $table) {
-            $table->dropForeign('diary_category_id_foreign');
-            $table->dropColumn('category_id');
+            $table->dropForeign('diary_contest_id_foreign');
+            $table->dropColumn('contest_id');
         });
-        Schema::dropIfExists('category');
+        Schema::dropIfExists('contest');
     }
 }

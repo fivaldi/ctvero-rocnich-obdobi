@@ -16,7 +16,7 @@ class CreateDiaryTable extends Migration
         Schema::create('diary', function (Blueprint $table) {
             $table->id();
             $table->string('call_sign');
-            $table->string('diary_url');
+            $table->string('diary_url')->unique();
             $table->string('qth_name');
             $table->string('qth_locator');
             $table->integer('qso_count');

@@ -9,17 +9,19 @@ version: "2.4"
 
 services:
   lumen:
+    container_name: ctvero-lumen
     build: .
     ports:
       - 8000:8000
     volumes:
       - .:/var/www/html
-    command: sh -c 'php artisan migrate && php -S lumen:8000 -t public'
+    command: sh -c 'composer install && php artisan migrate && php -S lumen:8000 -t public'
     restart: always
     depends_on:
       db:
         condition: service_healthy
   db:
+    container_name: ctvero-db
     image: mariadb:10
     restart: always
     env_file:

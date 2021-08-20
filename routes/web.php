@@ -13,6 +13,18 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->get('/', [
+    'as' => 'index',
+    'uses' => '\App\Http\Controllers\IndexController@show'
+]);
+$router->get('/hlaseni', function () use ($router) {
+    return view('submission');
 });
+$router->post('/message', [
+    'as' => 'message',
+    'uses' => '\App\Http\Controllers\MessageController@send'
+]);
+$router->get('/vysledky', [
+    'as' => 'results',
+    'uses' => '\App\Http\Controllers\ResultsController@show'
+]);
