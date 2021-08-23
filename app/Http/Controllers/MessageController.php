@@ -25,12 +25,12 @@ class MessageController extends BaseController
         ], $messages);
 
         if ($validator->fails()) {
-            $request->session()->put('mailErrors', $validator->errors()->all());
+            $request->session()->flash('mailErrors', $validator->errors()->all());
             return redirect('/#tm-section-6');
         }
 
         if (trim($request->input('spamCheck')) != 2) {
-            $request->session()->put('mailErrors', array('Kontrola proti spamu není úspěšná.'));
+            $request->session()->flash('mailErrors', array('Kontrola proti spamu není úspěšná.'));
             return redirect('/#tm-section-6');
         }
 
@@ -39,9 +39,9 @@ class MessageController extends BaseController
                                    $request->input('subject'),
                                    $request->input('message'));
             Mail::to(config('ctvero.ownerMail'))->send($msg);
-            $request->session()->put('mailSuccess', 'Zpráva byla úspěšně odeslána.');
+            $request->session()->flash('mailSuccess', 'Zpráva byla úspěšně odeslána.');
         } catch (\Exception $e) {
-            $request->session()->put('mailErrors', array('Odeslání zprávy se nezdařilo.'));
+            $request->session()->flash('mailErrors', array('Odeslání zprávy se nezdařilo.'));
         }
         return redirect('/#tm-section-6');
     }

@@ -151,11 +151,12 @@
         <div class="row">
             <div class="col-lg-7 col-md-7 col-xs-12">
                 <div class="contact_message">
-                    @if (isset($mailSuccess))
+                    <h2 class="mb-4">Kontaktní formulář</h2>
+                    @if ($mailSuccess = request()->session()->get('mailSuccess'))
                         <div class="alert alert-success">
                             {{ $mailSuccess }}
                         </div>
-                    @elseif (isset($mailErrors))
+                    @elseif ($mailErrors = request()->session()->get('mailErrors'))
                         <div class="alert alert-danger">
                             @if (count($mailErrors) == 1)
                                 {{ $mailErrors[0] }}
@@ -169,25 +170,23 @@
                         </div>
                     @endif
                     <form action="message" method="post" class="contact-form">
-                        <div class="row mb-2">
-                            <div class="form-group col-xl-6">
-                                <div class="form-group col-xl-6">
-                                    E-mail<input name="email" size="25" value=""><br>
-                                </div>
-                                <div class="form-group col-xl-6">
-                                    Předmět<input name="subject" size="25" value=""><br>
-                                </div>
-                                <div class="form-group col-xl-6">
-                                    1 + 1 = <input name="spamCheck" size="10" value=""><br>
-                                </div>
-                                <div class="form-group col-xl-6">
-                                    Zpráva<textarea name="message" rows="6" cols="55"></textarea><br>
-                                </div>
-                                <div class="form-group col-xl-6">
-                                    <input type="submit" value="Odeslat">
-                                </div>
-                            </div>
-                       </div>
+                        <div class="form-group row align-items-center col-12">
+                            <label for="email" class="col-2">E-mail</label>
+                            <input name="email" type="email" class="form-control col-10" id="email" placeholder="name@example.com">
+                        </div>
+                        <div class="form-group row align-items-center col-12">
+                            <label for="subject" class="col-2">Předmět</label>
+                            <input name="subject" type="text" class="form-control col-10" id="subject" placeholder="Předmět zprávy">
+                        </div>
+                        <div class="form-group row align-items-center col-12">
+                            <label for="spamCheck" class="col-2">1 + 1 =</label>
+                            <input name="spamCheck" type="text" class="form-control col-1" id="spamCheck" placeholder="?">
+                        </div>
+                        <div class="form-group row col-12">
+                            <label for="message">Zpráva</label>
+                            <textarea name="message" class="form-control" id="message" placeholder="Text zprávy" rows="6"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Odeslat</button>
                     </form>
                 </div>
             </div>

@@ -17,14 +17,10 @@ class IndexController extends BaseController
         $lastYearContests = Contest::lastYear();
         $lastContestDiaries = DiaryController::listContestDiaries($lastContest);
         $categories = Category::allOrdered();
-        $mailSuccess = $request->session()->pull('mailSuccess', NULL);
-        $mailErrors = $request->session()->pull('mailErrors', NULL);
 
         return view('index', [ 'lastYearContests' => $lastYearContests,
                                'useScorePoints' => $useScorePoints,
                                'lastContestDiaries' => $lastContestDiaries,
-                               'categories' => $categories,
-                               'mailSuccess' => $mailSuccess,
-                               'mailErrors' => $mailErrors ]);
+                               'categories' => $categories ]);
     }
 }
