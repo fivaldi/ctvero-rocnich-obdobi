@@ -20,6 +20,7 @@ class CreateDiaryTable extends Migration
             $table->string('qth_name');
             $table->string('qth_locator');
             $table->integer('qso_count');
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

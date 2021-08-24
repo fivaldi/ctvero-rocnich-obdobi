@@ -47,4 +47,9 @@ class Contest extends Model
     {
         return $query->orderBy('contest_start', 'desc')->get();
     }
+
+    public function scopeSubmissionActiveOrdered($query)
+    {
+        return $query->whereRaw('NOW() BETWEEN submission_start AND submission_end ORDER BY submission_start DESC')->get();
+    }
 }

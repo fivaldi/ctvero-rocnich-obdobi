@@ -17,12 +17,17 @@ $router->get('/', [
     'as' => 'index',
     'uses' => '\App\Http\Controllers\IndexController@show'
 ]);
-$router->get('/hlaseni', function () use ($router) {
-    return view('submission');
-});
+$router->get('/hlaseni', [
+    'as' => 'submissionForm',
+    'uses' => '\App\Http\Controllers\SubmissionController@show'
+]);
 $router->post('/message', [
     'as' => 'message',
     'uses' => '\App\Http\Controllers\MessageController@send'
+]);
+$router->post('/submission', [
+    'as' => 'submission',
+    'uses' => '\App\Http\Controllers\SubmissionController@submit'
 ]);
 $router->get('/vysledky', [
     'as' => 'results',
