@@ -68,13 +68,7 @@ class SubmissionController extends Controller
         }
     }
     public function processCbpmrInfo() {
-        $context = stream_context_create(
-            array(
-                'http' => array(
-                    'follow_location' => false
-                )
-            )
-        );
+        $context = stream_context_create([ 'http' => [ 'follow_location' => false ] ]);
         $html = file_get_contents($this->diaryUrl, false, $context);
         $finalUrl = NULL;
         foreach ($http_response_header as $header) {
@@ -85,7 +79,9 @@ class SubmissionController extends Controller
             }
         }
 
-        $data = json_decode(file_get_contents($finalUrl));
+        $auth = base64_encode(config('ctvero.cbpmrInfoApiAuthUsername') . ':' . config('ctvero.cbpmrInfoApiAuthPassword'));
+        $new_context = stream_context_create([ 'http' => [ 'header' => 'Authorization: Basic ' . $auth ] ]);
+        $data = json_decode(file_get_contents($finalUrl, false, $new_context));
         $this->callSign = $data->callName;
         $this->qthName = $data->place;
         $this->qthLocator = $data->locator;

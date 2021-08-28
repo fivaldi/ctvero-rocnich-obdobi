@@ -12,4 +12,6 @@ return [
         'https://www.cbpmr.info/share/' => 'CbpmrInfo',
     ],
     'cbpmrInfoApiUrl' => env('CTVERO_CBPMR_INFO_API_URL'),
+    'cbpmrInfoApiAuthUsername' => env('CTVERO_CBPMR_INFO_API_AUTH_USERNAME'),
+    'cbpmrInfoApiAuthPassword' => env('CTVERO_CBPMR_INFO_API_AUTH_PASSWORD'),
 ];
