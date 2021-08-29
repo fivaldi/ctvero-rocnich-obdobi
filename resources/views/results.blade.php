@@ -40,8 +40,9 @@
                             <th width="50" bgcolor="silver">Deník</th>
                             <th width="50" bgcolor="silver">QSO</th>
                             @if ($useScorePoints)
-                            <th width="50" bgcolor="silver">Body</th></tr>
+                            <th width="50" bgcolor="silver">Body</th>
                             @endif
+                        </tr>
                         @foreach ($allContestsDiaries[$contest_name][$category['id']] as $diary)
                             @if ($loop->index < 3)
                             <tr style="font-weight: bold;">
