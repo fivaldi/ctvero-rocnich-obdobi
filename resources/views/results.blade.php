@@ -44,11 +44,7 @@
                             @endif
                         </tr>
                         @foreach ($allContestsDiaries[$contest_name][$category['id']] as $diary)
-                            @if ($loop->index < 3)
-                            <tr style="font-weight: bold;">
-                            @else
-                            <tr style="font-weight: normal;">
-                            @endif
+                            <tr style="font-weight: {{ $loop->index < 3 ? 'bold' : 'normal' }}">
                                 <td>{{ $loop->iteration }}.</td>
                                 <td>{{ date('j.n.Y', strtotime($diary['created_at'])) }}</td>
                                 <td class="font-weight: lighter;">{{ $diary['call_sign'] }}</td>
