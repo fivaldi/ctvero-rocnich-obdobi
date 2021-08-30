@@ -32,15 +32,16 @@
                         <h4 class="mt-3">{{ $category['name'] }}</h4>
 
                         <table class="small text-left" style="width: 100%">
-                        <tr><th width="50" bgcolor="silver">Pořadí</th>
-                            <th width="50" bgcolor="silver">Datum</th>
-                            <th width="100" bgcolor="silver">Volačka</th>
-                            <th width="100" bgcolor="silver">QTH</th>
-                            <th width="50" bgcolor="silver">Lokátor</th>
-                            <th width="50" bgcolor="silver">Deník</th>
-                            <th width="50" bgcolor="silver">QSO</th>
+                        <tr style="background-color: silver">
+                            <th width="50">Pořadí</th>
+                            <th width="50">Datum</th>
+                            <th width="100">Volačka</th>
+                            <th width="100">QTH</th>
+                            <th width="50">Lokátor</th>
+                            <th width="50">Deník</th>
+                            <th width="50">QSO</th>
                             @if ($useScorePoints)
-                            <th width="50" bgcolor="silver">Body</th>
+                            <th width="50">Body</th>
                             @endif
                         </tr>
                         @foreach ($allContestsDiaries[$contest_name][$category['id']] as $diary)
