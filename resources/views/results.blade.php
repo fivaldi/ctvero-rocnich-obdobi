@@ -47,7 +47,7 @@
                             <tr style="font-weight: {{ $loop->index < 3 ? 'bold' : 'normal' }}">
                                 <td>{{ $loop->iteration }}.</td>
                                 <td>{{ date('j.n.Y', strtotime($diary['created_at'])) }}</td>
-                                <td class="font-weight: lighter;">{{ $diary['call_sign'] }}</td>
+                                <td>{{ $diary['call_sign'] }}</td>
                                 <td>{{ $diary['qth_name'] }}</td>
                                 <td>{{ $diary['qth_locator'] }}</td>
                                 <td><a href="{{ $diary['diary_url'] }}" target="_blank">deník</a></td>
