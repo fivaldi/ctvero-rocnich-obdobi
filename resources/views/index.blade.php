@@ -106,18 +106,19 @@
                     <div class="media-body tm-box-5">
                         <h2>{{ $category['name'] }}</h2>
 
-                        <font size="2" >
-                        <table style="text-align:left; width:100%">
-                            <tr><th width="50">Datum</th>
+                        <table class="small text-left" style="width: 100%">
+                            <tr style="background-color: silver">
+                                <th width="50">Datum</th>
                                 <th width="100">Volačka</th>
                                 <th width="100">QTH</th>
                                 <th width="50">Lokátor</th>
                                 <th width="50">Deník</th>
                                 <th width="50">Počet QSO</th>
                                 @if ($useScorePoints)
-                                <th width="50">Body</th></tr>
+                                <th width="50">Body</th>
                                 @endif
-                            @foreach (array_slice($lastContestDiaries[$category['id']], 0, 3) as $diary)
+                            </tr>
+                            @foreach (array_slice($lastContestDiaries[$category['id']] ?? [], 0, 3) as $diary)
                                 <tr><td>{{ date('j.n.Y', strtotime($diary['created_at'])) }}</td>
                                     <td>{{ $diary['call_sign'] }}</td>
                                     <td>{{ $diary['qth_name'] }}</td>
@@ -125,11 +126,11 @@
                                     <td><a href="{{ $diary['diary_url'] }}" target="_blank">deník</a></td>
                                     <td>{{ $diary['qso_count'] }}</td>
                                     @if ($useScorePoints)
-                                    <td>{{ $diary['score_points'] }}</td></tr>
+                                    <td>{{ $diary['score_points'] }}</td>
                                     @endif
+                                </tr>
                             @endforeach
                         </table>
-                        </font>
 
                     </div>
                 </div>
