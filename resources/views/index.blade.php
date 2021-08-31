@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-xl-20 col-lg-20 col-md-12">
                 <header>
-                <h2>Novinky o oznámení</h2>
+                <h2>Novinky a oznámení</h2>
                 </header>
                 {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/news.md')) }}
             </div>
