@@ -21,6 +21,10 @@ $router->get('/hlaseni', [
     'as' => 'submissionForm',
     'uses' => '\App\Http\Controllers\SubmissionController@show'
 ]);
+$router->get('/kalendar', [
+    'as' => 'calendar',
+    'uses' => '\App\Http\Controllers\CalendarController@download'
+]);
 $router->post('/message', [
     'as' => 'message',
     'uses' => '\App\Http\Controllers\MessageController@send'

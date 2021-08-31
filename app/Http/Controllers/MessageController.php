@@ -26,12 +26,12 @@ class MessageController extends BaseController
 
         if ($validator->fails()) {
             $request->session()->flash('mailErrors', $validator->errors()->all());
-            return redirect(route('index') . '#tm-section-6');
+            return redirect(route('index') . '#contact-form');
         }
 
         if (trim($request->input('spamCheck')) != 2) {
             $request->session()->flash('mailErrors', array('Kontrola proti spamu není úspěšná.'));
-            return redirect(route('index') . '#tm-section-6');
+            return redirect(route('index') . '#contact-form');
         }
 
         try {
@@ -43,6 +43,6 @@ class MessageController extends BaseController
         } catch (\Exception $e) {
             $request->session()->flash('mailErrors', array('Odeslání zprávy se nezdařilo.'));
         }
-        return redirect(route('index') . '#tm-section-6');
+        return redirect(route('index') . '#contact-form');
     }
 }

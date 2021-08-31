@@ -62,10 +62,23 @@
         <div class="loader-section section-right"></div>
     </div>
     <div class="container">
+        @if ($errors = request()->session()->get('errors'))
+            <div class="alert alert-danger">
+                @if (count($errors) == 1)
+                    {{ $errors[0] }}
+                @else
+                    <ul>
+                    @foreach ($errors as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                    </ul>
+                @endif
+            </div>
+        @endif
 
         <section class="tm-section-head" id="top">
             <header id="header" class="text-center tm-text-gray">
-                <h1><a href="/">Čtvero ročních období</a></h1>
+                <h1><a href="{{ route('index') }}">Čtvero ročních období</a></h1>
                 <p>CB soutěž</p>
             </header>
 
@@ -82,18 +95,18 @@
                 <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="/">Home
+                            <a class="nav-link tm-text-gray" href="{{ route('index') }}">Home
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="hlaseni">Hlášení</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('submissionForm') }}">Hlášení</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="vysledky">Výsledky</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('results') }}">Výsledky</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="/#tm-section-6">Kontakt</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('index') . '#contact-form' }}">Kontakt</a>
                         </li>
                     </ul>
                 </div>
@@ -113,16 +126,16 @@
 
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="/">Home</a>
+                        <a href="{{ route('index') }}">Home</a>
                     </li>
                     <li>
-                        <a href="hlaseni" target="">Hlášení</a>
+                        <a href="{{ route('submissionForm') }}" target="">Hlášení</a>
                     </li>
                     <li>
-                        <a href="vysledky">Výsledky</a>
+                        <a href="{{ route('results') }}">Výsledky</a>
                     </li>
                     <li>
-                        <a href="/#tm-section-6">Kontakt</a>
+                        <a href="{{ route('index') . '#contact-form' }}">Kontakt</a>
                     </li>
                 </ul>
             </div>

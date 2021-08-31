@@ -8,7 +8,7 @@
         <div class="row">
 
             <div class="col-xl-12 col-lg-12 col-md-12">
-                <h2>Kompletní výsledkové listiny</h2>
+                <h2>Výsledkové listiny</h2>
                 @foreach (array_keys($allContestsDiaries) as $contest_name)
                     @if (! empty($allContestsDiaries[$contest_name]))
                     <a href="#{{ $contest_name }}">{{ $contest_name }}</a>
