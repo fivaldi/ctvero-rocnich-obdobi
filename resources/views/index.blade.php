@@ -4,6 +4,8 @@
 
 @section('sections')
 
+@include('recaptcha', [ 'formId' => 'contact-form' ])
+
     <section class="tm-section-2 my-5 py-4">
         <div class="row">
             <div class="col-xl-20 col-lg-20 col-md-12">
@@ -123,26 +125,28 @@
     <section class="tm-section-6 mt-3" id="tm-section-6">
         <div class="row">
             <div class="col-lg-7 col-md-7 col-xs-12">
-                <div class="contact_message" id="contact-form">
+                <div class="contact_message" id="contact-message">
                     <h2 class="mb-4">Kontaktní formulář</h2>
-                    @if ($mailSuccess = request()->session()->get('mailSuccess'))
+                    @if ($messageSuccess = request()->session()->pull('messageSuccess'))
                         <div class="alert alert-success">
-                            {{ $mailSuccess }}
+                            {{ $messageSuccess }}
                         </div>
-                    @elseif ($mailErrors = request()->session()->get('mailErrors'))
+                        <script>location.hash = '#contact-message';</script>
+                    @elseif ($messageErrors = request()->session()->pull('messageErrors'))
                         <div class="alert alert-danger">
-                            @if (count($mailErrors) == 1)
-                                {{ $mailErrors[0] }}
+                            @if (count($messageErrors) == 1)
+                                {{ $messageErrors[0] }}
                             @else
                                 <ul>
-                                @foreach ($mailErrors as $error)
+                                @foreach ($messageErrors as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
                                 </ul>
                             @endif
                         </div>
+                        <script>location.hash = '#contact-message';</script>
                     @endif
-                    <form action="message" method="post" class="contact-form">
+                    <form action="message" method="post" class="contact-form" id='contact-form'>
                         <div class="form-group row align-items-center col-12">
                             <label for="email" class="col-2">E-mail</label>
                             <input name="email" type="email" class="form-control col-10" id="email" placeholder="name@example.com">
@@ -151,15 +155,11 @@
                             <label for="subject" class="col-2">Předmět</label>
                             <input name="subject" type="text" class="form-control col-10" id="subject" placeholder="Předmět zprávy">
                         </div>
-                        <div class="form-group row align-items-center col-12">
-                            <label for="spamCheck" class="col-2">1 + 1 =</label>
-                            <input name="spamCheck" type="text" class="form-control col-1" id="spamCheck" placeholder="?">
-                        </div>
                         <div class="form-group row col-12">
                             <label for="message">Zpráva</label>
                             <textarea name="message" class="form-control" id="message" placeholder="Text zprávy" rows="6"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Odeslat</button>
+                        <button type="submit" class="btn btn-primary g-recaptcha" data-sitekey="{{ config('ctvero.recaptchaSiteKey') }}" data-callback="onSubmit" data-action="submit">Odeslat</button>
                     </form>
                 </div>
             </div>

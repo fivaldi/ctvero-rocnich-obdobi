@@ -7,11 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MessageMail;
+use App\Http\Utilities;
+use App\Exceptions\MessageException;
 
 class MessageController extends BaseController
 {
     public function send(Request $request)
     {
+        Utilities::checkRecaptcha($request);
+
         $messages = [
             'email' => 'Pole :attribute obsahuje neplatnou e-mailovou adresu.',
             'required' => 'Pole :attribute je vyžadováno.',
@@ -20,18 +24,12 @@ class MessageController extends BaseController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'subject' => 'required|max:255',
-            'spamCheck' => 'required',
             'message' => 'required|max:2000',
         ], $messages);
 
         if ($validator->fails()) {
-            $request->session()->flash('mailErrors', $validator->errors()->all());
-            return redirect(route('index') . '#contact-form');
-        }
-
-        if (trim($request->input('spamCheck')) != 2) {
-            $request->session()->flash('mailErrors', array('Kontrola proti spamu není úspěšná.'));
-            return redirect(route('index') . '#contact-form');
+            $request->session()->flash('messageErrors', $validator->errors()->all());
+            return redirect(route('index'));
         }
 
         try {
@@ -39,10 +37,10 @@ class MessageController extends BaseController
                                    $request->input('subject'),
                                    $request->input('message'));
             Mail::to(config('ctvero.ownerMail'))->send($msg);
-            $request->session()->flash('mailSuccess', 'Zpráva byla úspěšně odeslána.');
+            $request->session()->flash('messageSuccess', 'Zpráva byla úspěšně odeslána.');
+            return redirect(route('index'));
         } catch (\Exception $e) {
-            $request->session()->flash('mailErrors', array('Odeslání zprávy se nezdařilo.'));
+            throw new MessageException(500, array('Odeslání zprávy se nezdařilo.'));
         }
-        return redirect(route('index') . '#contact-form');
     }
 }

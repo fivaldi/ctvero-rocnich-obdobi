@@ -62,7 +62,7 @@
         <div class="loader-section section-right"></div>
     </div>
     <div class="container">
-        @if ($errors = request()->session()->get('errors'))
+        @if ($errors = request()->session()->pull('errors'))
             <div class="alert alert-danger">
                 @if (count($errors) == 1)
                     {{ $errors[0] }}
@@ -106,7 +106,7 @@
                             <a class="nav-link tm-text-gray" href="{{ route('results') }}">Výsledky</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="{{ route('index') . '#contact-form' }}">Kontakt</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('index') . '#contact-message' }}">Kontakt</a>
                         </li>
                     </ul>
                 </div>
@@ -135,7 +135,7 @@
                         <a href="{{ route('results') }}">Výsledky</a>
                     </li>
                     <li>
-                        <a href="{{ route('index') . '#contact-form' }}">Kontakt</a>
+                        <a href="{{ route('index') . '#contact-message' }}">Kontakt</a>
                     </li>
                 </ul>
             </div>
@@ -167,7 +167,8 @@
         @yield('sections')
 
         <footer class="mt-5">
-            <p class="text-center">Copyright © 2021 Radek Lichnov - Design: Tooplate</p>
+            <p class="text-center small">Copyright © 2021 Radek Lichnov. Design: <a href="https://www.tooplate.com/">Tooplate</a>
+            | Tento <a href="{{ config('ctvero.repositoryUrl') }}">projekt</a> je open source. Engine: <a href="https://lumen.laravel.com/">Lumen Framework</a></p>
         </footer>
     </div>
 

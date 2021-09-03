@@ -10,13 +10,14 @@ version: "2.4"
 services:
   lumen:
     container_name: ctvero-lumen
-    build: .
+    build: docker
     ports:
       - 8000:8000
+    environment:
+      - TRAVIS_JOB_ID
     volumes:
       - .:/var/www/html
-    command: sh -c 'composer install && php artisan migrate && php -S lumen:8000 -t public'
-    restart: always
+    command: /entrypoint.sh
     depends_on:
       db:
         condition: service_healthy
@@ -24,8 +25,12 @@ services:
     container_name: ctvero-db
     image: mariadb:10
     restart: always
-    env_file:
-      - dev.env
+    environment:
+      - MARIADB_DATABASE=homestead
+      - MARIADB_USER=homestead
+      - MARIADB_PASSWORD=secret
+      - MARIADB_ROOT_PASSWORD=secret
+      - TZ=Europe/Prague
     volumes:
       - ./.dev-mysql-data:/var/lib/mysql:Z
     ports:
