@@ -10,13 +10,22 @@ use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Illuminate\Http\Request;
 use App\Models\Contest;
+use App\Exceptions\AppException;
 
 class CalendarController extends BaseController
 {
     public function download(Request $request)
     {
+        if (! $request->input('soutez', false)) {
+            throw new AppException(400, array('Neúplný požadavek'));
+        }
+
+        $contest = Contest::all()->where('name', $request->input('soutez'))->first();
+        if (empty($contest)) {
+            throw new AppException(404, array('Soutěž nebyla nalezena.'));
+        }
+
         try {
-            $contest = Contest::all()->where('name', $request->input('soutez'))->first();
             $tz = config('app.timezone');
             $name = $contest->name . ' (' . config('app.name') . ')';
             $event = (new Event())
@@ -43,8 +52,7 @@ class CalendarController extends BaseController
                     'Content-Disposition' => 'attachment; filename="' . $name . '"',
                 ]);
         } catch (\Exception $e) {
-            $request->session()->flash('errors', array('Něco se pokazilo.'));
+            throw new AppException(500, array('Něco se pokazilo.'));
         }
-        return redirect(route('index'));
     }
 }

@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "eluceo/ical": "^2.3",
+        "google/recaptcha": "^1.2",
         "illuminate/cookie": "^8.54",
         "illuminate/mail": "^8.55",
         "illuminate/session": "^8.54",

@@ -11,6 +11,8 @@ use App\Models\Diary;
 use App\Models\Category;
 use App\Models\Contest;
 use App\Rules\Locator;
+use App\Http\Utilities;
+use App\Exceptions\SubmissionException;
 
 class SubmissionController extends Controller
 {
@@ -87,45 +89,67 @@ class SubmissionController extends Controller
         $this->qthLocator = $data->locator;
         $this->qsoCount = $data->totalCalls;
     }
-    public function show(Request $request)
+    public function show(Request $request, $resetStep = false)
     {
-        return view('submission', [ 'data' => $this ]);
+        $step = $resetStep ? 1 : intval(request()->input('krok', 1));
+        if ($step < 1 or $step > 2) {
+            throw new SubmissionException(422, array('Neplatný formulářový krok'), true);
+        }
+        $diarySources = implode(', ', $this->diarySources);
+
+        return view('submission', [ 'data' => $this,
+                                    'step' => $step,
+                                    'diarySources' => $diarySources ]);
     }
     public function submit(Request $request)
     {
         if ($request->input('step') == 1) {
-            try {
-                $diaryUrl = trim($request->input('diaryUrl'));
-                foreach (config('ctvero.diaryUrlToProcessor') as $diaryUrlTemplate => $processor) {
-                    if (preg_match('|^' . preg_quote($diaryUrlTemplate) . '|', $diaryUrl)) {
-                        $processor = 'process' . $processor;
-                        $this->diaryUrlTemplate = $diaryUrlTemplate;
-                        $this->diaryUrl = $diaryUrl;
-                        $this->$processor();
-                        break;
-                    }
-                }
-                $request->session()->flash('diary', [
-                    'Url' => $this->diaryUrl,
-                    'callSign' => $this->callSign,
-                    'qthName' => $this->qthName,
-                    'qthLocator' => $this->qthLocator,
-                    'qsoCount' => $this->qsoCount ]);
-            } catch (\Exception $e) {
-                $request->session()->flash('submissionErrors', array('Deník se nepodařilo načíst.'));
-                return redirect(route('submissionForm') . '#tm-section-2');
+            Utilities::checkRecaptcha($request);
+
+            if (! $request->input('diaryUrl', false)) {
+                throw new SubmissionException(400, array('Neúplný požadavek'));
             }
+
+            $diaryUrl = trim($request->input('diaryUrl'));
+            $diarySourceFound = false;
+            foreach (config('ctvero.diaryUrlToProcessor') as $diaryUrlTemplate => $processor) {
+                if (preg_match('|^' . preg_quote($diaryUrlTemplate) . '|', $diaryUrl)) {
+                    $processor = 'process' . $processor;
+                    $this->diaryUrlTemplate = $diaryUrlTemplate;
+                    $this->diaryUrl = $diaryUrl;
+                    try {
+                        $this->$processor();
+                    } catch (\Exception $e) {
+                        throw new SubmissionException(500, array('Deník se nepodařilo načíst.'));
+                    }
+                    $diarySourceFound = true;
+                    break;
+                }
+            }
+
+            if (! $diarySourceFound) {
+                throw new SubmissionException(422, array('Neznámý zdroj deníku'));
+            }
+
+            $request->session()->flash('diary', [
+                'url' => $this->diaryUrl,
+                'callSign' => $this->callSign,
+                'qthName' => $this->qthName,
+                'qthLocator' => $this->qthLocator,
+                'qsoCount' => $this->qsoCount ]);
 
             $validator = Validator::make($request->all(), [
                 'diaryUrl' => 'required|max:255|unique:\App\Models\Diary,diary_url',
             ], $this->messages);
             if ($validator->fails()) {
                 $request->session()->flash('submissionErrors', $validator->errors()->all());
-                return redirect(route('submissionForm') . '#tm-section-2');
+                return redirect(route('submissionForm'));
             }
 
             return redirect()->route('submissionForm', [ 'krok' => 2 ]);
         } elseif ($request->input('step') == 2) {
+            Utilities::checkRecaptcha($request);
+
             $validator = Validator::make($request->all(), [
                 'contest' => 'required|max:255',
                 'category' => 'required|max:255',
@@ -141,7 +165,7 @@ class SubmissionController extends Controller
                 $request->session()->flash('diary', [
                     'contest' => $request->input('contest'),
                     'category' => $request->input('category'),
-                    'Url' => $request->input('diaryUrl'),
+                    'url' => $request->input('diaryUrl'),
                     'callSign' => $request->input('callSign'),
                     'qthName' => $request->input('qthName'),
                     'qthLocator' => $request->input('qthLocator'),
@@ -167,13 +191,12 @@ class SubmissionController extends Controller
                 $diary->save();
 
                 $request->session()->flash('submissionSuccess', 'Hlášení do soutěže bylo úspěšně zpracováno.');
+                return redirect(route('submissionForm'));
             } catch (\Exception $e) {
-                $request->session()->flash('submissionErrors', array('Něco se pokazilo.'));
+                throw new SubmissionException(500, array('Hlášení do soutěže se nepodařilo uložit.'));
             }
-            return redirect(route('submissionForm') . '#tm-section-2');
         } else {
-            $request->session()->flash('submissionErrors', array('Něco se pokazilo.'));
-            return redirect(route('submissionForm') . '#tm-section-2');
+            throw new SubmissionException(400, array('Neplatný formulářový krok nebo neúplný požadavek'));
         }
     }
 }

@@ -1,0 +1,7 @@
+---
+services:
+  - docker
+
+script:
+  - docker-compose up -d db
+  - docker-compose up lumen
