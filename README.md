@@ -2,6 +2,8 @@
 
 ## This Application
 
+[![Build Status](https://app.travis-ci.com/fivaldi/ctvero-rocnich-obdobi.svg?branch=main)](https://app.travis-ci.com/fivaldi/ctvero-rocnich-obdobi)
+
 ### Development and Testing
 
 Providing you have `docker` and `docker-compose` installed, clone the repository and run:
