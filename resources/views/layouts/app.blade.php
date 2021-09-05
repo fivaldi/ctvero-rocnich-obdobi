@@ -168,7 +168,7 @@
 
         <footer class="mt-5">
             <p class="text-center small">Copyright © 2021 Radek Lichnov. Design: <a href="https://www.tooplate.com/">Tooplate</a>
-            | Tento <a href="{{ config('ctvero.repositoryUrl') }}">projekt</a> je open source. Engine: <a href="https://lumen.laravel.com/">Lumen Framework</a></p>
+            | Tento <a href="{{ config('ctvero.repositoryUrl') }}">projekt</a> je open-source. Engine: <a href="https://lumen.laravel.com/">Lumen Framework</a></p>
         </footer>
     </div>
 
