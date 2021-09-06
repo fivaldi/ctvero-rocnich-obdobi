@@ -1,4 +1,6 @@
-FROM php:8.0-fpm-alpine3.13
+ARG PHP_IMAGE_TAG=8.0-fpm-alpine3.13
+
+FROM php:$PHP_IMAGE_TAG
 
 COPY entrypoint.sh /
 
