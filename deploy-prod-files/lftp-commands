@@ -1,0 +1,24 @@
+put -e deploy-prod-files/.htaccess
+
+mirror -eRvvv -P4 app
+put -e artisan
+mirror -eRvvv -P4 bootstrap
+put -e composer.json
+put -e composer.lock
+mirror -eRvvv -P4 config
+mirror -eRvvv -P4 database
+put -e deploy-prod-files/.env -o .env
+mirror -eRvvv -P4 public
+mirror -eRvvv -P4 resources
+mirror -eRvvv -P4 routes
+mirror -eRvvv -P4 vendor
+
+mkdir -pf storage/app
+mkdir -pf storage/framework/cache/data
+mkdir -pf storage/framework/sessions
+mkdir -pf storage/framework/views
+mkdir -pf storage/logs
+
+chmod g+w storage
+
+mirror -eRvvv -P4 storage/app/content storage/app/content

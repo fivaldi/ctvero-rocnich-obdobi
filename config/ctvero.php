@@ -23,4 +23,7 @@ return [
 
     'repositoryUrl' => env('CTVERO_REPOSITORY_URL'),
     'issuesReportUrl' => env('CTVERO_ISSUES_REPORT_URL'),
+
+    // This secret key has to be at least 32 chars long!
+    'apiAdminSecret' => env('CTVERO_API_ADMIN_SECRET'),
 ];
