@@ -1,5 +1,10 @@
 <?php
 
+use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+use App\Http\Controllers\ApiV0Controller;
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -36,4 +41,16 @@ $router->post('/submission', [
 $router->get('/vysledky', [
     'as' => 'results',
     'uses' => '\App\Http\Controllers\ResultsController@show'
+]);
+$router->get('/api/v0/{category}/{endpoint}', [
+    'as' => 'apiV0AppMigrate', function ($category, $endpoint) {
+        $registeredMethods = [
+            'appMigrate',
+        ];
+        $method = Str::camel($category . '_' . $endpoint);
+        if (! in_array($method, $registeredMethods)) {
+            throw new NotFoundHttpException();
+        }
+        return (new ApiV0Controller)->$method();
+    }
 ]);

@@ -8,3 +8,9 @@ jobs:
   include:
     - script: docker-compose build --build-arg PHP_IMAGE_TAG=8.0-fpm-alpine3.13 lumen && docker-compose up -d db && docker-compose up lumen
     - script: docker-compose build --build-arg PHP_IMAGE_TAG=7.4-fpm-alpine3.13 lumen && docker-compose up -d db && docker-compose up lumen
+
+deploy:
+  - provider: script
+    script: docker-compose build --build-arg PHP_IMAGE_TAG=7.4-fpm-alpine3.13 deploy-prod && docker-compose up deploy-prod
+    on:
+      branch: main

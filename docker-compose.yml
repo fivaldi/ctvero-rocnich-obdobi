@@ -40,3 +40,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 100
+  deploy-prod:
+    container_name: ctvero-deploy-prod
+    build: docker
+    environment:
+      - CTVERO_DEPLOY_PROD=true
+      - CTVERO_DEPLOY_PROD_SECRET
+    volumes:
+      - .:/var/www/html
+    command: /entrypoint.sh

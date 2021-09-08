@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DiDom\Document;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 use App\Http\Controllers\Controller;
 use App\Models\Diary;
@@ -70,13 +71,14 @@ class SubmissionController extends Controller
         }
     }
     public function processCbpmrInfo() {
+        $this->diaryUrl = preg_replace('http:', 'https:', $this->diaryUrl, 1);
         $context = stream_context_create([ 'http' => [ 'follow_location' => false ] ]);
         $html = file_get_contents($this->diaryUrl, false, $context);
         $finalUrl = NULL;
         foreach ($http_response_header as $header) {
             if (preg_match('|^Location: /share/[^/]+/\d+|', $header)) {
                 $diaryId = trim(preg_replace('|.*/share/[^/]+/(\d+).*|', '$1', $header));
-                $finalUrl = config('ctvero.cbpmrInfoApiUrl') . $diaryId;
+                $finalUrl = Str::finish(config('ctvero.cbpmrInfoApiUrl'), '/') . $diaryId;
                 break;
             }
         }
