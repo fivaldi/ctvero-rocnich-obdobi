@@ -8,11 +8,6 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-RewriteRule ^(css(/.*|$)) /public/$1 [L]
-RewriteRule ^favicon\.ico$ /public/$1 [L]
-RewriteRule ^(font-awesome-4\.5\.0(/.*|$)) /public/$1 [L]
-RewriteRule ^(img(/.*|$)) /public/$1 [L]
-RewriteRule ^(js(/.*|$)) /public/$1 [L]
-RewriteRule ^(slick(/.*|$)) /public/$1 [L]
-RewriteRule ^toplist\.txt$ /public/$1 [L]
+RewriteRule ^static/(.*) /public/static/$1 [L]
+RewriteRule ^(favicon\.ico)$ /public/static/$1 [L]
 RewriteRule ^ /public/ [L]
