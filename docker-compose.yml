@@ -24,7 +24,6 @@ services:
   db:
     container_name: ctvero-db
     image: mariadb:10
-    restart: always
     environment:
       - MARIADB_DATABASE=homestead
       - MARIADB_USER=homestead

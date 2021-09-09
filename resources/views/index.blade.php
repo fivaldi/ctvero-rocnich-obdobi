@@ -28,7 +28,7 @@
                     @foreach ($lastYearContests as $contest)
                         <dl class="mt-4 contests">
                             <dt>{{ $contest->name }}</dt>
-                            <dd>{{ date('j.n.Y H:i', strtotime($contest->contest_start)) }} — {{ date('j.n.Y H:i', strtotime($contest->contest_end)) }}<a class="ml-2" href="{{ route('calendar', [ 'soutez' => $contest->name ]) }}"><i class="fa fa-calendar" aria-hidden="true"></i></a></dd>
+                            <dd>{{ date('j.n.Y H:i', strtotime($contest->contest_start)) }} — {{ date('j.n.Y H:i', strtotime($contest->contest_end)) }}<a class="ml-2" href="{{ route('calendar', [ 'soutez' => $contest->name ]) }}"><i class="fa fa-calendar"></i></a></dd>
                         </dl>
                     @endforeach
 

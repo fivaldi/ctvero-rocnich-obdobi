@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
@@ -91,7 +90,7 @@ class PopulateTables extends Migration
                 [ 'call_sign' => 'Miloš Dolný Pial', 'diary_url' => 'http://www.cbpmr.cz/deniky/22827.htm', 'qth_name' => 'Dolný Pial', 'qth_locator' => 'JN98FD', 'qso_count' => '11', 'score_points' => NULL, 'category_id' => '4', 'contest_id' => '2', 'created_at' => '2021-03-27 00:00:00', 'updated_at' => '2021-03-27 00:00:00' ],
                 [ 'call_sign' => 'Grizzly Krkonoše', 'diary_url' => 'http://www.cbpmr.cz/deniky/22840.htm', 'qth_name' => 'Niklův Vrch, Malá Úpa', 'qth_locator' => 'JO70VR', 'qso_count' => '10', 'score_points' => NULL, 'category_id' => '4', 'contest_id' => '2', 'created_at' => '2021-03-27 00:00:00', 'updated_at' => '2021-03-27 00:00:00' ],
                 [ 'call_sign' => 'Dušan Brno', 'diary_url' => 'http://www.cbpmr.cz/deniky/22804.htm', 'qth_name' => 'Brno - Bohunice', 'qth_locator' => 'JN89HE', 'qso_count' => '8', 'score_points' => NULL, 'category_id' => '4', 'contest_id' => '2', 'created_at' => '2021-03-27 00:00:00', 'updated_at' => '2021-03-27 00:00:00' ],
-                [ 'call_sign' => 'Candát Praha', 'diary_url' => 'http://www.cbpmr.cz/deniky/20807.htm', 'qth_name' => 'Malý Tok,Praha,Paterák,Břez. vrch,Krušná hora,Vraní skála', 'qth_locator' => 'JN69WP a další', 'qso_count' => '36', 'score_points' => '54', 'category_id' => '1', 'contest_id' => '1', 'created_at' => '2020-12-12 00:00:00', 'updated_at' => '2020-12-12 00:00:00' ],
+                [ 'call_sign' => 'Candát Praha', 'diary_url' => 'http://www.cbpmr.cz/deniky/20807.htm', 'qth_name' => 'Malý Tok, Praha, Paterák, Břez. vrch, Krušná hora, Vraní skála', 'qth_locator' => 'JN69WP a další', 'qso_count' => '36', 'score_points' => '54', 'category_id' => '1', 'contest_id' => '1', 'created_at' => '2020-12-12 00:00:00', 'updated_at' => '2020-12-12 00:00:00' ],
                 [ 'call_sign' => 'expedice Fabián', 'diary_url' => 'http://www.cbpmr.cz/deniky/20825.htm', 'qth_name' => 'Tok', 'qth_locator' => 'JN69WQ', 'qso_count' => '34', 'score_points' => '51', 'category_id' => '1', 'contest_id' => '1', 'created_at' => '2020-12-12 00:00:00', 'updated_at' => '2020-12-12 00:00:00' ],
                 [ 'call_sign' => 'Honza Bolevec', 'diary_url' => 'http://www.cbpmr.cz/deniky/20758.htm', 'qth_name' => 'Čihátko', 'qth_locator' => 'JN69UT', 'qso_count' => '13', 'score_points' => '19.5', 'category_id' => '1', 'contest_id' => '1', 'created_at' => '2020-12-12 00:00:00', 'updated_at' => '2020-12-12 00:00:00' ],
                 [ 'call_sign' => 'David Zlín', 'diary_url' => 'http://www.cbpmr.cz/deniky/20792.htm', 'qth_name' => 'Lesná 696mnm', 'qth_locator' => 'JN88TV', 'qso_count' => '48', 'score_points' => '72', 'category_id' => '2', 'contest_id' => '1', 'created_at' => '2020-12-12 00:00:00', 'updated_at' => '2020-12-12 00:00:00' ],

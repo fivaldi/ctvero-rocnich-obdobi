@@ -9,7 +9,7 @@
 Providing you have `docker` and `docker-compose` installed, clone the repository and run:
 
 ```
-docker-compose up
+docker-compose up db lumen
 ```
 
 Then check your browser at <http://localhost:8000>.

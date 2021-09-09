@@ -21,4 +21,6 @@ mkdir -pf storage/logs
 
 chmod g+w storage
 
+glob rm storage/framework/views/*.php
+
 mirror -eRvvv -P4 storage/app/content storage/app/content
