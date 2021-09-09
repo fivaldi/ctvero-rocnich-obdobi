@@ -87,25 +87,25 @@
 
                         <table class="small text-left" style="width: 100%">
                             <tr style="background-color: silver">
-                                <th width="50">Datum</th>
-                                <th width="100">Volačka</th>
-                                <th width="100">QTH</th>
-                                <th width="50">Lokátor</th>
-                                <th width="50">Deník</th>
-                                <th width="50">Počet QSO</th>
+                                <th class="col-1 d-none d-md-table-cell">Datum</th>
+                                <th class="col-3">Volačka</th>
+                                <th class="col-3">QTH</th>
+                                <th class="col-1 d-none d-md-table-cell">Lokátor</th>
+                                <th class="col-1">Deník</th>
+                                <th class="col-2">Počet QSO</th>
                                 @if ($useScorePoints)
-                                <th width="50">Body</th>
+                                <th class="col-1">Body</th>
                                 @endif
                             </tr>
                             @foreach (array_slice($lastContestDiaries[$category['id']] ?? [], 0, 3) as $diary)
-                                <tr><td>{{ date('j.n.Y', strtotime($diary['created_at'])) }}</td>
-                                    <td>{{ $diary['call_sign'] }}</td>
-                                    <td>{{ $diary['qth_name'] }}</td>
-                                    <td>{{ $diary['qth_locator'] }}</td>
-                                    <td><a href="{{ $diary['diary_url'] }}" target="_blank">deník</a></td>
-                                    <td>{{ $diary['qso_count'] }}</td>
+                                <tr><td class="col-1 d-none d-md-table-cell">{{ date('j.n.Y', strtotime($diary['created_at'])) }}</td>
+                                    <td class="col-3">{{ $diary['call_sign'] }}</td>
+                                    <td class="col-3">{{ $diary['qth_name'] }}</td>
+                                    <td class="col-1 d-none d-md-table-cell">{{ $diary['qth_locator'] }}</td>
+                                    <td class="col-1"><a href="{{ $diary['diary_url'] }}" target="_blank"><i class="fa fa-book fa-lg"></i></a></td>
+                                    <td class="col-2">{{ $diary['qso_count'] }}</td>
                                     @if ($useScorePoints)
-                                    <td>{{ $diary['score_points'] }}</td>
+                                    <td class="col-1">{{ $diary['score_points'] }}</td>
                                     @endif
                                 </tr>
                             @endforeach
