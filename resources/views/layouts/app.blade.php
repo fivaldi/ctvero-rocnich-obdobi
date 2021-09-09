@@ -16,19 +16,19 @@
 
     -->
     <!-- Google web font "Open Sans" -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="font-awesome-4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="slick/slick.css" />
-    <link rel="stylesheet" type="text/css" href="slick/slick-theme.css" />
+    <link rel="stylesheet" type="text/css" href="/static/font-awesome-4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="/static/slick/slick-theme.css" />
     <!-- tooplate style -->
-    <link rel="stylesheet" href="css/tooplate-style.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/tooplate-style.css">
     <!-- custom style overrides -->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HP42P30DVN"></script>
+    <script async type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HP42P30DVN"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -49,7 +49,7 @@
 
     </script>
 
-    <script src="http://www.w3schools.com/lib/w3data.js"></script>
+    <script type="text/javascript" src="http://www.w3schools.com/lib/w3data.js"></script>
 
 </head>
 
@@ -144,21 +144,21 @@
         <section class="row" id="tm-section-1">
             <div class="col-lg-12 tm-slider-col">
                 <div class="tm-img-slider">
-                    <div class="tm-img-slider-item" href="img/gallery-img-1.jpg">
+                    <div class="tm-img-slider-item" href="/static/img/gallery-img-1.jpg">
                         <p class="tm-slider-caption">Vysílání nás baví !</p>
-                        <img src="img/gallery-img-1.jpg" alt="Image" class="tm-slider-img">
+                        <img src="/static/img/gallery-img-1.jpg" alt="Image" class="tm-slider-img">
                     </div>
-                    <div class="tm-img-slider-item" href="img/gallery-img-2.jpg">
+                    <div class="tm-img-slider-item" href="/static/img/gallery-img-2.jpg">
                         <p class="tm-slider-caption">Výzva na kanále ...</p>
-                        <img src="img/gallery-img-2.jpg" alt="Image" class="tm-slider-img">
+                        <img src="/static/img/gallery-img-2.jpg" alt="Image" class="tm-slider-img">
                     </div>
-                    <div class="tm-img-slider-item" href="img/gallery-img-3.jpg">
+                    <div class="tm-img-slider-item" href="/static/img/gallery-img-3.jpg">
                         <p class="tm-slider-caption">Stanice ... na příjmu</p>
-                        <img src="img/gallery-img-3.jpg" alt="Image" class="tm-slider-img">
+                        <img src="/static/img/gallery-img-3.jpg" alt="Image" class="tm-slider-img">
                     </div>
-                    <div class="tm-img-slider-item" href="img/gallery-img-4.jpg">
+                    <div class="tm-img-slider-item" href="/static/img/gallery-img-4.jpg">
                         <p class="tm-slider-caption">27 MHz - pásmo 11m</p>
-                        <img src="img/gallery-img-4.jpg" alt="Image" class="tm-slider-img">
+                        <img src="/static/img/gallery-img-4.jpg" alt="Image" class="tm-slider-img">
                     </div>
                 </div>
             </div>
@@ -173,12 +173,12 @@
     </div>
 
     <!-- load JS files -->
-    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
-    <script src="js/popper.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/popper.min.js"></script>
     <!-- https://popper.js.org/ -->
-    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <!-- https://getbootstrap.com/ -->
-    <script type="text/javascript" src="slick/slick.min.js"></script>
+    <script type="text/javascript" src="/static/slick/slick.min.js"></script>
     <!-- Slick Carousel -->
     <script>w3IncludeHTML();</script>
     <!-- Include MENU -->
