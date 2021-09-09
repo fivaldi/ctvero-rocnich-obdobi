@@ -71,7 +71,7 @@ class SubmissionController extends Controller
         }
     }
     public function processCbpmrInfo() {
-        $this->diaryUrl = preg_replace('http:', 'https:', $this->diaryUrl, 1);
+        $this->diaryUrl = preg_replace('|^http:|', 'https:', $this->diaryUrl);
         $context = stream_context_create([ 'http' => [ 'follow_location' => false ] ]);
         $html = file_get_contents($this->diaryUrl, false, $context);
         $finalUrl = NULL;

@@ -2,6 +2,7 @@
 
 use App\Models\Contest;
 use App\Models\Category;
+use App\Models\Diary;
 
 class SubmissionTest extends TestCase
 {
@@ -10,6 +11,13 @@ class SubmissionTest extends TestCase
 
         $this->contest = Contest::factory()->create();
         $this->seeInDatabase('contest', [ 'name' => $this->contest->name ]);
+    }
+
+    public function tearDown(): void {
+        Diary::where('diary_url', 'https://example.com/diary/url')->delete();
+        Contest::where('name', 'like', 'Test contest %')->delete();
+
+        parent::tearDown();
     }
 
     public function testSubmissionManual()
@@ -91,7 +99,37 @@ class SubmissionTest extends TestCase
         $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
     }
 
+    public function testDiarySourceCbdxCzPlainHttp()
+    {
+        $this->post('/submission', [
+            'step' => 1,
+            'diaryUrl' => 'http://drive.cbdx.cz/xdenik1503.ht0m' ]);
+        $diaryInSession = $this->app['session.store']->all()['diary'];
+        $this->assertEquals($diaryInSession['url'], 'http://drive.cbdx.cz/xdenik1503.ht0m');
+        $this->assertEquals($diaryInSession['callSign'], 'Expedice Morava');
+        $this->assertEquals($diaryInSession['qthName'], 'Bystré');
+        $this->assertEquals($diaryInSession['qthLocator'], 'JN99FO');
+        $this->assertEquals($diaryInSession['qsoCount'], '27');
+        $this->get('/hlaseni?krok=2');
+        $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
+    }
+
     public function testDiarySourceCbpmrCz()
+    {
+        $this->post('/submission', [
+            'step' => 1,
+            'diaryUrl' => 'https://www.cbpmr.cz/deniky/19124.htm' ]);
+        $diaryInSession = $this->app['session.store']->all()['diary'];
+        $this->assertEquals($diaryInSession['url'], 'https://www.cbpmr.cz/deniky/19124.htm');
+        $this->assertEquals($diaryInSession['callSign'], 'Pepa Klobouky');
+        $this->assertEquals($diaryInSession['qthName'], 'Malá Fatra Minčol');
+        $this->assertEquals($diaryInSession['qthLocator'], 'JN99JC');
+        $this->assertEquals($diaryInSession['qsoCount'], '1');
+        $this->get('/hlaseni?krok=2');
+        $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
+    }
+
+    public function testDiarySourceCbpmrCzPlainHttp()
     {
         $this->post('/submission', [
             'step' => 1,
@@ -114,6 +152,24 @@ class SubmissionTest extends TestCase
         $this->post('/submission', [
             'step' => 1,
             'diaryUrl' => 'https://www.cbpmr.info/share/4902b6' ]);
+        $diaryInSession = $this->app['session.store']->all()['diary'];
+        $this->assertEquals($diaryInSession['url'], 'https://www.cbpmr.info/share/4902b6');
+        $this->assertEquals($diaryInSession['callSign'], 'Filip 84');
+        $this->assertEquals($diaryInSession['qthName'], 'Olomouc');
+        $this->assertEquals($diaryInSession['qthLocator'], 'JN89PO');
+        $this->assertEquals($diaryInSession['qsoCount'], '36');
+        $this->get('/hlaseni?krok=2');
+        $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
+    }
+
+    public function testDiarySourceCbpmrInfoPlainHttp()
+    {
+        if (! config('ctvero.cbpmrInfoApiUrl')) {
+            $this->markTestSkipped('Access to cbpmr.info API is not configured.');
+        }
+        $this->post('/submission', [
+            'step' => 1,
+            'diaryUrl' => 'http://www.cbpmr.info/share/4902b6' ]);
         $diaryInSession = $this->app['session.store']->all()['diary'];
         $this->assertEquals($diaryInSession['url'], 'https://www.cbpmr.info/share/4902b6');
         $this->assertEquals($diaryInSession['callSign'], 'Filip 84');
