@@ -21,6 +21,36 @@ docker exec -it ctvero-lumen sh  # for the app server, then run e.g.: composer, 
 docker exec -it ctvero-db sh  # for the db server
 ```
 
+Local tests can be run as follows:
+
+```
+docker exec ctvero-lumen vendor/bin/phpunit -v
+```
+
+### Deployment
+
+#### Automated Workflow (preferred)
+
+Long story short: After a successfully tested PR merge to the production branch (`main`), the application gets deployed.
+
+As of 2021/09, we're using Travis CI for this. See <https://app.travis-ci.com/github/fivaldi/ctvero-rocnich-obdobi>.
+There's a strong secret (see `CTVERO_DEPLOY_PROD_SECRET` environment variable) which decrypts the file `deploy-prod-files/.env.gpg`. This file contains all other secrets which are necessary for application deployment and runtime. See also `docker/entrypoint.sh`, `docker-compose.yml` and `.travis.yml`.
+
+#### Manual Workflow
+
+Prerequisites:
+
+- Locally cloned up-to-date production branch (`main`) which has successful tests in Travis CI. (See above.)
+- No `ctvero-*` docker containers/images artifacts are present. (Check using `docker ps -a`, `docker images` and/or remove those artifacts using `docker rm`, `docker rmi`.)
+- No repository artifacts are present. (Check using `git status --ignored` and/or remove those artifacts using `git clean -fdx`.)
+
+Deployment Steps:
+
+```
+docker-compose build --build-arg PHP_IMAGE_TAG=7.4-fpm-alpine3.13 deploy-prod  # for PHP 7.4 webhosting as of 2021/09
+CTVERO_DEPLOY_PROD_SECRET="some-very-long-secret" docker-compose up deploy-prod  # deploys the app
+```
+
 ### License
 
 This app is open-sourced software under the *Ham Spirit Transferred into IT* license :-).
