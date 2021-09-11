@@ -47,6 +47,17 @@ class SubmissionTest extends TestCase
             'email' => 'name@example.com'
         ]);
         $this->response->assertSeeText('Hlášení do soutěže bylo úspěšně zpracováno.');
+
+        $this->get('/vysledky');
+        $this->response->assertSeeTextInOrder([
+            'Test contest ',
+            ' (průběžné výsledky)',
+            '1.',
+            'Test call sign',
+            'Test QTH name',
+            'JN79SO',
+            '99',
+        ]);
     }
 
     public function testSubmissionEmptyForm()
