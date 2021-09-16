@@ -1,13 +1,13 @@
-# DO NOT USE FOR PRODUCTION !!! DO NOT USE FOR PRODUCTION !!!
+# docker-compose.yml for quick and easy dev/testing environment setup
+# !!! Most of the stuff here is NOT INTENDED FOR PRODUCTION USE !!!
+# !!! The ONLY thing aiming production is the deploy-prod service !!!
 #
-# docker-compose.yml for quick and easy DEV environment setup
-#
-# DO NOT USE FOR PRODUCTION !!! DO NOT USE FOR PRODUCTION !!!
 
 ---
 version: "2.4"
 
 services:
+  # DO NOT USE FOR PRODUCTION !!! DO NOT USE FOR PRODUCTION !!!
   lumen:
     container_name: ctvero-lumen
     build: docker
@@ -21,6 +21,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  # DO NOT USE FOR PRODUCTION !!! DO NOT USE FOR PRODUCTION !!!
   db:
     container_name: ctvero-db
     image: mariadb:10
@@ -39,6 +41,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 100
+
   deploy-prod:
     container_name: ctvero-deploy-prod
     build: docker
