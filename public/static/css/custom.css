@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .tm-section-head a,
 .tm-section-head a:hover,
 .tm-section-head a:visited,
