@@ -31,7 +31,7 @@
                         @isset ($allContestsDiaries[$contest_name][$category['id']])
                         <h4 class="mt-3">{{ $category['name'] }}</h4>
 
-                        <table class="small text-left" style="width: 100%">
+                        <table class="table-striped small" style="width: 100%">
                         <tr style="background-color: silver">
                             <th class="col-1">Pořadí</th>
                             <th class="col-1 d-none d-md-table-cell">Datum</th>
