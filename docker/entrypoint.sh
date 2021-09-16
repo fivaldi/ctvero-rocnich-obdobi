@@ -19,6 +19,8 @@ then
 elif [[ "$CTVERO_DEPLOY_PROD" == "true" ]]
 then
     # Decrypt .env, install Lumen, upload content to the FTP and migrate DB via HTTP request
+    # Clean up the tree from artifacts of previous (unsuccessful) runs
+    rm -rf composer.lock deploy-prod-files/.env vendor/
     # Do NOT expose more than necessary!
     set +x
     [ -z "$CTVERO_DEPLOY_PROD_SECRET" ] && exit 1
@@ -35,8 +37,10 @@ then
     # So that we don't upload them to the server
     sed -i "/^CTVERO_DEPLOY_PROD_/d" deploy-prod-files/.env
     # The FTP directory must be explicitly set, even if it was "/" (to avoid accidental overwrites)
+    # Expose the target FTP directory
     set -x
     [ -z "$CTVERO_DEPLOY_PROD_FTP_DIRECTORY" ] && exit 1
+    # From here, do NOT expose more than necessary!
     set +x
     {
         echo "mkdir -pf $CTVERO_DEPLOY_PROD_FTP_DIRECTORY"
@@ -44,6 +48,9 @@ then
         cat deploy-prod-files/lftp-commands
     } | lftp --env-password "ftp://$CTVERO_DEPLOY_PROD_FTP_USERNAME@$CTVERO_DEPLOY_PROD_FTP_SERVER"
     [[ "`curl -sH "X-Ctvero-API-Admin-Secret: $CTVERO_API_ADMIN_SECRET" ${APP_URL/http:/https:}/api/v0/app/migrate`" -eq "0" ]]
+    # Clean up the tree from deployment artifacts (expose this action)
+    set -x
+    rm -rf composer.lock deploy-prod-files/.env vendor/
 else
     # Install Lumen, migrate DB, start Lumen (foreground) and keep running
     composer install
