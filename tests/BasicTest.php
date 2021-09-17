@@ -2,10 +2,90 @@
 
 class BasicTest extends TestCase
 {
+    public function setUp(): void {
+        parent::setUp();
+
+        $this->sessionCookieName = 'ctvero_rocnich_obdobi_session';
+    }
+
     public function testIndex()
     {
         $this->get('/');
+        $this->response->assertSeeTextInOrder([
+            'Čtvero ročních období',
+            'CB soutěž',
+        ]);
         $this->seeStatusCode(200);
+    }
+
+    public function testIndexCsLocale()
+    {
+        $this->get('/', $headers = [ 'Accept-Language' => 'cs' ]);
+        $this->response->assertSeeTextInOrder([
+            'Čtvero ročních období',
+            'CB soutěž',
+        ]);
+        $this->seeStatusCode(200);
+    }
+
+    public function testIndexDeLocale()
+    {
+        $this->get('/', $headers = [ 'Accept-Language' => 'de-AT' ]);
+        $this->response->assertSeeTextInOrder([
+            'Die vier Jahreszeiten',
+            'CB-Wettbewerb',
+        ]);
+        $this->seeStatusCode(200);
+    }
+
+    public function testIndexMultipleLocalesDePreferred()
+    {
+        $this->get('/', $headers = [ 'Accept-Language' => 'de-AT,cs' ]);
+        $this->response->assertSeeTextInOrder([
+            'Die vier Jahreszeiten',
+            'CB-Wettbewerb',
+        ]);
+        $this->seeStatusCode(200);
+    }
+
+    public function testIndexFallbackLocale()
+    {
+        $this->get('/', $headers = [ 'Accept-Language' => 'unsupported' ]);
+        $this->response->assertSeeTextInOrder([
+            'Čtvero ročních období',
+            'CB soutěž',
+        ]);
+        $this->seeStatusCode(200);
+    }
+
+    public function testSwitchLocaleToCs()
+    {
+        $this->get('/lang/cs');
+        $sessionCookie = $this->response->getCookie($this->sessionCookieName);
+        $this->get('/', $headers = [ 'Set-Cookie' => $this->sessionCookieName . '=' . $sessionCookie ]);
+        $this->response->assertSeeTextInOrder([
+            'Čtvero ročních období',
+            'CB soutěž',
+        ]);
+        $this->seeStatusCode(200);
+    }
+
+    public function testSwitchLocaleToDe()
+    {
+        $this->get('/lang/de');
+        $sessionCookie = $this->response->getCookie($this->sessionCookieName);
+        $this->get('/', $headers = [ 'Set-Cookie' => $this->sessionCookieName . '=' . $sessionCookie ]);
+        $this->response->assertSeeTextInOrder([
+            'Die vier Jahreszeiten',
+            'CB-Wettbewerb',
+        ]);
+        $this->seeStatusCode(200);
+    }
+
+    public function testSwitchLocaleToUnsupported()
+    {
+        $this->get('/lang/unsupported');
+        $this->seeStatusCode(422);
     }
 
     public function test404()

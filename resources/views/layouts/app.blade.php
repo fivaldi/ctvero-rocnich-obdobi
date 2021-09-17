@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href ="favicon.ico" type="image/x-icon" /> <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
-    <title>Čtvero Ročních Období - @yield('title')</title>
+    <title>{{ __('ctvero_title') }} - @yield('title')</title>
     <!--
 
     Template 2103 Central
@@ -78,8 +78,8 @@
 
         <section class="tm-section-head" id="top">
             <header id="header" class="text-center tm-text-gray">
-                <h1><a href="{{ route('index') }}">Čtvero ročních období</a></h1>
-                <p>CB soutěž</p>
+                <h1><a href="{{ route('index') }}">{{ __('ctvero_title') }}</a></h1>
+                <p>{{ __('ctvero_subtitle') }}</p>
             </header>
 
             <nav class="navbar narbar-light">
@@ -107,6 +107,11 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link tm-text-gray" href="{{ route('index') . '#contact-message' }}">Kontakt</a>
+                        </li>
+                        <li class="nav-item">
+                        @foreach (config('ctvero.locales') as $lang)
+                            {{ $loop->index > 0 ? '|' : '' }} <a class="nav-link tm-text-gray d-inline-block" href="{{ route('lang', [ 'lang' => $lang ]) }}">{{ strtoupper($lang) }}</a>
+                        @endforeach
                         </li>
                     </ul>
                 </div>
@@ -136,6 +141,11 @@
                     </li>
                     <li>
                         <a href="{{ route('index') . '#contact-message' }}">Kontakt</a>
+                    </li>
+                    <li>
+                    @foreach (config('ctvero.locales') as $lang)
+                        {{ $loop->index > 0 ? '|' : '' }} <a href="{{ route('lang', [ 'lang' => $lang ]) }}">{{ strtoupper($lang) }}</a>
+                    @endforeach
                     </li>
                 </ul>
             </div>
@@ -168,7 +178,8 @@
 
         <footer class="mt-5">
             <p class="text-center small">Copyright © 2021 Radek Lichnov. Design: <a href="https://www.tooplate.com/">Tooplate</a>
-            | Tento <a href="{{ config('ctvero.repositoryUrl') }}">projekt</a> je open-source. Engine: <a href="https://lumen.laravel.com/">Lumen Framework</a></p>
+            | Tento <a href="{{ config('ctvero.repositoryUrl') }}">projekt</a> je open-source. Engine: <a href="https://lumen.laravel.com/">Lumen Framework</a>
+            | Překlad do němčiny: KML - Kamillo</p>
         </footer>
     </div>
 

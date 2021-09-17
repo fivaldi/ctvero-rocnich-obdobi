@@ -3,6 +3,7 @@
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use App\Exceptions\AppException;
 use App\Http\Controllers\ApiV0Controller;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
@@ -30,6 +31,18 @@ $router->get('/kalendar', [
     'as' => 'calendar',
     'uses' => '\App\Http\Controllers\CalendarController@download'
 ]);
+$router->get('/lang/{lang}', [
+    'as' => 'lang', function ($lang) {
+        if (in_array($lang, config('ctvero.locales'))) {
+            request()->session()->put('locale', $lang);
+            if (str_starts_with(request()->header('referer'), config('app.url'))) {
+                return redirect(request()->header('referer'));
+            }
+            return redirect(route('index'));
+        }
+        throw new AppException(422, array('Neznámá lokalizace'));
+    }
+]);
 $router->post('/message', [
     'as' => 'message',
     'uses' => '\App\Http\Controllers\MessageController@send'
@@ -43,7 +56,7 @@ $router->get('/vysledky', [
     'uses' => '\App\Http\Controllers\ResultsController@show'
 ]);
 $router->get('/api/v0/{category}/{endpoint}', [
-    'as' => 'apiV0AppMigrate', function ($category, $endpoint) {
+    'as' => 'apiV0', function ($category, $endpoint) {
         $registeredMethods = [
             'appMigrate',
         ];
