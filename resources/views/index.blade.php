@@ -6,13 +6,17 @@
 
 @include('recaptcha', [ 'formId' => 'contact-form' ])
 
+@php
+$locale = app('translator')->getLocale();
+@endphp
+
     <section class="tm-section-2 my-5 py-4">
         <div class="row">
             <div class="col-xl-20 col-lg-20 col-md-12">
                 <header>
-                <h2>Novinky a oznámení</h2>
+                <h2>{{ __('news_and_announcements') }}</h2>
                 </header>
-                {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/news.md')) }}
+                {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/news_' . $locale . '.md')) }}
             </div>
         </div>
     </section>
@@ -22,53 +26,45 @@
             <div class="col-md-6 tm-mb-sm-4 tm-2col-l">
                 <div class="h-100 tm-box-3">
                     <header>
-                    <h3>Termíny</h3>
+                    <h3>{{ __('dates') }}</h3>
                     </header>
-                    <p class="small">obvykle sobota 0:00 až neděle 24:00</p>
+                    <p class="small">{{ __('dates_usual_times') }}</p>
                     @foreach ($lastYearContests as $contest)
                         <dl class="mt-4 contests">
-                            <dt>{{ $contest->name }}</dt>
+                            <dt>{{ App\Http\Utilities::contestL10n($contest->name) }}</dt>
                             <dd>{{ date('j.n.Y H:i', strtotime($contest->contest_start)) }} — {{ date('j.n.Y H:i', strtotime($contest->contest_end)) }}<a class="ml-2" href="{{ route('calendar', [ 'soutez' => $contest->name ]) }}"><i class="fa fa-calendar"></i></a></dd>
                         </dl>
                     @endforeach
 
                     <header>
-                    <h3 class="mt-5">Spojení</h3>
+                    <h3 class="mt-5">{{ __('connections') }}</h3>
                     </header>
-                    <p>Každé spojení by mělo obsahovat: volačku (volací znak nebo jméno), QTH - místo odkud vysílá, <a href="http://www.cbpmr.cz/lokatorova-mapa-gps.html">lokátor</a>, report.</p>
-                    <p>Za každé spojení je 1 bod, pokud protistanice změní polohu a přesune se do jiného lokátoru (dále než je vedlejší) je i takové spojení platné. Můžete si připsat i spojení přes opakovač (1 bod za všechna spojení přes jeden opakovač). V případě vysílání z více stanovišť zapište do hlášení to "nejlepší" QTH a všechna spojení sečtěte.</p>
+                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/connections_' . $locale . '.md')) }}
 
                     <header>
-                    <h3 class="mt-5">Deník</h3>
+                    <h3 class="mt-5">{{ __('logbook') }}</h3>
                     </header>
-                    <p>Deník je možné psát v libovolném formátu. Ve spolupráci s <a href="https://www.cbpmr.info/">cbpmr.info</a> nabízíme možnost těm, kteří ještě nejsou plnohodnotnými uživateli <a href="https://www.cbpmr.info/login">LOGBOOKu</a>, po dobu těchto termínů plnou verzi zapisovače spojení (o tuto možnost je nutno předem zažádat emailem na soutez(a)svysilackou.cz alespoň 24h předem ). Také není podmínkou deník zveřejňovat v bance deníků cbpmr.cz/deniky, ale doporučuje se pro transparentnost a pro účely vyhodnocení vkládat číslo deníku právě z této stránky.</p>
-                    <p>Pokud tento deník používáte i do jiné soutěže, prosím o zaslání na email níže (v době, kdy už bude možné ho zveřejnit), aby mohl být doplněn do tabulky výsledků.</p>
+                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/logbook_' . $locale . '.md')) }}
                 </div>
             </div>
             <div class="col-md-6 tm-2col-r">
                 <div class="h-100 tm-box-3">
                     <header>
-                    <h3>Kategorie</h3>
+                    <h3>{{ __('categories') }}</h3>
                     </header>
-                    <p>Vzhledem k možnostem CB od pendreku přes protiváhu, drátovku ..... až po směrovku na stožáru je velice složité striktně upřesnit kategorie. Vyberte si kategorii na kterou se nejlépe cítíte.</p>
-                    <p><b>Pěšák</b> - CB ručka (tak říkajíc vybavení co se vejde do kapsy, drátové antény atd., doprava na kopec převážně vlastními silami)</p>
-                    <p><b>Mobil</b> - vysílá z auta na mobilní anténu na autě (k tomu snad není co dodat)</p>
-                    <p><b>Obrněnec</b> - stožár s anténou (pevné konstrukce, doprava hromadná, auto, lanovka, elektropohon ...)</p>
-                    <p><b>Domased</b> - vysílá z domácího QTH</p>
-                    <p><b>Sdílenky</b> - SDÍLENÉ KMITOČTY podle všeobecného oprávnění</p>
+                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/categories_' . $locale . '.md')) }}
 
                     <header>
-                    <h3 class="mt-5">Technika</h3>
+                    <h3 class="mt-5">{{ __('equipment') }}</h3>
                     </header>
-                    <p>Vysílací zařízení musí splňovat legislativní podmínky státu z jehož území je vysíláno.</p>
+                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/equipment_' . $locale . '.md')) }}
 
                     <header>
-                    <h3 class="mt-5">Hodnocení</h3>
+                    <h3 class="mt-5">{{ __('scoring') }}</h3>
                     </header>
-                    <p>Hodnocení proběhne automaticky po vyplnění formuláře <a href="{{ route('submissionForm') }}">ZDE</a>. Každé období se bude vyhodnocovat samostatně. Zápis je vhodné udělat co nejdříve avšak maximálně do 30 dnů od termínu vysílání.</p>
-                    <p>Na konci každého období budou všechny údaje z formulářů smazány. Kdo bude chtít může poslat pár slov popřípadě nějakou fotečku. Bude použito pro vytvoření článku o proběhlé akci a vystaveno na tomto webu a sdíleno i na jiných s tématikou CB. V případě zájmu odešlete na email soutez(a)svysilackou.cz.</p>
+                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/scoring_' . $locale . '.md')) }}
 
-                    <p class="mt-5"><b>Všem přeji dobré podmínky, málo rušení a mnoho dalekých spojení. 73'</b></p>
+                    <p class="mt-5"><b>{{ __('wish_you_great_conditions') }}</b></p>
                 </div>
             </div>
         </div>
@@ -83,7 +79,7 @@
                 <div class="media tm-media">
                     <img src="{{ $category['image_src'] }}" class="img-responsive tm-media-img">
                     <div class="media-body tm-box-5">
-                        <h3>{{ $category['name'] }}</h3>
+                        <h3>{{ __($category['name']) }}</h3>
 
                         <table class="table-striped small" style="width: 100%">
                             <tr style="background-color: silver">

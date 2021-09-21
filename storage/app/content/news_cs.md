@@ -1,4 +1,4 @@
-**Děkuji všem za účast a budu se těšit na slyšenou v dalším kole.**
+**Děkuji všem za dosavadní účast a budu se těšit na slyšenou v dalším kole.**
 
 Pokud by se našel webmaster, který by mi ve svém volném čase pomohl upravit některé funkce, budu rád za pomoc. Já jsem jen samouk a podle toho to taky vypadá. :-)
 

@@ -73,11 +73,11 @@ $app->configure('app');
 */
 
 $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-     Illuminate\Cookie\Middleware\EncryptCookies::class,
-     Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-     Illuminate\Session\Middleware\StartSession::class,
-     Illuminate\View\Middleware\ShareErrorsFromSession::class,
+    Illuminate\Cookie\Middleware\EncryptCookies::class,
+    Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+    Illuminate\Session\Middleware\StartSession::class,
+    Illuminate\View\Middleware\ShareErrorsFromSession::class,
+    App\Http\Middleware\ClientLocale::class,
 ]);
 
 // $app->routeMiddleware([

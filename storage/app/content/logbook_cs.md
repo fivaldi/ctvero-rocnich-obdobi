@@ -1,0 +1,3 @@
+Deník je možné psát v libovolném formátu. Ve spolupráci s [cbpmr.info](https://www.cbpmr.info/) nabízíme možnost těm, kteří ještě nejsou plnohodnotnými uživateli [LOGBOOKu](https://www.cbpmr.info/login), po dobu těchto termínů plnou verzi zapisovače spojení (o tuto možnost je nutno alespoň 24h předem zažádat emailem na soutez(a)svysilackou.cz). Také není podmínkou deník zveřejňovat v bance deníků cbpmr.cz/deniky, ale doporučuje se pro transparentnost a pro účely vyhodnocení vkládat číslo deníku právě z této stránky.
+
+Pokud tento deník používáte i do jiné soutěže, prosím o zaslání na email níže (v době, kdy už bude možné ho zveřejnit), aby mohl být doplněn do tabulky výsledků.

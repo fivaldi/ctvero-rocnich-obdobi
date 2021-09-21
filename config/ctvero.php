@@ -2,6 +2,8 @@
 
 return [
 
+    'locales' => [ 'cs', 'de' ],
+
     'ownerMail' => env('CTVERO_OWNER_MAIL'),
 
     'diaryUrlToProcessor' => [

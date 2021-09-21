@@ -21,4 +21,11 @@ class Utilities {
         }
         return $response;
     }
+
+    public static function contestL10n($contestName) {
+        if (preg_match_all('|^(.*\S)\s+(\d+)\s*$|', $contestName, $output)) {
+            return __($output[1][0]) . ' ' . $output[2][0];
+        }
+        return $contestName;
+    }
 }

@@ -11,6 +11,7 @@ use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Illuminate\Http\Request;
 use App\Models\Contest;
 use App\Exceptions\AppException;
+use App\Http\Utilities;
 
 class CalendarController extends BaseController
 {
@@ -27,9 +28,10 @@ class CalendarController extends BaseController
 
         try {
             $tz = config('app.timezone');
-            $name = $contest->name . ' (' . config('app.name') . ')';
+            $name = __('ctvero_title') . ' - ' . Utilities::contestL10n($contest->name);
             $event = (new Event())
                 ->setSummary($name)
+                ->setDescription(__('ctvero_subtitle') . ' (' . config('app.url') . ')')
                 ->setOccurrence(
                     new TimeSpan(
                         new DateTime(
