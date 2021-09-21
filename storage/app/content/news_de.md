@@ -1,3 +1,5 @@
+<small class="alert alert-info">Diese Version der Neuigkeiten ist nicht aktuell. Bitte beachten Sie die [tschechische Variante](/lang/cs).</small>
+
 **Ich danke allen für die bisherige Teilnahme, es würde mich freuen, auch in der nächsten Runde von Euch zu hören.**
 
 Wenn sich ein Webmaster finden würde, der mir in seiner Freizeit bei der Anpassung einiger Funktionen helfen könnte, wäre ich sehr froh. Ich habe mir alles selbst beigebracht, und so sieht es dann auch aus. :-)
