@@ -98,7 +98,11 @@ $locale = app('translator')->getLocale();
                                     <td class="col-3">{{ $diary['call_sign'] }}</td>
                                     <td class="col-3">{{ $diary['qth_name'] }}</td>
                                     <td class="col-1 d-none d-md-table-cell">{{ $diary['qth_locator'] }}</td>
-                                    <td class="col-1"><a href="{{ $diary['diary_url'] }}" target="_blank"><i class="fa fa-book fa-lg"></i></a></td>
+                                    <td class="col-1">
+                                        @if ($diary['diary_url'])
+                                        <a href="{{ $diary['diary_url'] }}" target="_blank"><i class="fa fa-book fa-lg"></i></a>
+                                        @endif
+                                    </td>
                                     <td class="col-2">{{ $diary['qso_count'] }}</td>
                                     @if ($useScorePoints)
                                     <td class="col-1">{{ $diary['score_points'] }}</td>

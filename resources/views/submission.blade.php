@@ -52,7 +52,7 @@
                 <h3>Krok 2: {{ request()->session()->get('diary') ? 'Kontrola a doplnění' : 'Vyplnění' }} hlášení</h3>
                 <form action="submission" method="post" class="submission-form" id="submission-form">
                     <input type="hidden" name="step" value="2">
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label for="contest">Soutěž</label>
                         <select name="contest" class="form-control form-control-lg p-0 px-3" id="contest">
                             @if (count($data->contests) > 1)
@@ -63,7 +63,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label for="category">Kategorie</label>
                         <select name="category" class="form-control form-control-lg p-0 px-3" id="category">
                             @if (count($data->categories) > 1)
@@ -78,23 +78,23 @@
                         <label for="diaryUrl">URL deníku</label>
                         <input name="diaryUrl" class="form-control" type="text" placeholder="URL adresa deníku určená ke sdílení" value="{{ request()->session()->get('diary.url') }}">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label for="callSign">Volačka</label>
                         <input name="callSign" class="form-control" type="text" placeholder="Tvoje nebo expediční volačka" value="{{ request()->session()->get('diary.callSign') }}">
                     </div>
-                    <div class="form-group">
-                        <label for="qthName">Místo vysílání (QTH)</label>
-                        <input name="qthName" class="form-control" type="text" placeholder="Název místa vysílání" value="{{ request()->session()->get('diary.qthName') }}">
+                    <div class="form-group required">
+                        <label for="qthName">Místo vysílání</label>
+                        <input name="qthName" class="form-control" type="text" placeholder="Název místa vysílání (QTH)" value="{{ request()->session()->get('diary.qthName') }}">
                     </div>
-                    <div class="form-group">
-                        <label for="qthLocator">Lokátor</label>
-                        <input name="qthLocator" class="form-control" type="text" placeholder="Lokátor místa vysílání" value="{{ request()->session()->get('diary.qthLocator') }}">
+                    <div class="form-group required">
+                        <label for="qthLocator">Lokátor <small>(6místný, viz <a href="https://www.egloff.eu/googlemap_v3/carto.php" target="_blank">mapa</a>)</small></label>
+                        <input name="qthLocator" class="form-control" type="text" placeholder="Lokátor místa vysílání" value="{{ request()->session()->get('diary.qthLocator') }}" maxlength="6">
                     </div>
-                    <div class="form-group">
-                        <label for="qsoCount">Počet spojení (QSO)</label>
-                        <input name="qsoCount" class="form-control" type="text" placeholder="Počet úspěšných spojení" value="{{ request()->session()->get('diary.qsoCount') }}">
+                    <div class="form-group required">
+                        <label for="qsoCount">Počet spojení</label>
+                        <input name="qsoCount" class="form-control" type="text" placeholder="Počet úspěšných spojení (QSO)" value="{{ request()->session()->get('diary.qsoCount') }}">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label for="email">E-mail <small>(pro případnou kontrolu nesrovnalostí v deníku)</small></label>
                         <input name="email" class="form-control" type="email" placeholder="name@example.com" value="{{ request()->session()->get('diary.email') }}">
                     </div>
