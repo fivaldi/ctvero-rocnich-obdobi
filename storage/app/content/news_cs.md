@@ -1,7 +1,7 @@
-**Děkuji všem za dosavadní účast a budu se těšit na slyšenou v dalším kole.**
+**Děkuji všem za účast v minulých kolech a těším se opět na slyšenou.**
 
-Pokud by se našel webmaster, který by mi ve svém volném čase pomohl upravit některé funkce, budu rád za pomoc. Já jsem jen samouk a podle toho to taky vypadá. :-)
+Máme tady podzim a s ním další kolo vysílací aktivity Čtvero ročních období. Věřím, že i po minulém víkendu, kdy proběhla soutěž Podzimní éter 33, se najdou takoví, kteří vyrazí na kopec nebo budou vysílat alespoň z domácího QTH.
 
-**NOVINKA: Vzhledem k DX podmínkám na CB, které moc nepřejí lokálním spojením, jsem se rozhodl přidat kategorii pro sdílené kmitočty. Povede se udělat nějaká spojení ?**
+**Velký dík patří Filipovi 84, protože mi pomohl upravit stránky a nyní by mělo být vkládání hlášení jednodušší.**
 
-<span class="text-info">Upozornění: Buďte všichni v této prapodivné době a také v průběhu této aktivity zodpovědní, chovejte se tak, aby jste neohrozili sebe nebo své okolí. **V případě portejblů a vysílání mimo domov dodržujte doporučení a nařízení vlády.**</span>
+Taková malá zajímavost: O soutěž se zajímají v Rakousku, takže je možné, že se ozvou i stanice ze zahraničí. Tak si oprašte němčinu. :-)
