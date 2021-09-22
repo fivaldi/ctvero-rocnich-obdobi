@@ -17,3 +17,8 @@ dl.contests dt {
 dl.contests dd {
     float: right;
 }
+
+.form-group.required label:after {
+    content: "*";
+    color: red;
+}

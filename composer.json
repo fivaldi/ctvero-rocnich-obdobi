@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": "^7.4|^8.0",
+        "doctrine/dbal": "^3.1",
         "eluceo/ical": "^2.3",
         "google/recaptcha": "^1.2",
         "illuminate/cookie": "^8.54",

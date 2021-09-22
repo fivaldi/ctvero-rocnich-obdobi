@@ -155,7 +155,7 @@ class SubmissionController extends Controller
             $validator = Validator::make($request->all(), [
                 'contest' => 'required|max:255',
                 'category' => 'required|max:255',
-                'diaryUrl' => 'required|max:255|unique:\App\Models\Diary,diary_url',
+                'diaryUrl' => 'max:255|unique:\App\Models\Diary,diary_url',
                 'callSign' => 'required|max:255',
                 'qthName' => 'required|max:255',
                 'qthLocator' => ['required', 'size:6', new Locator],
@@ -184,7 +184,7 @@ class SubmissionController extends Controller
                 $diary = new Diary;
                 $diary->contest_id = $contestId;
                 $diary->category_id = $categoryId;
-                $diary->diary_url = $request->input('diaryUrl');
+                $diary->diary_url = $request->input('diaryUrl') !== '' ? $request->input('diaryUrl') : NULL;
                 $diary->call_sign = $request->input('callSign');
                 $diary->qth_name = $request->input('qthName');
                 $diary->qth_locator = $request->input('qthLocator');

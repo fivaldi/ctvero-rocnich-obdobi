@@ -14,7 +14,7 @@ class SubmissionTest extends TestCase
     }
 
     public function tearDown(): void {
-        Diary::where('diary_url', 'https://example.com/diary/url')->delete();
+        Diary::where('call_sign', 'like', 'Test call sign%')->delete();
         Contest::where('name', 'like', 'Test contest %')->delete();
 
         parent::tearDown();
@@ -60,6 +60,62 @@ class SubmissionTest extends TestCase
         ]);
     }
 
+    public function testSubmissionManualDiaryUrlDuplicity()
+    {
+        $category = Category::all()->where('name', 'Pěšák')->first();
+
+        for ($i = 0; $i <= 1; $i++) {
+            $this->post('/submission', [
+                'step' => 2,
+                'contest' => $this->contest->name,
+                'category' => $category->name,
+                'diaryUrl' => 'https://example.com/diary/url',
+                'callSign' => 'Test call sign',
+                'qthName' => 'Test QTH name',
+                'qthLocator' => 'JN79SO',
+                'qsoCount' => '99',
+                'email' => 'name@example.com'
+            ]);
+        }
+        $this->get('/hlaseni?krok-2');
+        $this->response->assertSeeText('Pole diary url již obsahuje v databázi stejný záznam.');
+    }
+
+    public function testSubmissionManualTwoSubmissionsWithoutDiaryUrl()
+    {
+        $category = Category::all()->where('name', 'Pěšák')->first();
+
+        for ($i = 0; $i <= 1; $i++) {
+            $this->post('/submission', [
+                'step' => 2,
+                'contest' => $this->contest->name,
+                'category' => $category->name,
+                'diaryUrl' => '',
+                'callSign' => 'Test call sign without diary URL ' . ($i + 1),
+                'qthName' => 'Test QTH name without diary URL ' . ($i + 1),
+                'qthLocator' => 'JN79SO',
+                'qsoCount' => 99 - $i,
+                'email' => 'name@example.com'
+            ]);
+        }
+
+        $this->get('/vysledky');
+        $this->response->assertSeeTextInOrder([
+            'Test contest ',
+            ' (průběžné výsledky)',
+            '1.',
+            'Test call sign without diary URL 1',
+            'Test QTH name without diary URL 1',
+            'JN79SO',
+            '99',
+            '2.',
+            'Test call sign without diary URL 2',
+            'Test QTH name without diary URL 2',
+            'JN79SO',
+            '98',
+        ]);
+    }
+
     public function testSubmissionEmptyForm()
     {
         $category = Category::all()->where('name', 'Pěšák')->first();
@@ -68,7 +124,6 @@ class SubmissionTest extends TestCase
         $this->get('/hlaseni?krok-2');
         $this->response->assertSeeText('Pole contest je vyžadováno.');
         $this->response->assertSeeText('Pole category je vyžadováno.');
-        $this->response->assertSeeText('Pole diary url je vyžadováno.');
         $this->response->assertSeeText('Pole call sign je vyžadováno.');
         $this->response->assertSeeText('Pole qth name je vyžadováno.');
         $this->response->assertSeeText('Pole qth locator je vyžadováno.');
