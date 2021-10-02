@@ -15,8 +15,7 @@ class SubmissionException extends Exception
     public function render($request)
     {
         $request->session()->flash('submissionErrors', $this->messages);
-        $submissionController = new SubmissionController;
-        return response($submissionController->show($request, $this->resetStep))
-                                             ->setStatusCode($this->statusCode);
+        return response((new SubmissionController)->show($request, $this->resetStep))
+                                                  ->setStatusCode($this->statusCode);
     }
 }

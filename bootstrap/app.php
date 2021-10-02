@@ -23,7 +23,10 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-$app->withFacades();
+$app->withFacades(true, [
+    'Illuminate\Support\Str' => 'Str',
+    'App\Http\Utilities' => 'Utilities',
+]);
 
 $app->withEloquent();
 

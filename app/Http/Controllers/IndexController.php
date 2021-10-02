@@ -15,12 +15,14 @@ class IndexController extends BaseController
         $lastContest = Contest::lastContest();
         $useScorePoints = ($lastContest->options['criterion'] ?? NULL == 'score_points') or false;
         $lastYearContests = Contest::lastYear();
-        $lastContestDiaries = DiaryController::listContestDiaries($lastContest);
+        $lastContestDiaries = DiaryController::getContestDiaries($lastContest);
         $categories = Category::allOrdered();
 
-        return view('index', [ 'lastYearContests' => $lastYearContests,
+        return view('index', [ 'title' => 'Home',
+                               'lastYearContests' => $lastYearContests,
                                'useScorePoints' => $useScorePoints,
                                'lastContestDiaries' => $lastContestDiaries,
-                               'categories' => $categories ]);
+                               'categories' => $categories,
+                               'lastContest' => $lastContest ]);
     }
 }

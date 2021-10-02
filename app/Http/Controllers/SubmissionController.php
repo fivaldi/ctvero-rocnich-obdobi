@@ -93,13 +93,14 @@ class SubmissionController extends Controller
     }
     public function show(Request $request, $resetStep = false)
     {
-        $step = $resetStep ? 1 : intval(request()->input('krok', 1));
+        $step = $resetStep ? 1 : intval(request()->input('step', 1));
         if ($step < 1 or $step > 2) {
             throw new SubmissionException(422, array('Neplatný formulářový krok'), true);
         }
         $diarySources = implode(', ', $this->diarySources);
 
-        return view('submission', [ 'data' => $this,
+        return view('submission', [ 'title' => 'Odeslat hlášení',
+                                    'data' => $this,
                                     'step' => $step,
                                     'diarySources' => $diarySources ]);
     }
@@ -148,7 +149,7 @@ class SubmissionController extends Controller
                 return redirect(route('submissionForm'));
             }
 
-            return redirect()->route('submissionForm', [ 'krok' => 2 ]);
+            return redirect(route('submissionForm', [ 'step' => 2 ]) . '#scroll');
         } elseif ($request->input('step') == 2) {
             Utilities::checkRecaptcha($request);
 
@@ -174,7 +175,7 @@ class SubmissionController extends Controller
                     'qsoCount' => $request->input('qsoCount'),
                     'email' => $request->input('email') ]);
                 $request->session()->flash('submissionErrors', $validator->errors()->all());
-                return redirect()->route('submissionForm', [ 'krok' => 2 ]);
+                return redirect(route('submissionForm', [ 'step' => 2 ]));
             }
 
             try {
@@ -187,12 +188,15 @@ class SubmissionController extends Controller
                 $diary->diary_url = $request->input('diaryUrl') !== '' ? $request->input('diaryUrl') : NULL;
                 $diary->call_sign = $request->input('callSign');
                 $diary->qth_name = $request->input('qthName');
-                $diary->qth_locator = $request->input('qthLocator');
+                $diary->qth_locator = strtoupper($request->input('qthLocator'));
+                list($lon, $lat) = Utilities::locatorToGps($diary->qth_locator);
+                $diary->qth_locator_lon = $lon;
+                $diary->qth_locator_lat = $lat;
                 $diary->qso_count = $request->input('qsoCount');
                 $diary->email = $request->input('email');
                 $diary->save();
 
-                $request->session()->flash('submissionSuccess', 'Hlášení do soutěže bylo úspěšně zpracováno.');
+                $request->session()->flash('submissionSuccess', 'Hlášení do soutěže <a href="' . route('contest', [ 'name' => Str::replace(' ', '-', $request->input('contest')) ]) . '#scroll">' . $request->input('contest') . '</a> bylo úspěšně zpracováno.');
                 return redirect(route('submissionForm'));
             } catch (\Exception $e) {
                 throw new SubmissionException(500, array('Hlášení do soutěže se nepodařilo uložit.'));

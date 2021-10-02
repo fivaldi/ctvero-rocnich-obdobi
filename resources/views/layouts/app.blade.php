@@ -18,8 +18,11 @@
     <!-- Google web font "Open Sans" -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">
     <!-- Font Awesome -->
-    <link rel="stylesheet" type="text/css" href="/static/font-awesome-4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous">
+    <!-- Slick Carousel -->
     <link rel="stylesheet" type="text/css" href="/static/slick/slick.css" />
     <link rel="stylesheet" type="text/css" href="/static/slick/slick-theme.css" />
     <!-- tooplate style -->
@@ -28,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HP42P30DVN"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HP42P30DVN"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -48,8 +51,6 @@
         }
 
     </script>
-
-    <script type="text/javascript" src="http://www.w3schools.com/lib/w3data.js"></script>
 
 </head>
 
@@ -82,7 +83,7 @@
                 <p>{{ __('ctvero_subtitle') }}</p>
             </header>
 
-            <nav class="navbar narbar-light">
+            <nav class="navbar navbar-light">
                 <a class="navbar-brand tm-text-gray" href="#">
                     Menu
                 </a>
@@ -99,11 +100,19 @@
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
+                        @php ($submissionDeadline = Utilities::submissionDeadline())
+                        @if ($submissionDeadline)
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="{{ route('submissionForm') }}">Hlášení</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('submissionForm') }}">Odeslat hlášení<br>
+                            <small class="pt-0 mt-0">{{ $submissionDeadline }}</small>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link tm-text-gray" href="{{ route('contests') }}">Soutěžní kola</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="{{ route('results') }}">Výsledky</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('results') }}">Výsledkové listiny</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link tm-text-gray" href="{{ route('index') . '#contact-message' }}">Kontakt</a>
@@ -116,63 +125,56 @@
                     </ul>
                 </div>
             </nav>
-
-            <div class="navbar navbar-default navbar-fixed-top">
-                <a href="/" class="navbar-brand"></a>
-                <botton class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mydropdown">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </botton>
-
-            </div>
-
-            <div class="collapse navbar-collapse" id="mydropdown">
-
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="{{ route('index') }}">Home</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('submissionForm') }}" target="">Hlášení</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('results') }}">Výsledky</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('index') . '#contact-message' }}">Kontakt</a>
-                    </li>
-                    <li>
-                    @foreach (config('ctvero.locales') as $lang)
-                        {{ $loop->index > 0 ? '|' : '' }} <a href="{{ route('lang', [ 'lang' => $lang ]) }}">{{ strtoupper($lang) }}</a>
-                    @endforeach
-                    </li>
-                </ul>
-            </div>
         </section>
 
         <section class="row" id="tm-section-1">
             <div class="col-lg-12 tm-slider-col">
                 <div class="tm-img-slider">
-                    <div class="tm-img-slider-item" href="/static/img/gallery-img-1.jpg">
+                    <div class="tm-img-slider-item">
                         <p class="tm-slider-caption">Vysílání nás baví !</p>
-                        <img src="/static/img/gallery-img-1.jpg" alt="Image" class="tm-slider-img">
+                        <img data-lazy="/static/img/gallery-img-1.jpg" alt="Slider" class="tm-slider-img">
                     </div>
-                    <div class="tm-img-slider-item" href="/static/img/gallery-img-2.jpg">
+                    <div class="tm-img-slider-item">
                         <p class="tm-slider-caption">Výzva na kanále ...</p>
-                        <img src="/static/img/gallery-img-2.jpg" alt="Image" class="tm-slider-img">
+                        <img data-lazy="/static/img/gallery-img-2.jpg" alt="Slider" class="tm-slider-img">
                     </div>
-                    <div class="tm-img-slider-item" href="/static/img/gallery-img-3.jpg">
+                    <div class="tm-img-slider-item">
                         <p class="tm-slider-caption">Stanice ... na příjmu</p>
-                        <img src="/static/img/gallery-img-3.jpg" alt="Image" class="tm-slider-img">
+                        <img data-lazy="/static/img/gallery-img-3.jpg" alt="Slider" class="tm-slider-img">
                     </div>
-                    <div class="tm-img-slider-item" href="/static/img/gallery-img-4.jpg">
+                    <div class="tm-img-slider-item">
                         <p class="tm-slider-caption">27 MHz - pásmo 11m</p>
-                        <img src="/static/img/gallery-img-4.jpg" alt="Image" class="tm-slider-img">
+                        <img data-lazy="/static/img/gallery-img-4.jpg" alt="Slider" class="tm-slider-img">
+                    </div>
+                    <div class="tm-img-slider-item">
+                        <p class="tm-slider-caption">73 a naslyš !</p>
+                        <img data-lazy="/static/img/gallery-img-5.jpg" alt="Slider" class="tm-slider-img">
+                    </div>
+                    <div class="tm-img-slider-item">
+                        <p class="tm-slider-caption">Hodně pěkných spojení !</p>
+                        <img data-lazy="/static/img/gallery-img-6.jpg" alt="Slider" class="tm-slider-img">
+                    </div>
+                    <div class="tm-img-slider-item">
+                        <p class="tm-slider-caption">Kategorie Pěšák</p>
+                        <img data-lazy="/static/img/gallery-img-7.jpg" alt="Slider" class="tm-slider-img">
+                    </div>
+                    <div class="tm-img-slider-item">
+                        <p class="tm-slider-caption">Kategorie Mobil</p>
+                        <img data-lazy="/static/img/gallery-img-8.jpg" alt="Slider" class="tm-slider-img">
+                    </div>
+                    <div class="tm-img-slider-item">
+                        <p class="tm-slider-caption">Kategorie Obrněnec</p>
+                        <img data-lazy="/static/img/gallery-img-9.jpg" alt="Slider" class="tm-slider-img">
+                    </div>
+                    <div class="tm-img-slider-item">
+                        <p class="tm-slider-caption">Kategorie Sdílenky</p>
+                        <img data-lazy="/static/img/gallery-img-11.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                 </div>
             </div>
         </section>
+
+        <section id="scroll"></section>
 
         @yield('sections')
 
@@ -184,15 +186,15 @@
     </div>
 
     <!-- load JS files -->
-    <script type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="/static/js/popper.min.js"></script>
-    <!-- https://popper.js.org/ -->
-    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
-    <!-- https://getbootstrap.com/ -->
-    <script type="text/javascript" src="/static/slick/slick.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+
     <!-- Slick Carousel -->
-    <script>w3IncludeHTML();</script>
-    <!-- Include MENU -->
+    <script src="/static/slick/slick.min.js"></script>
 
     <script>
         function setCarousel() {
@@ -202,26 +204,15 @@
                 slider.slick('destroy');
             }
 
-            if ($(window).width() > 991) {
-                // Slick carousel
-                slider.slick({
-                    autoplay: true,
-                    fade: true,
-                    speed: 800,
-                    infinite: true,
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                });
-            } else {
-                slider.slick({
-                    autoplay: true,
-                    fade: true,
-                    speed: 800,
-                    infinite: true,
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                });
-            }
+            slider.slick({
+                lazyLoad: 'ondemand',
+                autoplay: true,
+                fade: true,
+                speed: 800,
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1
+            });
         }
 
         $(document).ready(function () {
@@ -239,6 +230,11 @@
             $('.nav-link').click(function () {
                 $('#mainNav').removeClass('show');
             });
+
+            // Fix anchor scrolling
+            if (location.hash !== '') {
+                location.hash = location.hash;
+            }
         });
     </script>
 

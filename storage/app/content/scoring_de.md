@@ -1,3 +1,3 @@
-Die Auswertung erfolgt automatisch nach dem Ausfüllen des Formulars [HIER](/hlaseni). Jeder Zeitraum wird separat ausgewertet. Es empfiehlt sich, den Eintrag so schnell wie möglich vorzunehmen, spätestens jedoch 30 Tage nach dem Datum der Sendung.
+Die Auswertung erfolgt automatisch nach dem Ausfüllen des Formulars [HIER](/submission). Jeder Zeitraum wird separat ausgewertet. Es empfiehlt sich, den Eintrag so schnell wie möglich vorzunehmen, spätestens jedoch 30 Tage nach dem Datum der Sendung.
 
 Am Ende jedes Zeitabschnitts werden alle Daten aus den Formularen gelöscht. Wer will, kann davon abgesehen zusätzlich ein paar Worte oder ein Foto schicken. Dies wird verwendet, um einen Artikel über die Veranstaltung zu erstellen und auf dieser Website zu veröffentlichen bzw. mit anderen sich mit dem Thema CB-Funk befassenden zu teilen. Bei Interesse bitte per E-Mail an: soutez(a)svysilackou.cz

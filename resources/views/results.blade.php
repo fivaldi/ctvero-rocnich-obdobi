@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Výsledky')
+@section('title', $title)
 
 @section('sections')
 
@@ -8,66 +8,25 @@
         <div class="row">
 
             <div class="col-xl-12 col-lg-12 col-md-12">
-                <h2>Výsledkové listiny</h2>
-                @foreach (array_keys($allContestsDiaries) as $contest_name)
-                    @if (! empty($allContestsDiaries[$contest_name]))
-                    <a href="#{{ $contest_name }}">{{ $contest_name }}</a>
-                    @if (! $loop->last)
-                    <span>|</span>
-                    @endif
-                    @endif
+                <h2 class="mb-4">{{ $title }}</h2>
+                <ul class="mb-5 list-group list-group-horizontal-md d-flex flex-wrap">
+                @foreach ($allContestsDiaries as $contestName => $diaries)
+                    <li class="list-group-item text-large"><a href="#{{ Str::replace(' ', '-', $contestName) }}">{{ Utilities::contestL10n($contestName) }}</a></li>
                 @endforeach
+                </ul>
 
-                @foreach (array_keys($allContestsDiaries) as $contest_name)
-                    @if (! empty($allContestsDiaries[$contest_name]))
-                    @php
-                    $useScorePoints = ($allContests->where('name', $contest_name)->first()->options['criterion'] ?? NULL == 'score_points') or false;
-                    $inProgress = $contestsInProgress->where('name', $contest_name)->first() ? '<i> (' . 'průběžné výsledky' . ')</i>' : '';
-                    @endphp
-                    <hr class="mt-5">
-                    <h3 id="{{ $contest_name }}" class="mt-4 text-center">{{ $contest_name }}{!! $inProgress !!}</h3>
+                @foreach ($allContestsDiaries as $contestName => $diaries)
+                    @php ($useScorePoints = $allContests->where('name', $contestName)->first()->options['criterion'] ?? NULL == 'score_points')
+                    <h3 id="{{ Str::replace(' ', '-', $contestName) }}" class="mt-5 text-center">{{ Utilities::contestL10n($contestName) }}{!! Utilities::contestInProgress($contestName) !!}</h3>
 
                     @foreach ($categories as $category)
-                        @isset ($allContestsDiaries[$contest_name][$category['id']])
+                        @isset ($diaries[$category['id']])
                         <h4 class="mt-3">{{ $category['name'] }}</h4>
 
-                        <table class="table-striped small" style="width: 100%">
-                        <tr style="background-color: silver">
-                            <th class="col-1">Pořadí</th>
-                            <th class="col-1 d-none d-md-table-cell">Datum</th>
-                            <th class="col-3">Volačka</th>
-                            <th class="col-3">QTH</th>
-                            <th class="col-1 d-none d-md-table-cell">Lokátor</th>
-                            <th class="col-1">Deník</th>
-                            <th class="col-1">QSO</th>
-                            @if ($useScorePoints)
-                            <th class="col-1">Body</th>
-                            @endif
-                        </tr>
-                        @foreach ($allContestsDiaries[$contest_name][$category['id']] as $diary)
-                            <tr style="font-weight: {{ $loop->index < 3 ? 'bold' : 'normal' }}">
-                                <td class="col-1">{{ $loop->iteration }}.</td>
-                                <td class="col-1 d-none d-md-table-cell">{{ date('j.n.Y', strtotime($diary['created_at'])) }}</td>
-                                <td class="col-3">{{ $diary['call_sign'] }}</td>
-                                <td class="col-3">{{ $diary['qth_name'] }}</td>
-                                <td class="col-1 d-none d-md-table-cell">{{ $diary['qth_locator'] }}</td>
-                                <td class="col-1">
-                                    @if ($diary['diary_url'])
-                                    <a href="{{ $diary['diary_url'] }}" target="_blank"><i class="fa fa-book fa-lg"></i></a>
-                                    @endif
-                                </td>
-                                <td class="col-1">{{ $diary['qso_count'] }}</td>
-                                @if ($useScorePoints)
-                                <td class="col-1">{{ $diary['score_points'] }}</td>
-                                @endif
-                            </tr>
-                        @endforeach
-                        </table>
+                        <x-results-table :terse="false" :useScorePoints="$useScorePoints" :diaries="$diaries[$category['id']]"/>
 
                         @endisset
                     @endforeach
-
-                    @endif
                 @endforeach
 
             </div>

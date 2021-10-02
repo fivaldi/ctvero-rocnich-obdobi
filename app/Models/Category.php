@@ -13,7 +13,7 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'image_src', 'created_at', 'updated_at'
+        'name', 'image_src', 'map_marker_color', 'created_at', 'updated_at'
     ];
 
     /**
