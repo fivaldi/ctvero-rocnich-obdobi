@@ -233,7 +233,9 @@
 
             // Fix anchor scrolling
             if (location.hash !== '') {
-                location.hash = location.hash;
+                $('html, body').animate({
+                    scrollTop: $(location.hash).offset().top
+                });
             }
         });
     </script>

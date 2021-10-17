@@ -36,19 +36,33 @@
                         zoomOffset: -1,
                     }).addTo(map);
 
-                    var diaries = @json($diaries);
-                    diaries.forEach(function(item) {
-                        var myIcon = L.divIcon({
-                            html: `<i class="fa fa-flag fa-2x" style="color: ${item['categoryMapMarkerColor']};"></i>`,
-                            className: `no-class`,
+                    var locatorDiaries = @json($diaries);
+                    for (const [locator, diaries] of Object.entries(locatorDiaries)) {
+                        var marker = null;
+                        var popups = [];
+
+                        if (diaries.length > 1) {
+                            marker = L.divIcon({
+                                html: `<i class="fa fa-flag fa-2x" style="color: grey;"></i>`,
+                                className: 'no-class',
+                            });
+                        }
+                        diaries.forEach(function(diary) {
+                            marker = marker !== null ? marker : L.divIcon({
+                                html: `<i class="fa fa-flag fa-2x" style="color: ${diary['categoryMapMarkerColor']};"></i>`,
+                                className: 'no-class',
+                            });
+                            var diaryLink = diary['diaryUrl'] !== null ? `<a href="${diary['diaryUrl']}">Deník</a>` : '';
+                            popups.push(`<b>${diary['callSign']}</b><br>
+                                         ${diary['qthName']} (${diary['qthLocator']})<br>
+                                         Kategorie: ${diary['categoryName']}<br>
+                                         Počet spojení: ${diary['qsoCount']}<br>` + diaryLink);
                         });
-                        var diaryLink = item['diaryUrl'] !== null ? `<a href="${item['diaryUrl']}">Deník</a>` : '';
-                        L.marker([item['qthLocatorLat'], item['qthLocatorLon']], {icon: myIcon}).addTo(map)
-                        .bindPopup(`<b>${item['callSign']}</b><br>
-                                    ${item['qthName']} (${item['qthLocator']})<br>
-                                    Kategorie: ${item['categoryName']}<br>
-                                    Počet spojení: ${item['qsoCount']}<br>` + diaryLink);
-                    });
+
+                        /* Note: In case of multi-diaries popup for a single marker, QTH locator lon/lat
+                        should always be the same. Thus, it's OK to take the first diary's QTH locator lon/lat. */
+                        L.marker([diaries[0]['qthLocatorLat'], diaries[0]['qthLocatorLon']], {icon: marker}).addTo(map).bindPopup(popups.join('<hr>'));
+                    }
                 </script>
                 @endif
 

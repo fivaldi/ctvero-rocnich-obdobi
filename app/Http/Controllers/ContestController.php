@@ -22,15 +22,17 @@ class ContestController extends Controller
 
         foreach (DiaryController::getContestDiaries($contest) as $categoryDiaries) {
             foreach ($categoryDiaries as $diary) {
-                $diaries[] = [ 'callSign' => $diary->call_sign,
-                               'qthName' => $diary->qth_name,
-                               'qthLocator' => $diary->qth_locator,
-                               'qthLocatorLon' => $diary->qth_locator_lon,
-                               'qthLocatorLat' => $diary->qth_locator_lat,
-                               'categoryName' => __($diary->category->name),
-                               'categoryMapMarkerColor' => $diary->category->map_marker_color,
-                               'diaryUrl' => $diary->diary_url,
-                               'qsoCount' => $diary->qso_count ];
+                $diaries[$diary->qth_locator][] = [
+                    'callSign' => $diary->call_sign,
+                    'qthName' => $diary->qth_name,
+                    'qthLocator' => $diary->qth_locator,
+                    'qthLocatorLon' => $diary->qth_locator_lon,
+                    'qthLocatorLat' => $diary->qth_locator_lat,
+                    'categoryName' => __($diary->category->name),
+                    'categoryMapMarkerColor' => $diary->category->map_marker_color,
+                    'diaryUrl' => $diary->diary_url,
+                    'qsoCount' => $diary->qso_count
+                ];
             }
         }
         return view('contest', [ 'title' => 'Soutěžní kolo ' . Utilities::contestL10n($contest->name),
