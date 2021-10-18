@@ -52,7 +52,7 @@
                                 html: `<i class="fa fa-flag fa-2x" style="color: ${diary['categoryMapMarkerColor']};"></i>`,
                                 className: 'no-class',
                             });
-                            var diaryLink = diary['diaryUrl'] !== null ? `<a href="${diary['diaryUrl']}">Deník</a>` : '';
+                            var diaryLink = diary['diaryUrl'] !== null ? `<a href="${diary['diaryUrl']}"><i class="fa fa-book"></i> Deník</a>` : '';
                             popups.push(`<b>${diary['callSign']}</b><br>
                                          ${diary['qthName']} (${diary['qthLocator']})<br>
                                          Kategorie: ${diary['categoryName']}<br>
