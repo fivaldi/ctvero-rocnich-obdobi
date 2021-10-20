@@ -24,6 +24,7 @@ $app = new Laravel\Lumen\Application(
 );
 
 $app->withFacades(true, [
+    'Illuminate\Support\Facades\Session' => 'Session',
     'Illuminate\Support\Str' => 'Str',
     'App\Http\Utilities' => 'Utilities',
 ]);

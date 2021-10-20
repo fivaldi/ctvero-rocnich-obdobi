@@ -12,6 +12,6 @@ class Locator implements Rule
     }
     public function message()
     {
-        return 'Pole :attribute neobsahuje platný QTH lokátor.';
+        return __('Pole :attribute neobsahuje platný QTH lokátor.');
     }
 }

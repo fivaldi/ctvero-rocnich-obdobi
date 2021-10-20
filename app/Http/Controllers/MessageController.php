@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MessageMail;
@@ -14,12 +15,13 @@ class MessageController extends BaseController
 {
     public function send(Request $request)
     {
-        Utilities::checkRecaptcha($request);
+        Utilities::validateCsrfToken();
+        Utilities::checkRecaptcha();
 
         $messages = [
-            'email' => 'Pole :attribute obsahuje neplatnou e-mailovou adresu.',
-            'required' => 'Pole :attribute je vyžadováno.',
-            'max' => 'Pole :attribute přesahuje povolenou délku :max znaků.',
+            'email' => __('Pole :attribute obsahuje neplatnou e-mailovou adresu.'),
+            'required' => __('Pole :attribute je vyžadováno.'),
+            'max' => __('Pole :attribute přesahuje povolenou délku :max znaků.'),
         ];
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -28,7 +30,7 @@ class MessageController extends BaseController
         ], $messages);
 
         if ($validator->fails()) {
-            $request->session()->flash('messageErrors', $validator->errors()->all());
+            Session::flash('messageErrors', $validator->errors()->all());
             return redirect(route('index'));
         }
 
@@ -37,10 +39,10 @@ class MessageController extends BaseController
                                    $request->input('subject'),
                                    $request->input('message'));
             Mail::to(config('ctvero.ownerMail'))->send($msg);
-            $request->session()->flash('messageSuccess', 'Zpráva byla úspěšně odeslána.');
+            Session::flash('messageSuccess', __('Zpráva byla úspěšně odeslána.'));
             return redirect(route('index'));
         } catch (\Exception $e) {
-            throw new MessageException(500, array('Odeslání zprávy se nezdařilo.'));
+            throw new MessageException(500, array(__('Odeslání zprávy se nezdařilo.')));
         }
     }
 }

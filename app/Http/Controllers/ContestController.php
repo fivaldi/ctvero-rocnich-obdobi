@@ -17,7 +17,7 @@ class ContestController extends Controller
     {
         $contest = Contest::where('name', Str::replace('-', ' ', urldecode($name)))->first();
         if (empty($contest)) {
-            throw new ContestException(404, array('Soutěž nebyla nalezena.'));
+            throw new ContestException(404, array(__('Soutěž nebyla nalezena.')));
         }
 
         foreach (DiaryController::getContestDiaries($contest) as $categoryDiaries) {
@@ -35,13 +35,13 @@ class ContestController extends Controller
                 ];
             }
         }
-        return view('contest', [ 'title' => 'Soutěžní kolo ' . Utilities::contestL10n($contest->name),
+        return view('contest', [ 'title' => __('Soutěžní kolo') . ' ' . Utilities::contestL10n($contest->name),
                                  'contest' => $contest,
                                  'diaries' => $diaries ?? [] ]);
     }
     public function showAll(Request $request)
     {
-        return view('contests', [ 'title' => 'Soutěžní kola',
+        return view('contests', [ 'title' => __('Soutěžní kola'),
                                   'contests' => Contest::allOrdered() ]);
     }
 }

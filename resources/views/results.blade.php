@@ -21,9 +21,9 @@
 
                     @foreach ($categories as $category)
                         @isset ($diaries[$category['id']])
-                        <h4 class="mt-3">{{ $category['name'] }}</h4>
+                        <h4 class="mt-3">{{ __($category['name']) }}</h4>
 
-                        <x-results-table :terse="false" :useScorePoints="$useScorePoints" :diaries="$diaries[$category['id']]"/>
+                        <x-results-table :useScorePoints="$useScorePoints" :diaries="$diaries[$category['id']]"/>
 
                         @endisset
                     @endforeach

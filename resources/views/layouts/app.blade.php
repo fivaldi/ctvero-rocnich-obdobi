@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
 
-    <title>{{ __('ctvero_title') }} - @yield('title')</title>
+    <title>{{ __('Čtvero ročních období') }} - @yield('title')</title>
     <!--
 
     Template 2103 Central
@@ -27,17 +27,17 @@
     <link rel="stylesheet" type="text/css" href="/static/slick/slick-theme.css" />
     <!-- tooplate style -->
     <link rel="stylesheet" type="text/css" href="/static/css/tooplate-style.css">
-    <!-- custom style overrides -->
-    <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+    <!-- Ctvero app styles and overrides -->
+    <link rel="stylesheet" type="text/css" href="/static/css/ctvero.css">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HP42P30DVN"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    gtag('config', 'G-HP42P30DVN');
+        gtag('config', 'G-HP42P30DVN');
     </script>
 
     <script>
@@ -63,7 +63,7 @@
         <div class="loader-section section-right"></div>
     </div>
     <div class="container">
-        @if ($errors = request()->session()->pull('errors'))
+        @if ($errors = Session::pull('errors'))
             <div class="alert alert-danger">
                 @if (count($errors) == 1)
                     {{ $errors[0] }}
@@ -79,8 +79,8 @@
 
         <section class="tm-section-head" id="top">
             <header id="header" class="text-center tm-text-gray">
-                <h1><a href="{{ route('index') }}">{{ __('ctvero_title') }}</a></h1>
-                <p>{{ __('ctvero_subtitle') }}</p>
+                <h1><a href="{{ route('index') }}">{{ __('Čtvero ročních období') }}</a></h1>
+                <p>{{ __('CB soutěž') }}</p>
             </header>
 
             <nav class="navbar navbar-light">
@@ -103,19 +103,19 @@
                         @php ($submissionDeadline = Utilities::submissionDeadline())
                         @if ($submissionDeadline)
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="{{ route('submissionForm') }}">Odeslat hlášení<br>
+                            <a class="nav-link tm-text-gray" href="{{ route('submissionForm') }}">{{ __('Odeslat hlášení') }}<br>
                             <small class="pt-0 mt-0">{{ $submissionDeadline }}</small>
                             </a>
                         </li>
                         @endif
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="{{ route('contests') }}">Soutěžní kola</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('contests') }}">{{ __('Soutěžní kola') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="{{ route('results') }}">Výsledkové listiny</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('results') }}">{{ __('Výsledkové listiny') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link tm-text-gray" href="{{ route('index') . '#contact-message' }}">Kontakt</a>
+                            <a class="nav-link tm-text-gray" href="{{ route('index') . '#contact-message' }}">{{ __('Kontakt') }}</a>
                         </li>
                         <li class="nav-item">
                         @foreach (config('ctvero.locales') as $lang)
@@ -131,43 +131,43 @@
             <div class="col-lg-12 tm-slider-col">
                 <div class="tm-img-slider">
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">Vysílání nás baví !</p>
+                        <p class="tm-slider-caption">{{ __('Vysílání nás baví !') }}</p>
                         <img data-lazy="/static/img/gallery-img-1.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">Výzva na kanále ...</p>
+                        <p class="tm-slider-caption">{{ __('Výzva na kanále ...') }}</p>
                         <img data-lazy="/static/img/gallery-img-2.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">Stanice ... na příjmu</p>
+                        <p class="tm-slider-caption">{{ __('Stanice ... na příjmu') }}</p>
                         <img data-lazy="/static/img/gallery-img-3.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">27 MHz - pásmo 11m</p>
+                        <p class="tm-slider-caption">{{ __('27 MHz - pásmo 11m') }}</p>
                         <img data-lazy="/static/img/gallery-img-4.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">73 a naslyš !</p>
+                        <p class="tm-slider-caption">{{ __('73 a naslyš !') }}</p>
                         <img data-lazy="/static/img/gallery-img-5.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">Hodně pěkných spojení !</p>
+                        <p class="tm-slider-caption">{{ __('Hodně pěkných spojení !') }}</p>
                         <img data-lazy="/static/img/gallery-img-6.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">Kategorie Pěšák</p>
+                        <p class="tm-slider-caption">{{ __('Kategorie Pěšák') }}</p>
                         <img data-lazy="/static/img/gallery-img-7.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">Kategorie Mobil</p>
+                        <p class="tm-slider-caption">{{ __('Kategorie Mobil') }}</p>
                         <img data-lazy="/static/img/gallery-img-8.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">Kategorie Obrněnec</p>
+                        <p class="tm-slider-caption">{{ __('Kategorie Obrněnec') }}</p>
                         <img data-lazy="/static/img/gallery-img-9.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                     <div class="tm-img-slider-item">
-                        <p class="tm-slider-caption">Kategorie Sdílenky</p>
+                        <p class="tm-slider-caption">{{ __('Kategorie Sdílenky') }}</p>
                         <img data-lazy="/static/img/gallery-img-11.jpg" alt="Slider" class="tm-slider-img">
                     </div>
                 </div>
@@ -180,8 +180,8 @@
 
         <footer class="mt-5">
             <p class="text-center small">Copyright © 2021 Radek Lichnov. Design: <a href="https://www.tooplate.com/">Tooplate</a>
-            | Tento <a href="{{ config('ctvero.repositoryUrl') }}">projekt</a> je open-source. Engine: <a href="https://lumen.laravel.com/">Lumen Framework</a>
-            | Překlad do němčiny: KML - Kamillo</p>
+            | {!! __('Tento <a href=":repositoryLink">projekt</a> je open-source', [ 'repositoryLink' => config('ctvero.repositoryUrl') ]) !!}. Engine: <a href="https://lumen.laravel.com/">Lumen Framework</a>
+            | {{ __('Překlad do němčiny') }}: KML - Kamillo</p>
         </footer>
     </div>
 
@@ -196,49 +196,8 @@
     <!-- Slick Carousel -->
     <script src="/static/slick/slick.min.js"></script>
 
-    <script>
-        function setCarousel() {
-            var slider = $('.tm-img-slider');
-
-            if (slider.hasClass('slick-initialized')) {
-                slider.slick('destroy');
-            }
-
-            slider.slick({
-                lazyLoad: 'ondemand',
-                autoplay: true,
-                fade: true,
-                speed: 800,
-                infinite: true,
-                slidesToShow: 1,
-                slidesToScroll: 1
-            });
-        }
-
-        $(document).ready(function () {
-            if (renderPage) {
-                $('body').addClass('loaded');
-            }
-
-            setCarousel();
-
-            $(window).resize(function () {
-                setCarousel();
-            });
-
-            // Close menu after link click
-            $('.nav-link').click(function () {
-                $('#mainNav').removeClass('show');
-            });
-
-            // Fix anchor scrolling
-            if (location.hash !== '') {
-                $('html, body').animate({
-                    scrollTop: $(location.hash).offset().top
-                });
-            }
-        });
-    </script>
+    <!-- Ctvero app scripts and final document loading actions -->
+    <script src="/static/js/ctvero.js"></script>
 
 </body>
 

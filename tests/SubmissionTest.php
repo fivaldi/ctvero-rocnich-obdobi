@@ -1,5 +1,7 @@
 <?php
 
+use DiDom\Document;
+
 use App\Models\Contest;
 use App\Models\Category;
 use App\Models\Diary;
@@ -12,6 +14,12 @@ class SubmissionTest extends TestCase
 
         $this->contest = Contest::factory()->create();
         $this->seeInDatabase('contest', [ 'name' => $this->contest->name ]);
+
+        $this->get('/submission');
+
+        // CSRF
+        $doc = new Document($this->response->getContent(), false);
+        $this->csrfToken = $doc->first('form#submission-form input[name=_csrf]')->value;
     }
 
     public function tearDown(): void
@@ -33,6 +41,7 @@ class SubmissionTest extends TestCase
         $this->response->assertDontSeeText($this->contest->name);
 
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 2,
             'contest' => $this->contest->name,
             'category' => $category->name,
@@ -78,7 +87,12 @@ class SubmissionTest extends TestCase
         $category = Category::all()->where('name', 'Pěšák')->first();
 
         for ($i = 0; $i <= 1; $i++) {
+            $this->get('/submission');
+            $doc = new Document($this->response->getContent(), false);
+            $csrfToken = $doc->first('form#submission-form input[name=_csrf]')->value;
+
             $this->post('/submission', [
+                '_csrf' => $csrfToken,
                 'step' => 2,
                 'contest' => $this->contest->name,
                 'category' => $category->name,
@@ -99,7 +113,12 @@ class SubmissionTest extends TestCase
         $category = Category::all()->where('name', 'Pěšák')->first();
 
         for ($i = 0; $i <= 1; $i++) {
+            $this->get('/submission');
+            $doc = new Document($this->response->getContent(), false);
+            $csrfToken = $doc->first('form#submission-form input[name=_csrf]')->value;
+
             $this->post('/submission', [
+                '_csrf' => $csrfToken,
                 'step' => 2,
                 'contest' => $this->contest->name,
                 'category' => $category->name,
@@ -133,7 +152,10 @@ class SubmissionTest extends TestCase
     {
         $category = Category::all()->where('name', 'Pěšák')->first();
 
-        $this->post('/submission', [ 'step' => 2 ]);
+        $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
+            'step' => 2
+        ]);
         $this->get('/submission?step=2');
         $this->response->assertSeeText('Pole contest je vyžadováno.');
         $this->response->assertSeeText('Pole category je vyžadováno.');
@@ -153,6 +175,7 @@ class SubmissionTest extends TestCase
             'ctvero.cbpmrInfoApiAuthPassword' => 'test-pass-test-pass-test-pass' ]);
 
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'https://www.cbpmr.info/share/4902b6' ]);
         $this->seeStatusCode(500);
@@ -166,6 +189,7 @@ class SubmissionTest extends TestCase
     public function testDiarySourceCbdxCz()
     {
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'https://drive.cbdx.cz/xdenik1503.ht0m' ]);
         $diaryInSession = $this->app['session.store']->all()['diary'];
@@ -181,6 +205,7 @@ class SubmissionTest extends TestCase
     public function testDiarySourceCbdxCzPlainHttp()
     {
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'http://drive.cbdx.cz/xdenik1503.ht0m' ]);
         $diaryInSession = $this->app['session.store']->all()['diary'];
@@ -196,6 +221,7 @@ class SubmissionTest extends TestCase
     public function testDiarySourceCbpmrCz()
     {
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'https://www.cbpmr.cz/deniky/19124.htm' ]);
         $diaryInSession = $this->app['session.store']->all()['diary'];
@@ -211,6 +237,7 @@ class SubmissionTest extends TestCase
     public function testDiarySourceCbpmrCzPlainHttp()
     {
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'http://www.cbpmr.cz/deniky/19124.htm' ]);
         $diaryInSession = $this->app['session.store']->all()['diary'];
@@ -229,6 +256,7 @@ class SubmissionTest extends TestCase
             $this->markTestSkipped('Access to cbpmr.info API is not configured.');
         }
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'https://www.cbpmr.info/share/4902b6' ]);
         $diaryInSession = $this->app['session.store']->all()['diary'];
@@ -247,6 +275,7 @@ class SubmissionTest extends TestCase
             $this->markTestSkipped('Access to cbpmr.info API is not configured.');
         }
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'http://www.cbpmr.info/share/4902b6' ]);
         $diaryInSession = $this->app['session.store']->all()['diary'];
@@ -262,22 +291,34 @@ class SubmissionTest extends TestCase
     public function testDiaryAlreadyInDb()
     {
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'http://www.cbpmr.cz/deniky/24597.htm' ]);
         $this->get('/submission?step=2');
         $this->response->assertSeeText('Pole diary url již obsahuje v databázi stejný záznam.');
     }
 
-    public function testSubmissionFormMissingAllData()
+    public function testSubmissionFormMissingCsrf()
     {
         $this->post('/submission', []);
+        $this->seeStatusCode(403);
+    }
+
+    public function testSubmissionFormMissingAllData()
+    {
+        $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
+        ]);
         $this->seeStatusCode(400);
         $this->response->assertSeeText('Neplatný formulářový krok nebo neúplný požadavek');
     }
 
     public function testSubmissionMissingDiaryUrl()
     {
-        $this->post('/submission', [ 'step' => 1 ]);
+        $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
+            'step' => 1
+        ]);
         $this->seeStatusCode(400);
         $this->response->assertSeeText('Neúplný požadavek');
     }
@@ -285,6 +326,7 @@ class SubmissionTest extends TestCase
     public function testSubmissionUnknownDiarySource()
     {
         $this->post('/submission', [
+            '_csrf' => $this->csrfToken,
             'step' => 1,
             'diaryUrl' => 'http://example.com/unknown/diary/url' ]);
         $this->seeStatusCode(422);

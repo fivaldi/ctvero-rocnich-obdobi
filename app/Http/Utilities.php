@@ -5,21 +5,23 @@ namespace App\Http;
 use Log;
 use Carbon\Carbon;
 use Illuminate\Mail\Markdown;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use ReCaptcha\ReCaptcha;
 
 use App\Exceptions\ForbiddenException;
 use App\Models\Contest;
 
 class Utilities {
-    public static function checkRecaptcha($request) {
+    public static function checkRecaptcha() {
         // FIXME: Workaround due to some mocking issues in PHPUnit when unit testing
         if (config('app.env') == 'testing') {
             return;
         }
         $recaptcha = new ReCaptcha(config('ctvero.recaptchaSecret'));
         $response = $recaptcha->setScoreThreshold(config('ctvero.recaptchaScoreThreshold'))
-            ->verify($request->input('g-recaptcha-response'), $request->ip());
+            ->verify(request()->input('g-recaptcha-response'), request()->ip());
         Log::info('Received reCAPTCHA response:', [ var_export($response, true) ]);
         if (! $response->isSuccess()) {
             throw new ForbiddenException();
@@ -40,7 +42,7 @@ class Utilities {
 
     public static function contestInProgress($contestName) {
         $contestsInProgress = Contest::submissionActiveOrdered();
-        return $contestsInProgress->where('name', $contestName)->first() ? '<i> (' . 'průběžné pořadí' . ')</i>' : '';
+        return $contestsInProgress->where('name', $contestName)->first() ? '<i> (' . __('průběžné pořadí') . ')</i>' : '';
     }
 
     public static function submissionDeadline() {
@@ -49,15 +51,15 @@ class Utilities {
         if ($deadline->diffInSeconds($now) > 0) {
             if ($deadline->diffInDays($now) > 0) {
                 $diff = $deadline->diffInDays($now);
-                $unit = 'dnů';
+                $unit = __('dnů');
             } elseif ($deadline->diffInHours($now) > 0) {
                 $diff = $deadline->diffInHours($now);
-                $unit = 'hodin';
+                $unit = __('hodin');
             } else {
                 $diff = $deadline->diffInMinutes($now);
-                $unit = 'minut';
+                $unit = __('minut');
             }
-            return 'Zbývá ' . $unit . ': ' . $diff;
+            return __('Zbývá') . ' ' . $unit . ': ' . $diff;
         }
     }
 
@@ -85,7 +87,7 @@ class Utilities {
     }
 
     public static function locatorToGps($locator) {
-        list($lon1, $lat1, $lon2, $lat2, $lon3, $lat3) = str_split($locator);
+        list($lon1, $lat1, $lon2, $lat2, $lon3, $lat3) = str_split(strtoupper($locator));
 
         $lon_base = -180;
         $lat_base = -90;
@@ -101,5 +103,39 @@ class Utilities {
 
         return [$lon_base + $lon1_contrib + $lon2_contrib + $lon3_contrib + 1 / 24,
                 $lat_base + $lat1_contrib + $lat2_contrib + $lat3_contrib + 1 / 48];
+    }
+
+    public static function getCsrfToken() {
+        $csrfToken = Str::random(40);
+        Session::put('_csrf', $csrfToken);
+
+        return $csrfToken;
+    }
+
+    public static function getSessionSafeToken() {
+        return hash('sha256', Session::get('_token'));
+    }
+
+    public static function validateCsrfToken() {
+        if (! Session::has('_csrf')) {
+            throw new ForbiddenException();
+        }
+        if (request()->input('_csrf') !== Session::get('_csrf')) {
+            throw new ForbiddenException();
+        }
+        Session::forget('_csrf');
+
+        return true;
+    }
+
+    public static function validateSessionSafeToken() {
+        if (! Session::has('_token')) {
+            throw new ForbiddenException();
+        }
+        if (request()->input('_token') !== hash('sha256', Session::get('_token'))) {
+            throw new ForbiddenException();
+        }
+
+        return true;
     }
 }
