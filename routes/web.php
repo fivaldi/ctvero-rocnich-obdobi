@@ -23,11 +23,17 @@ $router->get('/', [
     'as' => 'index',
     'uses' => '\App\Http\Controllers\IndexController@show'
 ]);
-$router->get('/hlaseni', [
+$router->get('/hlaseni', function () {
+    return redirect(route('submissionForm'));
+});
+$router->get('/submission', [
     'as' => 'submissionForm',
     'uses' => '\App\Http\Controllers\SubmissionController@show'
 ]);
-$router->get('/kalendar', [
+$router->get('/kalendar', function () {
+    return redirect(route('calendar', [ 'contest' => request()->input('soutez') ]));
+});
+$router->get('/calendar', [
     'as' => 'calendar',
     'uses' => '\App\Http\Controllers\CalendarController@download'
 ]);
@@ -47,11 +53,22 @@ $router->post('/message', [
     'as' => 'message',
     'uses' => '\App\Http\Controllers\MessageController@send'
 ]);
+$router->get('/contest/{name}', [
+    'as' => 'contest',
+    'uses' => '\App\Http\Controllers\ContestController@show'
+]);
+$router->get('/contests', [
+    'as' => 'contests',
+    'uses' => '\App\Http\Controllers\ContestController@showAll'
+]);
 $router->post('/submission', [
     'as' => 'submission',
     'uses' => '\App\Http\Controllers\SubmissionController@submit'
 ]);
-$router->get('/vysledky', [
+$router->get('/vysledky', function () {
+    return redirect(route('results'));
+});
+$router->get('/results', [
     'as' => 'results',
     'uses' => '\App\Http\Controllers\ResultsController@show'
 ]);

@@ -28,4 +28,6 @@ return [
 
     // This secret key has to be at least 32 chars long!
     'apiAdminSecret' => env('CTVERO_API_ADMIN_SECRET'),
+
+    'mapboxAccessToken' => env('CTVERO_MAPBOX_ACCESS_TOKEN'),
 ];

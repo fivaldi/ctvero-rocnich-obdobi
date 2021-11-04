@@ -1,14 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Home')
+@section('title', $title)
 
 @section('sections')
 
 @include('recaptcha', [ 'formId' => 'contact-form' ])
-
-@php
-$locale = app('translator')->getLocale();
-@endphp
 
     <section class="tm-section-2 my-5 py-4">
         <div class="row">
@@ -16,7 +12,7 @@ $locale = app('translator')->getLocale();
                 <header>
                 <h2>{{ __('news_and_announcements') }}</h2>
                 </header>
-                {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/news_' . $locale . '.md')) }}
+                {{ Utilities::getAppContent('news') }}
             </div>
         </div>
     </section>
@@ -29,22 +25,28 @@ $locale = app('translator')->getLocale();
                     <h3>{{ __('dates') }}</h3>
                     </header>
                     <p class="small">{{ __('dates_usual_times') }}</p>
+                    <ul class="list-group">
                     @foreach ($lastYearContests as $contest)
-                        <dl class="mt-4 contests">
-                            <dt>{{ App\Http\Utilities::contestL10n($contest->name) }}</dt>
-                            <dd>{{ date('j.n.Y H:i', strtotime($contest->contest_start)) }} — {{ date('j.n.Y H:i', strtotime($contest->contest_end)) }}<a class="ml-2" href="{{ route('calendar', [ 'soutez' => $contest->name ]) }}"><i class="fa fa-calendar"></i></a></dd>
-                        </dl>
+                        <li class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h4 class="mb-1"><a href="{{ route('contest', [ 'name' => Str::replace(' ', '-', $contest->name) ]) . '#scroll' }}">{{ Utilities::contestL10n($contest->name) }}</a></h4>
+                                <p><a class="ml-2" href="{{ route('calendar', [ 'contest' => $contest->name ]) }}"><i class="fa fa-calendar"></i></a></p>
+                            </div>
+                            <p class="mb-1"><span class="text-nowrap">{{ Utilities::normalDateTime($contest->contest_start) }}</span>
+                                          — <span class="text-nowrap">{{ Utilities::normalDateTime($contest->contest_end) }}</span></p>
+                        </li>
                     @endforeach
+                    </ul>
 
                     <header>
                     <h3 class="mt-5">{{ __('connections') }}</h3>
                     </header>
-                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/connections_' . $locale . '.md')) }}
+                    {{ Utilities::getAppContent('connections') }}
 
                     <header>
                     <h3 class="mt-5">{{ __('logbook') }}</h3>
                     </header>
-                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/logbook_' . $locale . '.md')) }}
+                    {{ Utilities::getAppContent('logbook') }}
                 </div>
             </div>
             <div class="col-md-6 tm-2col-r">
@@ -52,17 +54,17 @@ $locale = app('translator')->getLocale();
                     <header>
                     <h3>{{ __('categories') }}</h3>
                     </header>
-                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/categories_' . $locale . '.md')) }}
+                    {{ Utilities::getAppContent('categories') }}
 
                     <header>
                     <h3 class="mt-5">{{ __('equipment') }}</h3>
                     </header>
-                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/equipment_' . $locale . '.md')) }}
+                    {{ Utilities::getAppContent('equipment') }}
 
                     <header>
                     <h3 class="mt-5">{{ __('scoring') }}</h3>
                     </header>
-                    {{ Illuminate\Mail\Markdown::parse(Illuminate\Support\Facades\Storage::get('content/scoring_' . $locale . '.md')) }}
+                    {{ Utilities::getAppContent('scoring') }}
 
                     <p class="mt-5"><b>{{ __('wish_you_great_conditions') }}</b></p>
                 </div>
@@ -73,43 +75,15 @@ $locale = app('translator')->getLocale();
     <section class="tm-section-12 tm-section-mb">
             <div class="col-lg-12 col-md-12 col-sm-12 pl-lg-0">
                 <header>
-                <h2 class="mb-4">Nejlepší trojka</h2>
+                <h2 class="mb-4">Nejlepší trojka{!! Utilities::contestInProgress($lastContest->name) !!}</h2>
                 </header>
                 @foreach ($categories as $category)
                 <div class="media tm-media">
-                    <img src="{{ $category['image_src'] }}" class="img-responsive tm-media-img">
-                    <div class="media-body tm-box-5">
+                    <img src="{{ $category['image_src'] }}" alt="Category" class="img-responsive tm-media-img">
+                    <div class="media-body tm-box-5 w-100">
                         <h3>{{ __($category['name']) }}</h3>
 
-                        <table class="table-striped small" style="width: 100%">
-                            <tr style="background-color: silver">
-                                <th class="col-1 d-none d-md-table-cell">Datum</th>
-                                <th class="col-3">Volačka</th>
-                                <th class="col-3">QTH</th>
-                                <th class="col-1 d-none d-md-table-cell">Lokátor</th>
-                                <th class="col-1">Deník</th>
-                                <th class="col-2">Počet QSO</th>
-                                @if ($useScorePoints)
-                                <th class="col-1">Body</th>
-                                @endif
-                            </tr>
-                            @foreach (array_slice($lastContestDiaries[$category['id']] ?? [], 0, 3) as $diary)
-                                <tr><td class="col-1 d-none d-md-table-cell">{{ date('j.n.Y', strtotime($diary['created_at'])) }}</td>
-                                    <td class="col-3">{{ $diary['call_sign'] }}</td>
-                                    <td class="col-3">{{ $diary['qth_name'] }}</td>
-                                    <td class="col-1 d-none d-md-table-cell">{{ $diary['qth_locator'] }}</td>
-                                    <td class="col-1">
-                                        @if ($diary['diary_url'])
-                                        <a href="{{ $diary['diary_url'] }}" target="_blank"><i class="fa fa-book fa-lg"></i></a>
-                                        @endif
-                                    </td>
-                                    <td class="col-2">{{ $diary['qso_count'] }}</td>
-                                    @if ($useScorePoints)
-                                    <td class="col-1">{{ $diary['score_points'] }}</td>
-                                    @endif
-                                </tr>
-                            @endforeach
-                        </table>
+                        <x-results-table :terse="true" :useScorePoints="$useScorePoints" :diaries="array_slice($lastContestDiaries[$category['id']] ?? [], 0, 3)"/>
 
                     </div>
                 </div>
@@ -146,18 +120,18 @@ $locale = app('translator')->getLocale();
                         </div>
                         <script>location.hash = '#contact-message';</script>
                     @endif
-                    <form action="message" method="post" class="contact-form" id='contact-form'>
-                        <div class="form-group row align-items-center col-12">
-                            <label for="email" class="col-2">E-mail</label>
-                            <input name="email" type="email" class="form-control col-10" id="email" placeholder="name@example.com">
+                    <form action="message" method="post" class="contact-form col-12" id='contact-form'>
+                        <div class="form-group align-items-center row">
+                            <label for="email" class="col-12 col-md-3">E-mail</label>
+                            <input name="email" type="email" class="form-control col-12 col-md-9" id="email" placeholder="name@example.com">
                         </div>
-                        <div class="form-group row align-items-center col-12">
-                            <label for="subject" class="col-2">Předmět</label>
-                            <input name="subject" type="text" class="form-control col-10" id="subject" placeholder="Předmět zprávy">
+                        <div class="form-group align-items-center row">
+                            <label for="subject" class="col-12 col-md-3">Předmět</label>
+                            <input name="subject" type="text" class="form-control col-12 col-md-9" id="subject" placeholder="Předmět zprávy">
                         </div>
-                        <div class="form-group row col-12">
-                            <label for="message">Zpráva</label>
-                            <textarea name="message" class="form-control" id="message" placeholder="Text zprávy" rows="6"></textarea>
+                        <div class="form-group row">
+                            <label for="message" class="col-12">Zpráva</label>
+                            <textarea name="message" class="form-control col-12" id="message" placeholder="Text zprávy" rows="6"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary g-recaptcha" data-sitekey="{{ config('ctvero.recaptchaSiteKey') }}" data-callback="onSubmit" data-action="submit">Odeslat</button>
                     </form>

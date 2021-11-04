@@ -13,12 +13,16 @@ class ResultsController extends BaseController
     {
         $allContests = Contest::allOrdered();
         $categories = Category::allOrdered();
-        $contestsInProgress = Contest::whereRaw('NOW() BETWEEN submission_start AND submission_end')->get();
+        $contestsInProgress = Contest::submissionActiveOrdered();
         foreach ($allContests as $contest) {
-            $allContestsDiaries[$contest->name] = DiaryController::listContestDiaries($contest);
+            $diaries = DiaryController::getContestDiaries($contest);
+            if ($diaries) {
+                $allContestsDiaries[$contest->name] = $diaries;
+            }
         }
 
-        return view('results', [ 'allContests' => $allContests,
+        return view('results', [ 'title' => 'Výsledkové listiny',
+                                 'allContests' => $allContests,
                                  'allContestsDiaries' => $allContestsDiaries,
                                  'categories' => $categories,
                                  'contestsInProgress' => $contestsInProgress ]);

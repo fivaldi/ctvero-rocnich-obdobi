@@ -6,14 +6,16 @@ use App\Models\Diary;
 
 class SubmissionTest extends TestCase
 {
-    public function setUp(): void {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->contest = Contest::factory()->create();
         $this->seeInDatabase('contest', [ 'name' => $this->contest->name ]);
     }
 
-    public function tearDown(): void {
+    public function tearDown(): void
+    {
         Diary::where('call_sign', 'like', 'Test call sign%')->delete();
         Contest::where('name', 'like', 'Test contest %')->delete();
 
@@ -24,6 +26,12 @@ class SubmissionTest extends TestCase
     {
         $category = Category::all()->where('name', 'Pěšák')->first();
 
+        $this->get('/contests');
+        $this->response->assertSeeText($this->contest->name);
+
+        $this->get('/results');
+        $this->response->assertDontSeeText($this->contest->name);
+
         $this->post('/submission', [
             'step' => 2,
             'contest' => $this->contest->name,
@@ -31,11 +39,10 @@ class SubmissionTest extends TestCase
             'diaryUrl' => 'https://example.com/diary/url',
             'callSign' => 'Test call sign',
             'qthName' => 'Test QTH name',
-            'qthLocator' => 'JN79SO',
+            'qthLocator' => 'jn79so',
             'qsoCount' => '99',
             'email' => 'name@example.com'
         ]);
-        $this->get('/hlaseni?krok-2');
         $this->seeInDatabase('diary', [
             'contest_id' => $this->contest->id,
             'category_id' => $category->id,
@@ -43,21 +50,27 @@ class SubmissionTest extends TestCase
             'call_sign' => 'Test call sign',
             'qth_name' => 'Test QTH name',
             'qth_locator' => 'JN79SO',
+            'qth_locator_lon' => '15.541667',
+            'qth_locator_lat' => '49.604167',
             'qso_count' => '99',
             'email' => 'name@example.com'
         ]);
-        $this->response->assertSeeText('Hlášení do soutěže bylo úspěšně zpracováno.');
+        $this->get('/submission?step=2');
+        $this->response->assertSeeText('Hlášení do soutěže ' . $this->contest->name . ' bylo úspěšně zpracováno.');
 
-        $this->get('/vysledky');
+        $this->get('/results');
         $this->response->assertSeeTextInOrder([
-            'Test contest ',
-            ' (průběžné výsledky)',
+            $this->contest->name,
+            ' (průběžné pořadí)',
             '1.',
             'Test call sign',
             'Test QTH name',
             'JN79SO',
             '99',
         ]);
+
+        $this->get('/contest/' . $this->contest->name);
+        $this->response->assertSeeText('Výsledková listina (průběžné pořadí)');
     }
 
     public function testSubmissionManualDiaryUrlDuplicity()
@@ -77,7 +90,7 @@ class SubmissionTest extends TestCase
                 'email' => 'name@example.com'
             ]);
         }
-        $this->get('/hlaseni?krok-2');
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Pole diary url již obsahuje v databázi stejný záznam.');
     }
 
@@ -99,10 +112,10 @@ class SubmissionTest extends TestCase
             ]);
         }
 
-        $this->get('/vysledky');
+        $this->get('/results');
         $this->response->assertSeeTextInOrder([
-            'Test contest ',
-            ' (průběžné výsledky)',
+            $this->contest->name,
+            ' (průběžné pořadí)',
             '1.',
             'Test call sign without diary URL 1',
             'Test QTH name without diary URL 1',
@@ -121,7 +134,7 @@ class SubmissionTest extends TestCase
         $category = Category::all()->where('name', 'Pěšák')->first();
 
         $this->post('/submission', [ 'step' => 2 ]);
-        $this->get('/hlaseni?krok-2');
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Pole contest je vyžadováno.');
         $this->response->assertSeeText('Pole category je vyžadováno.');
         $this->response->assertSeeText('Pole call sign je vyžadováno.');
@@ -160,8 +173,8 @@ class SubmissionTest extends TestCase
         $this->assertEquals($diaryInSession['callSign'], 'Expedice Morava');
         $this->assertEquals($diaryInSession['qthName'], 'Bystré');
         $this->assertEquals($diaryInSession['qthLocator'], 'JN99FO');
-        $this->assertEquals($diaryInSession['qsoCount'], '27');
-        $this->get('/hlaseni?krok=2');
+        $this->assertEquals($diaryInSession['qsoCount'], 27);
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
     }
 
@@ -175,8 +188,8 @@ class SubmissionTest extends TestCase
         $this->assertEquals($diaryInSession['callSign'], 'Expedice Morava');
         $this->assertEquals($diaryInSession['qthName'], 'Bystré');
         $this->assertEquals($diaryInSession['qthLocator'], 'JN99FO');
-        $this->assertEquals($diaryInSession['qsoCount'], '27');
-        $this->get('/hlaseni?krok=2');
+        $this->assertEquals($diaryInSession['qsoCount'], 27);
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
     }
 
@@ -190,8 +203,8 @@ class SubmissionTest extends TestCase
         $this->assertEquals($diaryInSession['callSign'], 'Pepa Klobouky');
         $this->assertEquals($diaryInSession['qthName'], 'Malá Fatra Minčol');
         $this->assertEquals($diaryInSession['qthLocator'], 'JN99JC');
-        $this->assertEquals($diaryInSession['qsoCount'], '1');
-        $this->get('/hlaseni?krok=2');
+        $this->assertEquals($diaryInSession['qsoCount'], 1);
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
     }
 
@@ -205,8 +218,8 @@ class SubmissionTest extends TestCase
         $this->assertEquals($diaryInSession['callSign'], 'Pepa Klobouky');
         $this->assertEquals($diaryInSession['qthName'], 'Malá Fatra Minčol');
         $this->assertEquals($diaryInSession['qthLocator'], 'JN99JC');
-        $this->assertEquals($diaryInSession['qsoCount'], '1');
-        $this->get('/hlaseni?krok=2');
+        $this->assertEquals($diaryInSession['qsoCount'], 1);
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
     }
 
@@ -223,8 +236,8 @@ class SubmissionTest extends TestCase
         $this->assertEquals($diaryInSession['callSign'], 'Filip 84');
         $this->assertEquals($diaryInSession['qthName'], 'Olomouc');
         $this->assertEquals($diaryInSession['qthLocator'], 'JN89PO');
-        $this->assertEquals($diaryInSession['qsoCount'], '36');
-        $this->get('/hlaseni?krok=2');
+        $this->assertTrue($diaryInSession['qsoCount'] > 0);
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
     }
 
@@ -241,8 +254,8 @@ class SubmissionTest extends TestCase
         $this->assertEquals($diaryInSession['callSign'], 'Filip 84');
         $this->assertEquals($diaryInSession['qthName'], 'Olomouc');
         $this->assertEquals($diaryInSession['qthLocator'], 'JN89PO');
-        $this->assertEquals($diaryInSession['qsoCount'], '36');
-        $this->get('/hlaseni?krok=2');
+        $this->assertTrue($diaryInSession['qsoCount'] > 0);
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Krok 2: Kontrola a doplnění hlášení');
     }
 
@@ -251,7 +264,7 @@ class SubmissionTest extends TestCase
         $this->post('/submission', [
             'step' => 1,
             'diaryUrl' => 'http://www.cbpmr.cz/deniky/24597.htm' ]);
-        $this->get('/hlaseni?krok=2');
+        $this->get('/submission?step=2');
         $this->response->assertSeeText('Pole diary url již obsahuje v databázi stejný záznam.');
     }
 

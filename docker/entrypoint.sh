@@ -26,7 +26,7 @@ then
     [ -z "$CTVERO_DEPLOY_PROD_SECRET" ] && exit 1
     apk add findutils gnupg lftp
     gpg --quiet --batch --yes --decrypt --passphrase="$CTVERO_DEPLOY_PROD_SECRET" --output deploy-prod-files/.env deploy-prod-files/.env.gpg
-    composer install
+    composer install --no-dev
     # Dereference symbolic links due to some FTP server limitations
     find -type l -exec sh -c 'cp `readlink -fn {}` {}' \;
     set -o allexport

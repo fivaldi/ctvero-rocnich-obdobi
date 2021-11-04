@@ -2,7 +2,8 @@
 
 class BasicTest extends TestCase
 {
-    public function setUp(): void {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->sessionCookieName = 'ctvero_rocnich_obdobi_session';
@@ -96,39 +97,64 @@ class BasicTest extends TestCase
 
     public function testResults()
     {
-        $this->get('/vysledky');
+        $this->get('/results');
         $this->seeStatusCode(200);
+    }
+
+    public function testResultsOldUrl()
+    {
+        $this->get('/vysledky');
+        $this->seeStatusCode(302);
     }
 
     public function testSubmissionForm()
     {
-        $this->get('/hlaseni');
+        $this->get('/submission');
         $this->seeStatusCode(200);
+    }
+
+    public function testSubmissionFormOldUrl()
+    {
+        $this->get('/hlaseni');
+        $this->seeStatusCode(302);
     }
 
     public function testSubmissionFormInvalidStep()
     {
-        $this->get('/hlaseni?krok=999999999');
+        $this->get('/submission?step=999999999');
         $this->response->assertSeeText('Neplatný formulářový krok');
         $this->seeStatusCode(422);
     }
 
     public function testCalendar()
     {
-        $this->get('/kalendar?soutez=Předkolo Zima 2020');
+        $this->get('/calendar?contest=Předkolo Zima 2020');
         $this->response->assertDownload();
+        $this->seeStatusCode(200);
+    }
+
+    public function testCalendarOldUrl()
+    {
+        $this->get('/kalendar?soutez=Předkolo Zima 2020');
+        $this->seeStatusCode(302);
+    }
+
+    public function testCalendarLinkInIndexPage()
+    {
+        $this->get('/');
+        $this->response->assertSee('/calendar?contest=');
         $this->seeStatusCode(200);
     }
 
     public function testCalendarBadRequest()
     {
-        $this->get('/kalendar');
+        $this->get('/calendar');
         $this->seeStatusCode(400);
     }
 
     public function testCalendarNonExistingContest()
     {
-        $this->get('/kalendar?soutez=Neexistující soutěž');
+        $this->get('/calendar?contest=Neexistující soutěž');
         $this->seeStatusCode(404);
     }
 
@@ -174,9 +200,21 @@ class BasicTest extends TestCase
         config([ 'app.env' => $originalConfig ]);
     }
 
-    public function testWrongMethodOnSubmissionSend()
+    public function testContests()
     {
-        $this->get('/submission');
-        $this->seeStatusCode(405);
+        $this->get('/contests');
+        $this->seeStatusCode(200);
+    }
+
+    public function testContest()
+    {
+        $this->get('/contest/Předkolo Zima 2020');
+        $this->seeStatusCode(200);
+    }
+
+    public function testContestNonExisting()
+    {
+        $this->get('/contest/Neexistující soutěž');
+        $this->seeStatusCode(404);
     }
 }

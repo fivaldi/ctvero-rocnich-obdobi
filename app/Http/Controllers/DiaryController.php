@@ -8,7 +8,7 @@ use App\Models\Category;
 
 class DiaryController extends Controller
 {
-    public static function listContestDiaries($contest)
+    public static function getContestDiaries($contest)
     {
         $categories = Category::all();
         if (isset($contest->options['criterion'])) {

@@ -1,4 +1,4 @@
-<small class="alert alert-info">Diese Version der Neuigkeiten ist nicht aktuell. Bitte beachten Sie die [tschechische Variante](/lang/cs).</small>
+<p class="alert alert-info small">Diese Version der Neuigkeiten ist nicht aktuell. Bitte beachten Sie die <a href="/lang/cs">tschechische Variante</a>.</p>
 
 **Ich danke allen für die bisherige Teilnahme, es würde mich freuen, auch in der nächsten Runde von Euch zu hören.**
 
