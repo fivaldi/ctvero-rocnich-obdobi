@@ -2,7 +2,8 @@
 
 ## This Application
 
-![Build Status](https://github.com/fivaldi/ctvero-rocnich-obdobi/actions/workflows/main.yml/badge.svg)
+[![Test](https://github.com/fivaldi/ctvero-rocnich-obdobi/actions/workflows/test.yml/badge.svg)](https://github.com/fivaldi/ctvero-rocnich-obdobi/actions/workflows/test.yml)
+[![Prod](https://github.com/fivaldi/ctvero-rocnich-obdobi/actions/workflows/prod.yml/badge.svg)](https://github.com/fivaldi/ctvero-rocnich-obdobi/actions/workflows/prod.yml)
 
 ### Development and Testing
 
