@@ -1,5 +1,4 @@
 .phpunit.result.cache
-/.dev-mysql-data
 /.idea
 /deploy-prod-files/.env
 /vendor

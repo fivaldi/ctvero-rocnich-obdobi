@@ -2,21 +2,10 @@
 
 set -ex
 
-if [ -n "$TRAVIS_JOB_ID" ]
-then
-    # Install Lumen, migrate DB, start Lumen (background), run tests and exit
-    composer install
-    php artisan migrate
-    php -S lumen:8000 -t public &
-    set +e
-    while true
-    do
-        curl -fs lumen:8000 > /dev/null
-        [ $? -eq 0 ] && break
-        sleep 1
-    done
-    vendor/bin/phpunit -v
-elif [[ "$CTVERO_DEPLOY_PROD" == "true" ]]
+# Check PHP version
+php -v
+
+if [[ "$CTVERO_DEPLOY_PROD" == "true" ]]
 then
     # Decrypt .env, install Lumen, upload content to the FTP and migrate DB via HTTP request
     # Clean up the tree from artifacts of previous (unsuccessful) runs
@@ -24,7 +13,6 @@ then
     # Do NOT expose more than necessary!
     set +x
     [ -z "$CTVERO_DEPLOY_PROD_SECRET" ] && exit 1
-    apk add findutils gnupg lftp
     gpg --quiet --batch --yes --decrypt --passphrase="$CTVERO_DEPLOY_PROD_SECRET" --output deploy-prod-files/.env deploy-prod-files/.env.gpg
     composer install --no-dev
     # Dereference symbolic links due to some FTP server limitations
@@ -51,6 +39,20 @@ then
     # Clean up the tree from deployment artifacts (expose this action)
     set -x
     rm -rf composer.lock deploy-prod-files/.env vendor/
+elif [[ "$GITHUB_ACTIONS" == "true" ]]
+then
+    # Install Lumen, migrate DB, start Lumen (background), run tests and exit
+    composer install
+    php artisan migrate
+    php -S lumen:8000 -t public &
+    set +e
+    while true
+    do
+        curl -fs lumen:8000 > /dev/null
+        [ $? -eq 0 ] && break
+        sleep 1
+    done
+    vendor/bin/phpunit -v
 else
     # Install Lumen, migrate DB, start Lumen (foreground) and keep running
     composer install

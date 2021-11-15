@@ -16,3 +16,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 
 # Install PDO extension for MySQL/MariaDB
 RUN docker-php-ext-install pdo_mysql
+
+# Requirements for production deployment
+RUN apk add findutils gnupg lftp

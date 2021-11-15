@@ -2,14 +2,14 @@
 
 ## This Application
 
-[![Build Status](https://app.travis-ci.com/fivaldi/ctvero-rocnich-obdobi.svg?branch=main)](https://app.travis-ci.com/fivaldi/ctvero-rocnich-obdobi)
+![Build Status](https://github.com/fivaldi/ctvero-rocnich-obdobi/actions/workflows/main.yml/badge.svg)
 
 ### Development and Testing
 
 Providing you have `docker` and `docker-compose` installed, clone the repository and run:
 
 ```
-docker-compose up db lumen
+UID_GID="$(id -u):$(id -g)" docker-compose up db lumen
 ```
 
 Then check your browser at <http://localhost:8000>.
@@ -33,14 +33,14 @@ docker exec ctvero-lumen vendor/bin/phpunit -v
 
 Long story short: After a successfully tested PR merge to the production branch (`main`), the application gets deployed.
 
-As of 2021/09, we're using Travis CI for this. See <https://app.travis-ci.com/github/fivaldi/ctvero-rocnich-obdobi>.
-There's a strong secret (see `CTVERO_DEPLOY_PROD_SECRET` environment variable) which decrypts the file `deploy-prod-files/.env.gpg`. This file contains all other secrets which are necessary for application deployment and runtime. See also `docker/entrypoint.sh`, `docker-compose.yml` and `.travis.yml`.
+As of 2021/11, we're using GitHub Actions for this.
+There's a strong secret (see `CTVERO_DEPLOY_PROD_SECRET` environment variable) which decrypts the file `deploy-prod-files/.env.gpg`. This file contains all other secrets which are necessary for application deployment and runtime. See also `docker/entrypoint.sh`, `docker-compose.yml` and `.github/workflows/main.yml`.
 
 #### Manual Workflow
 
 Prerequisites:
 
-- Locally cloned up-to-date production branch (`main`) which has successful tests in Travis CI. (See above.)
+- Locally cloned up-to-date production branch (`main`) which has successful tests in GitHub Actions CI. (See above.)
 - No `ctvero-*` docker containers/images artifacts are present. (Check using `docker ps -a`, `docker images` and/or remove those artifacts using `docker rm`, `docker rmi`.)
 - No repository artifacts are present. (Check using `git status --ignored` and/or remove those artifacts using `git clean -fdx`.)
 
@@ -48,7 +48,7 @@ Deployment Steps:
 
 ```
 docker-compose build --build-arg PHP_IMAGE_TAG=7.4-fpm-alpine3.13 deploy-prod  # for PHP 7.4 webhosting as of 2021/09
-CTVERO_DEPLOY_PROD_SECRET="some-very-long-secret" docker-compose up deploy-prod  # deploys the app
+UID_GID="$(id -u):$(id -g)" CTVERO_DEPLOY_PROD_SECRET="some-very-long-secret" docker-compose up deploy-prod  # deploys the app
 ```
 
 ### License
