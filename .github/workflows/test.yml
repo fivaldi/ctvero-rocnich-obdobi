@@ -10,8 +10,8 @@ on:
 jobs:
   test:
     runs-on: self-hosted
-    concurrency: test
-    environment: test
+    concurrency: common-test-deploy-prod-env
+    environment: common-test-deploy-prod-env
     steps:
       - uses: actions/checkout@v2
       - name: Clean up
