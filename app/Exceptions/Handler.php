@@ -55,19 +55,19 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof ForbiddenException) {
-            return response(view('error', [ 'msg' => 'Přístup odepřen.' ]))->setStatusCode(403);
+            return response(view('error', [ 'msg' => __('Přístup odepřen.') ]))->setStatusCode(403);
         }
 
         if ($exception instanceof NotFoundHttpException) {
-            return response(view('error', [ 'msg' => 'Stránka nebyla nalezena.' ]))->setStatusCode(404);
+            return response(view('error', [ 'msg' => __('Stránka nebyla nalezena.') ]))->setStatusCode(404);
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
-            return response(view('error', [ 'msg' => 'Metoda není povolena.' ]))->setStatusCode(405);
+            return response(view('error', [ 'msg' => __('Metoda není povolena.') ]))->setStatusCode(405);
         }
 
         if ($exception instanceof QueryException) {
-            return response(view('error', [ 'msg' => 'Došlo k chybě!' ]))->setStatusCode(500);
+            return response(view('error', [ 'msg' => __('Došlo k chybě!') ]))->setStatusCode(500);
         }
 
         return parent::render($request, $exception);

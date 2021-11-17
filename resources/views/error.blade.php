@@ -9,7 +9,7 @@
             <div class="col-xl-20 col-lg-20 col-md-12">
                 <header>
                 <h2>{{ $msg }}</h2>
-                <h3 class="mt-3">Pokud se skutečně jedná o problém, <a href="{{ config('ctvero.issuesReportUrl') }}">tady ho lze nahlásit.</a></h3>
+                <h3 class="mt-3">{!! __('Pokud se skutečně jedná o problém, <a href=":issueReportLink">tady ho lze nahlásit.</a>', [ 'issueReportLink' => config('ctvero.issuesReportUrl') ]) !!}</h3>
                 </header>
             </div>
         </div>

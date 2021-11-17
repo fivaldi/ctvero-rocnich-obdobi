@@ -21,7 +21,7 @@ class ResultsController extends BaseController
             }
         }
 
-        return view('results', [ 'title' => 'Výsledkové listiny',
+        return view('results', [ 'title' => __('Výsledkové listiny'),
                                  'allContests' => $allContests,
                                  'allContestsDiaries' => $allContestsDiaries,
                                  'categories' => $categories,

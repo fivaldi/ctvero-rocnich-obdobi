@@ -23,18 +23,18 @@ class CalendarController extends BaseController
     public function download(Request $request)
     {
         if (! $request->input('contest')) {
-            throw new AppException(400, array('Neúplný požadavek'));
+            throw new AppException(400, array(__('Neúplný požadavek')));
         }
 
         $contest = Contest::all()->where('name', $request->input('contest'))->first();
         if (empty($contest)) {
-            throw new AppException(404, array('Soutěž nebyla nalezena.'));
+            throw new AppException(404, array(__('Soutěž nebyla nalezena.')));
         }
 
         try {
             $tz = config('app.timezone');
-            $summary = __('ctvero_title') . ' - ' . Utilities::contestL10n($contest->name);
-            $description = __('ctvero_subtitle') . ' (' . config('app.url') . ')';
+            $summary = __('Čtvero ročních období') . ' - ' . Utilities::contestL10n($contest->name);
+            $description = __('CB soutěž') . ' (' . config('app.url') . ')';
             $trigger = new RelativeTrigger(\DateInterval::createFromDateString('0 day ago'));
 
             $event = (new Event())
@@ -55,12 +55,12 @@ class CalendarController extends BaseController
 
             $deadline = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s e', $contest->submission_end . ' ' . $tz);
             $reminder = (new Event())
-                ->setSummary($summary . ' - Poslední den pro odeslání hlášení')
+                ->setSummary($summary . ' - ' . __('Poslední den pro odeslání hlášení'))
                 ->setDescription($description)
                 ->setOccurrence(new TimeSpan(new DateTime($deadline->add(\DateInterval::createFromDateString('1 day ago')), $tz),
                                              new DateTime($deadline, $tz)));
-            $reminder->addAlarm(new Alarm(new DisplayAction($summary . ' - Odeslat hlášení'), $trigger));
-            $reminder->addAlarm(new Alarm(new EmailAction($summary . ' - Odeslat hlášení', $description), $trigger));
+            $reminder->addAlarm(new Alarm(new DisplayAction($summary . ' - ' . __('Odeslat hlášení')), $trigger));
+            $reminder->addAlarm(new Alarm(new EmailAction($summary . ' - ' . __('Odeslat hlášení'), $description), $trigger));
 
             $calendar = new Calendar([ $event, $reminder ]);
 
@@ -73,7 +73,7 @@ class CalendarController extends BaseController
                     'Content-Disposition' => 'attachment; filename="' . $summary . '"',
                 ]);
         } catch (\Exception $e) {
-            throw new AppException(500, array('Něco se pokazilo.'));
+            throw new AppException(500, array(__('Došlo k chybě!')));
         }
     }
 }

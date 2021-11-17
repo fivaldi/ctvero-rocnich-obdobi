@@ -35,7 +35,7 @@ docker exec ctvero-lumen vendor/bin/phpunit -v
 Long story short: After a successfully tested PR merge to the production branch (`main`), the application gets deployed.
 
 As of 2021/11, we're using GitHub Actions for this.
-There's a strong secret (see `CTVERO_DEPLOY_PROD_SECRET` environment variable) which decrypts the file `deploy-prod-files/.env.gpg`. This file contains all other secrets which are necessary for application deployment and runtime. See also `docker/entrypoint.sh`, `docker-compose.yml` and `.github/workflows/main.yml`.
+There's a strong secret (see `CTVERO_DEPLOY_PROD_SECRET` environment variable) which decrypts the file `deploy-prod-files/.env.gpg`. This file contains all other secrets which are necessary for application deployment and runtime. See also `docker/entrypoint.sh`, `docker-compose.yml` and `.github/workflows/prod.yml`.
 
 #### Manual Workflow
 

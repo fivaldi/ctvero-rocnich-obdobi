@@ -4,13 +4,13 @@
 
 @section('sections')
 
-@include('recaptcha', [ 'formId' => 'contact-form' ])
+    <x-recaptcha formId="contact-form"/>
 
     <section class="tm-section-2 my-5 py-4">
         <div class="row">
             <div class="col-xl-20 col-lg-20 col-md-12">
                 <header>
-                <h2>{{ __('news_and_announcements') }}</h2>
+                <h2>{{ __('Novinky a oznámení') }}</h2>
                 </header>
                 {{ Utilities::getAppContent('news') }}
             </div>
@@ -22,9 +22,9 @@
             <div class="col-md-6 tm-mb-sm-4 tm-2col-l">
                 <div class="h-100 tm-box-3">
                     <header>
-                    <h3>{{ __('dates') }}</h3>
+                    <h3>{{ __('Termíny') }}</h3>
                     </header>
-                    <p class="small">{{ __('dates_usual_times') }}</p>
+                    <p class="small">{{ __('obvykle sobota 0:00 až neděle 24:00') }}</p>
                     <ul class="list-group">
                     @foreach ($lastYearContests as $contest)
                         <li class="list-group-item list-group-item-action">
@@ -39,12 +39,12 @@
                     </ul>
 
                     <header>
-                    <h3 class="mt-5">{{ __('connections') }}</h3>
+                    <h3 class="mt-5">{{ __('Spojení') }}</h3>
                     </header>
                     {{ Utilities::getAppContent('connections') }}
 
                     <header>
-                    <h3 class="mt-5">{{ __('logbook') }}</h3>
+                    <h3 class="mt-5">{{ __('Deník') }}</h3>
                     </header>
                     {{ Utilities::getAppContent('logbook') }}
                 </div>
@@ -52,21 +52,21 @@
             <div class="col-md-6 tm-2col-r">
                 <div class="h-100 tm-box-3">
                     <header>
-                    <h3>{{ __('categories') }}</h3>
+                    <h3>{{ trans_choice('Kategorie', 2) }}</h3>
                     </header>
                     {{ Utilities::getAppContent('categories') }}
 
                     <header>
-                    <h3 class="mt-5">{{ __('equipment') }}</h3>
+                    <h3 class="mt-5">{{ __('Technika') }}</h3>
                     </header>
                     {{ Utilities::getAppContent('equipment') }}
 
                     <header>
-                    <h3 class="mt-5">{{ __('scoring') }}</h3>
+                    <h3 class="mt-5">{{ __('Hodnocení') }}</h3>
                     </header>
                     {{ Utilities::getAppContent('scoring') }}
 
-                    <p class="mt-5"><b>{{ __('wish_you_great_conditions') }}</b></p>
+                    <p class="mt-5"><b>{{ __('Všem přeji dobré podmínky, málo rušení a mnoho dalekých spojení. 73\'') }}</b></p>
                 </div>
             </div>
         </div>
@@ -75,7 +75,7 @@
     <section class="tm-section-12 tm-section-mb">
             <div class="col-lg-12 col-md-12 col-sm-12 pl-lg-0">
                 <header>
-                <h2 class="mb-4">Nejlepší trojka{!! Utilities::contestInProgress($lastContest->name) !!}</h2>
+                <h2 class="mb-4">{{ __('Nejlepší trojka') }} - {{ Utilities::contestL10n($lastContest->name) }}{!! Utilities::contestInProgress($lastContest->name) !!}</h2>
                 </header>
                 @foreach ($categories as $category)
                 <div class="media tm-media">
@@ -100,13 +100,13 @@
         <div class="row">
             <div class="col-lg-7 col-md-7 col-xs-12">
                 <div class="contact_message" id="contact-message">
-                    <h2 class="mb-4">Kontaktní formulář</h2>
-                    @if ($messageSuccess = request()->session()->pull('messageSuccess'))
+                    <h2 class="mb-4">{{ __('Kontaktní formulář') }}</h2>
+                    @if ($messageSuccess = Session::pull('messageSuccess'))
                         <div class="alert alert-success">
                             {{ $messageSuccess }}
                         </div>
-                        <script>location.hash = '#contact-message';</script>
-                    @elseif ($messageErrors = request()->session()->pull('messageErrors'))
+                        <script>location.hash = '#contact-message'</script>
+                    @elseif ($messageErrors = Session::pull('messageErrors'))
                         <div class="alert alert-danger">
                             @if (count($messageErrors) == 1)
                                 {{ $messageErrors[0] }}
@@ -118,35 +118,36 @@
                                 </ul>
                             @endif
                         </div>
-                        <script>location.hash = '#contact-message';</script>
+                        <script>location.hash = '#contact-message'</script>
                     @endif
                     <form action="message" method="post" class="contact-form col-12" id='contact-form'>
+                        <input type="hidden" name="_csrf" value="{{ Utilities::getCsrfToken() }}">
                         <div class="form-group align-items-center row">
-                            <label for="email" class="col-12 col-md-3">E-mail</label>
+                            <label for="email" class="col-12 col-md-3">{{ __('E-mail') }}</label>
                             <input name="email" type="email" class="form-control col-12 col-md-9" id="email" placeholder="name@example.com">
                         </div>
                         <div class="form-group align-items-center row">
-                            <label for="subject" class="col-12 col-md-3">Předmět</label>
-                            <input name="subject" type="text" class="form-control col-12 col-md-9" id="subject" placeholder="Předmět zprávy">
+                            <label for="subject" class="col-12 col-md-3">{{ __('Předmět') }}</label>
+                            <input name="subject" type="text" class="form-control col-12 col-md-9" id="subject" placeholder="{{ __('Předmět zprávy') }}">
                         </div>
                         <div class="form-group row">
-                            <label for="message" class="col-12">Zpráva</label>
-                            <textarea name="message" class="form-control col-12" id="message" placeholder="Text zprávy" rows="6"></textarea>
+                            <label for="message" class="col-12">{{ __('Zpráva') }}</label>
+                            <textarea name="message" class="form-control col-12" id="message" placeholder="{{ __('Text zprávy') }}" rows="6"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary g-recaptcha" data-sitekey="{{ config('ctvero.recaptchaSiteKey') }}" data-callback="onSubmit" data-action="submit">Odeslat</button>
+                        <button type="submit" class="btn btn-primary g-recaptcha" data-sitekey="{{ config('ctvero.recaptchaSiteKey') }}" data-callback="onSubmit" data-action="submit">{{ __('Odeslat') }}</button>
                     </form>
                 </div>
             </div>
 
             <div class="col-lg-5 col-md-5 col-xs-12 tm-contact-right">
                 <div class="tm-address-box">
-                    <h2 class="mb-4">Kontakt</h2>
+                    <h2 class="mb-4">{{ __('Kontakt') }}</h2>
                     <div class="mb-4">
-                        <p>V případě dotazů, návrhů či připomínek mne neváhejte kontaktovat.</p>
+                        <p>{{ __('V případě dotazů, návrhů či připomínek mne neváhejte kontaktovat.') }}</p>
                         <p class="text-right pr-5">73 Radek Lichnov</p>
                     </div>
                     <div class="mb-4">
-                        <p class="mb-0">Diskuze k souteži na stránce</p>
+                        <p class="mb-0">{{ __('Diskuze k souteži na stránce') }}</p>
                         <a href="https://forum.svysilackou.cz/showthread.php?tid=112"><img alt="forum.svysilackou.cz" src="https://forum.svysilackou.cz/images/simplicity/logo_n.png"></a>
                     </div>
                 </div>

@@ -3,14 +3,15 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Session;
 
 class ClientLocale
 {
     // https://stackoverflow.com/a/48133154 - thank you!
     public function handle($request, Closure $next)
     {
-        if ($request->session()->has('locale')) {
-            app('translator')->setLocale($request->session()->get('locale'));
+        if (Session::has('locale')) {
+            app('translator')->setLocale(Session::get('locale'));
         } else {
             $clientLocales = preg_split('/,|;/', $request->server('HTTP_ACCEPT_LANGUAGE'));
             foreach ($clientLocales as $locale) {
@@ -21,7 +22,7 @@ class ClientLocale
                 }
             }
             app('translator')->setLocale($clientLocale ?? config('app.fallback_locale'));
-            $request->session()->put('locale', $clientLocale ?? config('app.fallback_locale'));
+            Session::put('locale', $clientLocale ?? config('app.fallback_locale'));
         }
 
         return $next($request);

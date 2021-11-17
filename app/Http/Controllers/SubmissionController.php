@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DiDom\Document;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -25,13 +26,13 @@ class SubmissionController extends Controller
         $this->contests = Contest::submissionActiveOrdered();
         $this->categories = Category::allOrdered();
         $this->messages = [
-            'email' => 'Pole :attribute obsahuje neplatnou e-mailovou adresu.',
-            'required' => 'Pole :attribute je vyžadováno.',
-            'max' => 'Pole :attribute přesahuje povolenou délku :max znaků.',
-            'unique' => 'Pole :attribute již obsahuje v databázi stejný záznam.',
-            'size' => 'Pole :attribute nemá přesně :size znaků.',
-            'integer' => 'Pole :attribute neobsahuje celočíselnou hodnotu.',
-            'gt' => 'Pole :attribute neobsahuje hodnotu větší než :value .',
+            'email' => __('Pole :attribute obsahuje neplatnou e-mailovou adresu.'),
+            'required' => __('Pole :attribute je vyžadováno.'),
+            'max' => __('Pole :attribute přesahuje povolenou délku :max znaků.'),
+            'unique' => __('Pole :attribute již obsahuje v databázi stejný záznam.'),
+            'size' => __('Pole :attribute nemá přesně :size znaků.'),
+            'integer' => __('Pole :attribute neobsahuje celočíselnou hodnotu.'),
+            'gt' => __('Pole :attribute neobsahuje hodnotu větší než :value.'),
         ];
     }
     public function processCbdxCz() {
@@ -95,22 +96,23 @@ class SubmissionController extends Controller
     {
         $step = $resetStep ? 1 : intval(request()->input('step', 1));
         if ($step < 1 or $step > 2) {
-            throw new SubmissionException(422, array('Neplatný formulářový krok'), true);
+            throw new SubmissionException(422, array(__('Neplatný formulářový krok')), true);
         }
         $diarySources = implode(', ', $this->diarySources);
 
-        return view('submission', [ 'title' => 'Odeslat hlášení',
+        return view('submission', [ 'title' => __('Odeslat hlášení'),
                                     'data' => $this,
                                     'step' => $step,
                                     'diarySources' => $diarySources ]);
     }
     public function submit(Request $request)
     {
-        if ($request->input('step') == 1) {
-            Utilities::checkRecaptcha($request);
+        Utilities::validateCsrfToken();
+        Utilities::checkRecaptcha();
 
+        if ($request->input('step') == 1) {
             if (! $request->input('diaryUrl', false)) {
-                throw new SubmissionException(400, array('Neúplný požadavek'));
+                throw new SubmissionException(400, array(__('Neúplný požadavek')));
             }
 
             $diaryUrl = trim($request->input('diaryUrl'));
@@ -123,7 +125,7 @@ class SubmissionController extends Controller
                     try {
                         $this->$processor();
                     } catch (\Exception $e) {
-                        throw new SubmissionException(500, array('Deník se nepodařilo načíst.'));
+                        throw new SubmissionException(500, array(__('Deník se nepodařilo načíst.')));
                     }
                     $diarySourceFound = true;
                     break;
@@ -131,10 +133,10 @@ class SubmissionController extends Controller
             }
 
             if (! $diarySourceFound) {
-                throw new SubmissionException(422, array('Neznámý zdroj deníku'));
+                throw new SubmissionException(422, array(__('Neznámý zdroj deníku')));
             }
 
-            $request->session()->flash('diary', [
+            Session::flash('diary', [
                 'url' => $this->diaryUrl,
                 'callSign' => $this->callSign,
                 'qthName' => $this->qthName,
@@ -145,27 +147,25 @@ class SubmissionController extends Controller
                 'diaryUrl' => 'required|max:255|unique:\App\Models\Diary,diary_url',
             ], $this->messages);
             if ($validator->fails()) {
-                $request->session()->flash('submissionErrors', $validator->errors()->all());
+                Session::flash('submissionErrors', $validator->errors()->all());
                 return redirect(route('submissionForm'));
             }
 
             return redirect(route('submissionForm', [ 'step' => 2 ]) . '#scroll');
         } elseif ($request->input('step') == 2) {
-            Utilities::checkRecaptcha($request);
-
             $validator = Validator::make($request->all(), [
                 'contest' => 'required|max:255',
                 'category' => 'required|max:255',
                 'diaryUrl' => 'max:255|unique:\App\Models\Diary,diary_url',
                 'callSign' => 'required|max:255',
                 'qthName' => 'required|max:255',
-                'qthLocator' => ['required', 'size:6', new Locator],
+                'qthLocator' => [ 'required', 'size:6', new Locator ],
                 'qsoCount' => 'required|integer|gt:0',
                 'email' => 'required|email',
             ], $this->messages);
 
             if ($validator->fails()) {
-                $request->session()->flash('diary', [
+                Session::flash('diary', [
                     'contest' => $request->input('contest'),
                     'category' => $request->input('category'),
                     'url' => $request->input('diaryUrl'),
@@ -174,7 +174,7 @@ class SubmissionController extends Controller
                     'qthLocator' => $request->input('qthLocator'),
                     'qsoCount' => $request->input('qsoCount'),
                     'email' => $request->input('email') ]);
-                $request->session()->flash('submissionErrors', $validator->errors()->all());
+                Session::flash('submissionErrors', $validator->errors()->all());
                 return redirect(route('submissionForm', [ 'step' => 2 ]));
             }
 
@@ -196,13 +196,16 @@ class SubmissionController extends Controller
                 $diary->email = $request->input('email');
                 $diary->save();
 
-                $request->session()->flash('submissionSuccess', 'Hlášení do soutěže <a href="' . route('contest', [ 'name' => Str::replace(' ', '-', $request->input('contest')) ]) . '#scroll">' . $request->input('contest') . '</a> bylo úspěšně zpracováno.');
+                $contestLink = route('contest', [ 'name' => Str::replace(' ', '-', $request->input('contest')) ]) . '#scroll';
+                $contestName = Utilities::contestL10n($request->input('contest'));
+                Session::flash('submissionSuccess', __('Hlášení do soutěže <a href=":contestLink">:contestName</a> bylo úspěšně zpracováno.', [ 'contestLink' => $contestLink,
+                                                                                                                                                'contestName' => $contestName ]));
                 return redirect(route('submissionForm'));
             } catch (\Exception $e) {
-                throw new SubmissionException(500, array('Hlášení do soutěže se nepodařilo uložit.'));
+                throw new SubmissionException(500, array(__('Hlášení do soutěže se nepodařilo uložit.')));
             }
         } else {
-            throw new SubmissionException(400, array('Neplatný formulářový krok nebo neúplný požadavek'));
+            throw new SubmissionException(400, array(__('Neplatný formulářový krok nebo neúplný požadavek')));
         }
     }
 }

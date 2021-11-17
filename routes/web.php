@@ -46,7 +46,7 @@ $router->get('/lang/{lang}', [
             }
             return redirect(route('index'));
         }
-        throw new AppException(422, array('Neznámá lokalizace'));
+        throw new AppException(422, array(__('Neznámá lokalizace')));
     }
 ]);
 $router->post('/message', [
@@ -72,10 +72,12 @@ $router->get('/results', [
     'as' => 'results',
     'uses' => '\App\Http\Controllers\ResultsController@show'
 ]);
-$router->get('/api/v0/{category}/{endpoint}', [
+$router->addRoute([ 'GET', 'POST' ], '/api/v0/{category}/{endpoint}', [
     'as' => 'apiV0', function ($category, $endpoint) {
         $registeredMethods = [
             'appMigrate',
+            'utilGpsToLocator',
+            'utilLocatorToGps',
         ];
         $method = Str::camel($category . '_' . $endpoint);
         if (! in_array($method, $registeredMethods)) {
