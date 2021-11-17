@@ -12,8 +12,8 @@ jobs:
 
   prod:
     runs-on: self-hosted
-    concurrency: prod
-    environment: prod
+    concurrency: common-test-deploy-prod-env
+    environment: common-test-deploy-prod-env
     needs: test
     steps:
       - uses: actions/checkout@v2
