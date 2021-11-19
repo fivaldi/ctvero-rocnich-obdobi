@@ -75,6 +75,15 @@ html {
     border-radius: 50%;
 }
 
+span.ajax-status-indicator {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 42px;
+    height: 100%;
+    z-index: 3;
+}
+
 @media (max-width: 575.98px) {
     .qth-name-sm {
         font-size: 80%;

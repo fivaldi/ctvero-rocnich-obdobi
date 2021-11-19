@@ -13,13 +13,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable, HasFactory;
 
+    protected $table = 'user';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'name', 'nickname', 'email', 'created_at', 'updated_at'
     ];
 
     /**
@@ -28,6 +29,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password', 'remember_token'
     ];
+
+    public function diaries()
+    {
+        return $this->hasMany(Diary::class);
+    }
+
+    public function providers()
+    {
+        return $this->hasMany(UserProvider::class);
+    }
 }

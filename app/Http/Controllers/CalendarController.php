@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Lumen\Routing\Controller as BaseController;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\Alarm;
@@ -18,7 +17,7 @@ use App\Exceptions\AppException;
 use App\Http\Utilities;
 use App\Models\Contest;
 
-class CalendarController extends BaseController
+class CalendarController extends Controller
 {
     public function download(Request $request)
     {

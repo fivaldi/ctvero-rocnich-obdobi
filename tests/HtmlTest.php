@@ -2,6 +2,8 @@
 
 use HtmlValidator\Validator;
 
+use App\Models\User;
+
 class HtmlTest extends TestCase
 {
     public function setUp(): void
@@ -11,11 +13,21 @@ class HtmlTest extends TestCase
         $this->errors = array();
         $this->validator = new Validator();
         $this->validator->setParser(Validator::PARSER_HTML5);
+        $this->usersToDelete = array();
     }
 
-    public function commonErrors($requestUri)
+    public function tearDown(): void
     {
-        $this->get($requestUri);
+        User::whereIn('id', $this->usersToDelete)->delete();
+
+        parent::tearDown();
+    }
+
+    public function commonErrors($requestUri = NULL)
+    {
+        if ($requestUri) {
+            $this->get($requestUri);
+        }
         $result = $this->validator->validateDocument($this->response->getContent());
         foreach ($result->getErrors() as $error) {
             if ($error->getText() !== 'Element “img” is missing required attribute “src”.') {
@@ -43,6 +55,18 @@ class HtmlTest extends TestCase
         $this->assertEquals($this->errors, []);
     }
 
+    public function testProfile()
+    {
+        $user = User::factory()->create();
+        array_push($this->usersToDelete, $user->id);
+
+        $this->get('/');
+        Auth::login($user);
+        $this->get('/profile');
+        $this->commonErrors();
+        $this->assertEquals($this->errors, []);
+    }
+
     public function testResults()
     {
         $this->commonErrors('/results');
@@ -58,6 +82,12 @@ class HtmlTest extends TestCase
     public function testSubmissionFormStepTwo()
     {
         $this->commonErrors('/submission?step=2');
+        $this->assertEquals($this->errors, []);
+    }
+
+    public function testTermsAndPrivacy()
+    {
+        $this->commonErrors('/terms-and-privacy');
         $this->assertEquals($this->errors, []);
     }
 

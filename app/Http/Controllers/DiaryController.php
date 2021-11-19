@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Diary;
 use App\Models\Category;
+use App\Models\Diary;
 
 class DiaryController extends Controller
 {

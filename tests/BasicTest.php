@@ -217,4 +217,14 @@ class BasicTest extends TestCase
         $this->get('/contest/Neexistující soutěž');
         $this->seeStatusCode(404);
     }
+
+    public function testContact()
+    {
+        $this->get('/contact');
+        $this->seeStatusCode(302);
+        $this->response->assertSeeTextInOrder([
+            'Redirecting to ',
+            '#contact-message',
+        ]);
+    }
 }

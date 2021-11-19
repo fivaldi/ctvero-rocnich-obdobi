@@ -10,9 +10,8 @@ use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
-
-use App\Exceptions\ForbiddenException;
 
 class Handler extends ExceptionHandler
 {
@@ -54,22 +53,34 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof UnauthorizedHttpException) {
+            return $this->errorJsonOrErrorPageResponse(__('Je vyžadováno přihlášení.'), 401);
+        }
+
         if ($exception instanceof ForbiddenException) {
-            return response(view('error', [ 'msg' => __('Přístup odepřen.') ]))->setStatusCode(403);
+            return $this->errorJsonOrErrorPageResponse(__('Přístup odepřen.'), 403);
         }
 
         if ($exception instanceof NotFoundHttpException) {
-            return response(view('error', [ 'msg' => __('Stránka nebyla nalezena.') ]))->setStatusCode(404);
+            return $this->errorJsonOrErrorPageResponse(__('Stránka nebyla nalezena.'), 404);
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
-            return response(view('error', [ 'msg' => __('Metoda není povolena.') ]))->setStatusCode(405);
+            return $this->errorJsonOrErrorPageResponse(__('Metoda není povolena.'), 405);
         }
 
         if ($exception instanceof QueryException) {
-            return response(view('error', [ 'msg' => __('Došlo k chybě!') ]))->setStatusCode(500);
+            return $this->errorJsonOrErrorPageResponse(__('Došlo k chybě!'), 500);
         }
 
         return parent::render($request, $exception);
+    }
+
+    public static function errorJsonOrErrorPageResponse($message, $statusCode)
+    {
+        if (request()->ajax()) {
+            return response()->json([ 'errors' => array($message) ])->setStatusCode($statusCode);
+        }
+        return response(view('error', [ 'msg' => $message ]))->setStatusCode($statusCode);
     }
 }

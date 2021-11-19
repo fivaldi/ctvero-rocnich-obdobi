@@ -26,6 +26,7 @@ $app = new Laravel\Lumen\Application(
 $app->withFacades(true, [
     'Illuminate\Support\Facades\Session' => 'Session',
     'Illuminate\Support\Str' => 'Str',
+    'Laravel\Socialite\Facades\Socialite' => 'Socialite',
     'App\Http\Utilities' => 'Utilities',
 ]);
 
@@ -100,9 +101,10 @@ $app->middleware([
 */
 
 // $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Illuminate\Mail\MailServiceProvider::class);
+$app->register(Laravel\Socialite\SocialiteServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -138,7 +140,10 @@ $app->alias('mailer', Illuminate\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 
+$app->alias('Socialite', Laravel\Socialite\Facades\Socialite::class);
+
 $app->configure('ctvero');
+$app->configure('services');
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',

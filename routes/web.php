@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Str;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 use App\Exceptions\AppException;
-use App\Http\Controllers\ApiV0Controller;
+use App\Http\Utilities;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
@@ -31,6 +31,11 @@ $router->get('/calendar', [
 $router->get('/kalendar', function () {
     return redirect(route('calendar', [ 'contest' => request()->input('soutez') ]));
 });
+$router->get('/contact', [
+    'as' => 'contact', function () {
+        return redirect(route('index') . '#contact-message');
+    }
+]);
 $router->post('/message', [
     'as' => 'message',
     'uses' => '\App\Http\Controllers\MessageController@send'
@@ -57,6 +62,30 @@ $router->get('/lang/{lang}', [
     }
 ]);
 
+// Login & logout
+$router->get('/login/{provider}', [
+    'as' => 'login',
+    'uses' => '\App\Http\Controllers\LoginController@login'
+]);
+$router->get('/login/{provider}/callback', [
+    'as' => 'loginCallback',
+    'uses' => '\App\Http\Controllers\LoginController@callback'
+]);
+$router->get('/logout', [
+    'as' => 'logout',
+    'uses' => '\App\Http\Controllers\LoginController@logout'
+]);
+
+// Profile
+$router->get('/profile', [
+    'as' => 'profile', function() {
+        if (! Auth::check()) {
+            throw new UnauthorizedHttpException('');
+        }
+        return view('profile')->with([ 'title' => __('Můj profil') ]);
+    }
+]);
+
 // Results
 $router->get('/results', [
     'as' => 'results',
@@ -79,18 +108,15 @@ $router->get('/hlaseni', function () {
     return redirect(route('submissionForm'));
 });
 
+// Terms and privacy
+$router->get('/terms-and-privacy', [
+    'as' => 'termsAndPrivacy', function() {
+        return view('terms-and-privacy')->with([ 'title' => __('Podmínky použití a Zásady ochrany osobních údajů') ]);
+    }
+]);
+
 // APIv0
 $router->addRoute([ 'GET', 'POST' ], '/api/v0/{category}/{endpoint}', [
-    'as' => 'apiV0', function ($category, $endpoint) {
-        $registeredMethods = [
-            'appMigrate',
-            'utilGpsToLocator',
-            'utilLocatorToGps',
-        ];
-        $method = Str::camel($category . '_' . $endpoint);
-        if (! in_array($method, $registeredMethods)) {
-            throw new NotFoundHttpException();
-        }
-        return (new ApiV0Controller)->$method();
-    }
+    'as' => 'apiV0',
+    'uses' => '\App\Http\Controllers\ApiV0Controller@route'
 ]);

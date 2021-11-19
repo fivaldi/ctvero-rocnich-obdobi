@@ -8,6 +8,7 @@
     "Neznámá lokalizace": "Unbekannte Lokalisierung",
 
     "### error messages": "",
+    "Je vyžadováno přihlášení.": "",
     "Přístup odepřen.": "Zugriff abgelehnt.",
     "Stránka nebyla nalezena.": "Seite nicht gefunden.",
     "Metoda není povolena.": "Methode nicht erlaubt.",
@@ -27,6 +28,14 @@
     "Pole :attribute neobsahuje hodnotu větší než :value.": "Das Feld :attribute enthält keinen Wert größer als :value.",
     "Pole :attribute neobsahuje platný QTH lokátor.": "Das Feld :attribute enthält keinen gültigen QTH Lokator.",
     "Pole :attribute neobsahuje hodnotu v rozmezí od :min do :max.": "Das Feld :attribute enthält keinen gültigen Wert zwischen :min und :max.",
+
+    "### auth and related stuff": "",
+    "Neznámý nebo nepodporovaný poskytovatel autentizace: :provider": "",
+    "Uživatelský účet je již přihlášen.": "",
+    "Chyba poskytovatele autentizace: :provider": "",
+    "Přihlášení proběhlo úspěšně.": "",
+    "Uživatelský účet nebyl přihlášen.": "",
+    "Odhlášení proběhlo úspěšně.": "",
 
     "### calendar controller": "",
     "Soutěž nebyla nalezena.": "Der Wettbewerb wurde nicht gefunden.",
@@ -56,6 +65,10 @@
     "Soutěžní kola": "Wettbewerbsrunden",
     "Výsledkové listiny": "Ergebnislisten",
     "Kontakt": "Kontakt",
+    "Přihlásit se přes…": "",
+    "Můj profil": "",
+    "Odhlásit se": "",
+    "Podmínky služby<br>a ochrana soukromí": "",
 
     "### carousel images captions": "",
     "Vysílání nás baví !": "Rundfunk macht uns Spaß !",
@@ -161,5 +174,15 @@
     "Konec soutěže": "Ende des Wettbewerbs",
     "Termín odeslání hlášení do": "Frist für Wettbewerbsberichte",
     "Stáhnout kalendář se všemi daty": "Kalender mit allen Terminen herunterladen",
-    "Výsledková listina": "Ergebnisliste"
+    "Výsledková listina": "Ergebnisliste",
+
+    "### profile": "",
+    "Přezdívka": "",
+    "volačka": "",
+    "Jméno": "",
+    "Zavřít": "",
+    "Toto je současná přezdívka. Zůstává nezměněna.": "",
+
+    "### terms and privacy": "",
+    "Podmínky použití a Zásady ochrany osobních údajů": ""
 }
