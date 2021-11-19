@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Lumen\Routing\Controller as BaseController;
-
-use App\Models\Contest;
 use App\Models\Category;
+use App\Models\Contest;
 
-class ResultsController extends BaseController
+class ResultsController extends Controller
 {
     public function show()
     {

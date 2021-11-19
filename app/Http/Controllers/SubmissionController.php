@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use DiDom\Document;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 use App\Exceptions\SubmissionException;
-use App\Http\Controllers\Controller;
 use App\Http\Utilities;
 use App\Models\Category;
 use App\Models\Contest;
@@ -186,6 +186,9 @@ class SubmissionController extends Controller
                 $diary = new Diary;
                 $diary->contest_id = $contestId;
                 $diary->category_id = $categoryId;
+                if (Auth::check()) {
+                    $diary->user_id = Auth::user()->id;
+                }
                 $diary->diary_url = $request->input('diaryUrl') !== '' ? $request->input('diaryUrl') : NULL;
                 $diary->call_sign = $request->input('callSign');
                 $diary->qth_name = $request->input('qthName');

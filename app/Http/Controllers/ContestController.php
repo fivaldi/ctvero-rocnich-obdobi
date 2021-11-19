@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 use App\Exceptions\ContestException;
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\DiaryController;
 use App\Http\Utilities;
 use App\Models\Contest;
 

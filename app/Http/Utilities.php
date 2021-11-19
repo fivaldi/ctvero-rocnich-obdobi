@@ -2,9 +2,10 @@
 
 namespace App\Http;
 
-use Log;
 use Carbon\Carbon;
 use Illuminate\Mail\Markdown;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -18,6 +19,9 @@ class Utilities {
     {
         // FIXME: Workaround due to some mocking issues in PHPUnit when unit testing
         if (config('app.env') == 'testing') {
+            return;
+        }
+        if (Auth::check()) {
             return;
         }
         $recaptcha = new ReCaptcha(config('ctvero.recaptchaSecret'));

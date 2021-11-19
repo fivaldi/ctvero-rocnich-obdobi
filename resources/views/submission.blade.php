@@ -84,7 +84,7 @@
                     </div>
                     <div class="form-group required">
                         <label for="callSign">{{ __('Volačka') }}</label>
-                        <input name="callSign" class="form-control" id="callSign" type="text" placeholder="{{ __('Tvoje nebo expediční volačka') }}" value="{{ Session::get('diary.callSign') }}">
+                        <input name="callSign" class="form-control" id="callSign" type="text" placeholder="{{ __('Tvoje nebo expediční volačka') }}" value="{{ Session::get('diary.callSign', Auth::user()->nickname ?? '') }}">
                     </div>
                     <div class="row">
                         <div class="col-12 col-lg-7 form-group required">
@@ -125,7 +125,7 @@
                         </div>
                         <div class="col-12 col-lg-7 form-group required">
                             <label for="email">{{ __('E-mail') }} <small>({{ __('pro případnou komunikaci nesrovnalostí v deníku') }})</small></label>
-                            <input name="email" class="form-control" id="email" type="email" placeholder="name@example.com" value="{{ Session::get('diary.email') }}">
+                            <input name="email" class="form-control" id="email" type="email" placeholder="name@example.com" value="{{ Session::get('diary.email', Auth::user()->email ?? '') }}">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary g-recaptcha" data-sitekey="{{ config('ctvero.recaptchaSiteKey') }}" data-callback="onSubmit" data-action="submit">{{ __('Odeslat') }}</button>

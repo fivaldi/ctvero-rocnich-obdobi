@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 
-use App\Models\Contest;
 use App\Models\Category;
+use App\Models\Contest;
 
-class IndexController extends BaseController
+class IndexController extends Controller
 {
     public function show(Request $request)
     {

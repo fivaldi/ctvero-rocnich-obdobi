@@ -2,9 +2,10 @@
 
 use DiDom\Document;
 
-use App\Models\Contest;
 use App\Models\Category;
+use App\Models\Contest;
 use App\Models\Diary;
+use App\Models\User;
 
 class SubmissionTest extends TestCase
 {
@@ -14,6 +15,7 @@ class SubmissionTest extends TestCase
 
         $this->contest = Contest::factory()->create();
         $this->seeInDatabase('contest', [ 'name' => $this->contest->name ]);
+        $this->usersToDelete = array();
 
         $this->get('/submission');
 
@@ -26,6 +28,7 @@ class SubmissionTest extends TestCase
     {
         Diary::where('call_sign', 'like', 'Test call sign%')->delete();
         Contest::where('name', 'like', 'Test contest %')->delete();
+        User::whereIn('id', $this->usersToDelete)->delete();
 
         parent::tearDown();
     }
@@ -55,6 +58,7 @@ class SubmissionTest extends TestCase
         $this->seeInDatabase('diary', [
             'contest_id' => $this->contest->id,
             'category_id' => $category->id,
+            'user_id' => NULL,
             'diary_url' => 'https://example.com/diary/url',
             'call_sign' => 'Test call sign',
             'qth_name' => 'Test QTH name',
@@ -80,6 +84,48 @@ class SubmissionTest extends TestCase
 
         $this->get('/contest/' . $this->contest->name);
         $this->response->assertSeeText('Výsledková listina (průběžné pořadí)');
+    }
+
+    public function testSubmissionManualLoggedIn()
+    {
+        $category = Category::all()->where('name', 'Pěšák')->first();
+        $user = User::factory()->create();
+        array_push($this->usersToDelete, $user->id);
+
+        $this->get('/');
+        Auth::login($user);
+
+        $this->get('/submission');
+        $doc = new Document($this->response->getContent(), false);
+        $csrfToken = $doc->first('form#submission-form input[name=_csrf]')->value;
+
+        $this->post('/submission', [
+            '_csrf' => $csrfToken,
+            'step' => 2,
+            'contest' => $this->contest->name,
+            'category' => $category->name,
+            'diaryUrl' => 'https://example.com/diary/url',
+            'callSign' => 'Test call sign',
+            'qthName' => 'Test QTH name',
+            'qthLocator' => 'jn79so',
+            'qsoCount' => '99',
+            'email' => 'name@example.com'
+        ]);
+        $this->seeInDatabase('diary', [
+            'contest_id' => $this->contest->id,
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+            'diary_url' => 'https://example.com/diary/url',
+            'call_sign' => 'Test call sign',
+            'qth_name' => 'Test QTH name',
+            'qth_locator' => 'JN79SO',
+            'qth_locator_lon' => '15.541667',
+            'qth_locator_lat' => '49.604167',
+            'qso_count' => '99',
+            'email' => 'name@example.com'
+        ]);
+        $this->get('/submission?step=2');
+        $this->response->assertSeeText('Hlášení do soutěže ' . $this->contest->name . ' bylo úspěšně zpracováno.');
     }
 
     public function testSubmissionManualDiaryUrlDuplicity()

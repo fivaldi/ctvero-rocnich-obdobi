@@ -108,7 +108,7 @@
                         <input type="hidden" name="_csrf" value="{{ Utilities::getCsrfToken() }}">
                         <div class="form-group align-items-center row">
                             <label for="email" class="col-12 col-md-3">{{ __('E-mail') }}</label>
-                            <input name="email" type="email" class="form-control col-12 col-md-9" id="email" placeholder="name@example.com">
+                            <input name="email" type="email" class="form-control col-12 col-md-9" id="email" placeholder="name@example.com" value="{{ Auth::user()->email ?? '' }}">
                         </div>
                         <div class="form-group align-items-center row">
                             <label for="subject" class="col-12 col-md-3">{{ __('Předmět') }}</label>

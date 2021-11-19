@@ -63,19 +63,21 @@
         <div class="loader-section section-right"></div>
     </div>
     <div class="container">
-        @if ($errors = Session::pull('errors'))
-            <div class="alert alert-danger">
-                @if (count($errors) == 1)
-                    {{ $errors[0] }}
-                @else
-                    <ul>
-                    @foreach ($errors as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                    </ul>
-                @endif
-            </div>
-        @endif
+        @foreach ([ 'errors' => 'danger', 'successes' => 'success', 'infos' => 'info' ] as $category => $alertType)
+            @if ($messages = Session::pull($category))
+                <div class="alert alert-{{ $alertType }}">
+                    @if (count($messages) == 1)
+                        {{ $messages[0] }}
+                    @else
+                        <ul>
+                        @foreach ($messages as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                        </ul>
+                    @endif
+                </div>
+            @endif
+        @endforeach
 
         <section class="tm-section-head" id="top">
             <header id="header" class="text-center tm-text-gray">
@@ -121,6 +123,29 @@
                         @foreach (config('ctvero.locales') as $lang)
                             {!! $loop->index > 0 ? '<span class="text-muted">|</span>' : '' !!} <a class="nav-link tm-text-gray d-inline-block" href="{{ route('lang', [ 'lang' => $lang ]) }}">{{ strtoupper($lang) }}</a>
                         @endforeach
+                        </li>
+
+                        <li class="dropdown-divider"></li>
+
+                        @if (! Auth::check())
+                        <li class="nav-item text-muted">
+                            {{ __('Přihlásit se přes…') }}
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link tm-text-gray d-inline-block" href="{{ route('login', [ 'provider' => 'facebook' ]) }}"><i class="fa fa-facebook fa-2x"></i></a>
+                            <a class="nav-link tm-text-gray d-inline-block ml-2" href="{{ route('login', [ 'provider' => 'google' ]) }}"><i class="fa fa-google fa-2x"></i></a>
+                            <a class="nav-link tm-text-gray d-inline-block ml-2" href="{{ route('login', [ 'provider' => 'twitter' ]) }}"><i class="fa fa-twitter fa-2x"></i></a>
+                        </li>
+                        @elseif (Auth::user())
+                        <li class="nav-item">
+                            <a class="nav-link to-modal tm-text-gray" href="#" data-modal-id="profile" data-url="{{ route('profile') }}"><x-avatar/>{{ __('Můj profil') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link tm-text-gray" href="{{ route('logout') }}">{{ __('Odhlásit se') }}</a>
+                        </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link to-modal tm-text-gray small" href="#" data-modal-id="terms-and-privacy" data-url="{{ route('termsAndPrivacy') }}">{!! __('Podmínky služby<br>a ochrana soukromí') !!}</a>
                         </li>
                     </ul>
                 </div>
@@ -184,6 +209,10 @@
             | {{ __('Překlad do němčiny') }}: KML - Kamillo</p>
         </footer>
     </div>
+
+    <x-modal.profile/>
+
+    <x-modal.terms-and-privacy/>
 
     <!-- load JS files -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"

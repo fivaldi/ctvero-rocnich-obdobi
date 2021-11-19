@@ -7,10 +7,12 @@ use App\Http\Controllers\ContestController;
 
 class ContestException extends Exception
 {
-    public function __construct($statusCode, $messages = []) {
+    public function __construct($statusCode, $messages = [])
+    {
         $this->statusCode = $statusCode;
         $this->messages = $messages;
     }
+
     public function render($request)
     {
         $request->session()->flash('errors', $this->messages);

@@ -34,6 +34,11 @@ class Diary extends Model
         return $this->belongsTo(Contest::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function scopeOfCategory($query, $id)
     {
         return $query->whereCategory_id($id);
