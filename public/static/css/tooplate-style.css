@@ -38,7 +38,7 @@ p {
 #mainNav {
   background: white;
   padding: 5px 15px;
-  width: 180px;
+  min-width: 180px;
   position: absolute;
   top: 50px;
   right: 15px;
