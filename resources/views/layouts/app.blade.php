@@ -199,6 +199,8 @@
     <!-- Ctvero app scripts and final document loading actions -->
     <script src="/static/js/ctvero.js"></script>
 
+    @yield('scripts')
+
 </body>
 
 </html>
