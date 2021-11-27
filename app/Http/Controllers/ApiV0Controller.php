@@ -28,7 +28,7 @@ class ApiV0Controller extends BaseController
         $validator = Validator::make(request()->all(), [
             'gpsLon' => 'required|numeric|between:-180,180',
             'gpsLat' => 'required|numeric|between:-90,90',
-        ]);
+        ], Utilities::validatorMessages());
         if ($validator->fails()) {
             return response()->json([ 'errors' => $validator->messages()->all() ])->setStatusCode(422);
         }
@@ -46,7 +46,7 @@ class ApiV0Controller extends BaseController
 
         $validator = Validator::make(request()->all(), [
             'qthLocator' => [ 'required', 'size:6', new Locator ],
-        ]);
+        ], Utilities::validatorMessages());
         if ($validator->fails()) {
             return response()->json([ 'errors' => $validator->messages()->all() ])->setStatusCode(422);
         }
