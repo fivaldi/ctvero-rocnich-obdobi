@@ -15,23 +15,26 @@
     "Neúplný požadavek": "Unvollständige Anfrage",
     "Pokud se skutečně jedná o problém, <a href=\":issueReportLink\">tady ho lze nahlásit.</a>": "Wenn das wirklich ein Problem ist, <a href=\":issueReportLink\">hier kann gemeldet werden.</a>",
 
-    "### calendar controller": "",
-    "Soutěž nebyla nalezena.": "Der Wettbewerb wurde nicht gefunden.",
-    "Poslední den pro odeslání hlášení": "Letzter Tag zum Senden des Berichts",
-
-    "### message controller incl. submission controller validation errors": "",
+    "### validator error messages": "",
     "Pole :attribute obsahuje neplatnou e-mailovou adresu.": "Das Feld :attribute enthält eine ungültige E-Mail-Adresse.",
     "Pole :attribute je vyžadováno.": "Das Feld :attribute ist erforderlich.",
     "Pole :attribute přesahuje povolenou délku :max znaků.": "Das Feld :attribute überschreitet die zulässige Länge von :max Zeichen.",
-    "Zpráva byla úspěšně odeslána.": "Nachricht wurde erfolgreich gesendet.",
-    "Odeslání zprávy se nezdařilo.": "Nachricht konnte nicht gesendet werden.",
-
-    "### submission controller": "",
     "Pole :attribute již obsahuje v databázi stejný záznam.": "Das Feld :attribute enthält bereits denselben Datensatz in der Datenbank.",
     "Pole :attribute nemá přesně :size znaků.": "Das Feld :attribute hat nicht genau :size Zeichen.",
     "Pole :attribute neobsahuje celočíselnou hodnotu.": "Das Feld :attribute enthält keinen ganzzahligen Wert.",
     "Pole :attribute neobsahuje hodnotu větší než :value.": "Das Feld :attribute enthält keinen Wert größer als :value.",
     "Pole :attribute neobsahuje platný QTH lokátor.": "Das Feld :attribute enthält keinen gültigen QTH Lokator.",
+    "Pole :attribute neobsahuje hodnotu v rozmezí od :min do :max.": "Das Feld :attribute enthält keinen gültigen Wert zwischen :min und :max.",
+
+    "### calendar controller": "",
+    "Soutěž nebyla nalezena.": "Der Wettbewerb wurde nicht gefunden.",
+    "Poslední den pro odeslání hlášení": "Letzter Tag zum Senden des Berichts",
+
+    "### message controller incl. submission controller validation errors": "",
+    "Zpráva byla úspěšně odeslána.": "Nachricht wurde erfolgreich gesendet.",
+    "Odeslání zprávy se nezdařilo.": "Nachricht konnte nicht gesendet werden.",
+
+    "### submission controller": "",
     "Neplatný formulářový krok": "Ungültiger Formularschritt",
     "Deník se nepodařilo načíst.": "Das Logbuch konnte nicht geladen werden.",
     "Neznámý zdroj deníku": "Unbekannte Quelle des Logbuchs",

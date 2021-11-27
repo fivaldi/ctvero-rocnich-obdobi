@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use DiDom\Document;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+use App\Exceptions\SubmissionException;
 use App\Http\Controllers\Controller;
-use App\Models\Diary;
+use App\Http\Utilities;
 use App\Models\Category;
 use App\Models\Contest;
+use App\Models\Diary;
 use App\Rules\Locator;
-use App\Http\Utilities;
-use App\Exceptions\SubmissionException;
 
 class SubmissionController extends Controller
 {
@@ -26,15 +26,7 @@ class SubmissionController extends Controller
         $this->diarySources = array_unique($diarySources);
         $this->contests = Contest::submissionActiveOrdered();
         $this->categories = Category::allOrdered();
-        $this->messages = [
-            'email' => __('Pole :attribute obsahuje neplatnou e-mailovou adresu.'),
-            'required' => __('Pole :attribute je vyžadováno.'),
-            'max' => __('Pole :attribute přesahuje povolenou délku :max znaků.'),
-            'unique' => __('Pole :attribute již obsahuje v databázi stejný záznam.'),
-            'size' => __('Pole :attribute nemá přesně :size znaků.'),
-            'integer' => __('Pole :attribute neobsahuje celočíselnou hodnotu.'),
-            'gt' => __('Pole :attribute neobsahuje hodnotu větší než :value.'),
-        ];
+        $this->messages = Utilities::validatorMessages();
     }
 
     public function processCbdxCz()

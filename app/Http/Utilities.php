@@ -14,7 +14,8 @@ use App\Exceptions\ForbiddenException;
 use App\Models\Contest;
 
 class Utilities {
-    public static function checkRecaptcha() {
+    public static function checkRecaptcha()
+    {
         // FIXME: Workaround due to some mocking issues in PHPUnit when unit testing
         if (config('app.env') == 'testing') {
             return;
@@ -29,23 +30,27 @@ class Utilities {
         return $response;
     }
 
-    public static function contestL10n($contestName) {
+    public static function contestL10n($contestName)
+    {
         if (preg_match_all('|^(.*\S)\s+(\d+)\s*$|', $contestName, $output)) {
             return __($output[1][0]) . ' ' . $output[2][0];
         }
         return $contestName;
     }
 
-    public static function normalDateTime($dateTime) {
+    public static function normalDateTime($dateTime)
+    {
         return date('j. n. Y H:i', strtotime($dateTime));
     }
 
-    public static function contestInProgress($contestName) {
+    public static function contestInProgress($contestName)
+    {
         $contestsInProgress = Contest::submissionActiveOrdered();
         return $contestsInProgress->where('name', $contestName)->first() ? '<i> (' . __('průběžné pořadí') . ')</i>' : '';
     }
 
-    public static function submissionDeadline() {
+    public static function submissionDeadline()
+    {
         $deadline = Carbon::parse(Contest::submissionActiveOrdered()->min('submission_end'));
         $now = Carbon::now();
         if ($deadline->diffInSeconds($now) > 0) {
@@ -63,12 +68,14 @@ class Utilities {
         }
     }
 
-    public static function getAppContent($section) {
+    public static function getAppContent($section)
+    {
         $locale = app('translator')->getLocale();
         return Markdown::parse(Storage::get('content/' . $section . '_' . $locale . '.md'));
     }
 
-    public static function gpsToLocator($lon, $lat) {
+    public static function gpsToLocator($lon, $lat)
+    {
         $lon += 180;
         $lat += 90;
 
@@ -86,7 +93,8 @@ class Utilities {
         return $locator;
     }
 
-    public static function locatorToGps($locator) {
+    public static function locatorToGps($locator)
+    {
         list($lon1, $lat1, $lon2, $lat2, $lon3, $lat3) = str_split(strtoupper($locator));
 
         $lon_base = -180;
@@ -105,18 +113,21 @@ class Utilities {
                 $lat_base + $lat1_contrib + $lat2_contrib + $lat3_contrib + 1 / 48];
     }
 
-    public static function getCsrfToken() {
+    public static function getCsrfToken()
+    {
         $csrfToken = Str::random(40);
         Session::put('_csrf', $csrfToken);
 
         return $csrfToken;
     }
 
-    public static function getSessionSafeToken() {
+    public static function getSessionSafeToken()
+    {
         return hash('sha256', Session::get('_token'));
     }
 
-    public static function validateCsrfToken() {
+    public static function validateCsrfToken()
+    {
         if (! Session::has('_csrf')) {
             throw new ForbiddenException();
         }
@@ -128,7 +139,8 @@ class Utilities {
         return true;
     }
 
-    public static function validateSessionSafeToken() {
+    public static function validateSessionSafeToken()
+    {
         if (! Session::has('_token')) {
             throw new ForbiddenException();
         }
@@ -137,5 +149,19 @@ class Utilities {
         }
 
         return true;
+    }
+
+    public static function validatorMessages()
+    {
+        return [
+            'email' => __('Pole :attribute obsahuje neplatnou e-mailovou adresu.'),
+            'required' => __('Pole :attribute je vyžadováno.'),
+            'max' => __('Pole :attribute přesahuje povolenou délku :max znaků.'),
+            'unique' => __('Pole :attribute již obsahuje v databázi stejný záznam.'),
+            'size' => __('Pole :attribute nemá přesně :size znaků.'),
+            'integer' => __('Pole :attribute neobsahuje celočíselnou hodnotu.'),
+            'gt' => __('Pole :attribute neobsahuje hodnotu větší než :value.'),
+            'between' => __('Pole :attribute neobsahuje hodnotu v rozmezí od :min do :max.'),
+        ];
     }
 }
