@@ -35,7 +35,7 @@ $(document).ready(function () {
     // Fix anchor scrolling
     if (location.hash !== '') {
         $('html, body').animate({
-            scrollTop: $(location.hash).offset().top
+            scrollTop: $(decodeURIComponent(location.hash)).offset().top
         });
     }
 });
