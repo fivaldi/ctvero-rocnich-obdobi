@@ -13,7 +13,9 @@
     "Metoda není povolena.": "Methode nicht erlaubt.",
     "Došlo k chybě!": "Ein Fehler ist aufgetreten!",
     "Neúplný požadavek": "Unvollständige Anfrage",
-    "Pokud se skutečně jedná o problém, <a href=\":issueReportLink\">tady ho lze nahlásit.</a>": "Wenn das wirklich ein Problem ist, <a href=\":issueReportLink\">hier kann gemeldet werden.</a>",
+    "Možnosti dalšího postupu": "",
+    "Věc se týká soutěže nebo uživatelského přístupu a dat.": "",
+    "Jedná se o přetrvávající chybu aplikace nebo jiný problém.": "",
 
     "### validator error messages": "",
     "Pole :attribute obsahuje neplatnou e-mailovou adresu.": "Das Feld :attribute enthält eine ungültige E-Mail-Adresse.",
