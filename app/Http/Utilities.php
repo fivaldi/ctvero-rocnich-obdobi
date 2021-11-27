@@ -151,6 +151,17 @@ class Utilities {
         return true;
     }
 
+    public static function smartRedirect($preferredUrl = NULL)
+    {
+        $redirectUrl = $preferredUrl ?? request()->header('referer');
+        $redirectUrlWithoutScheme = preg_replace('|^https?://|', '', $redirectUrl);
+        $appUrlWithoutScheme = preg_replace('|^https?://|', '', config('app.url'));
+        if (str_starts_with($redirectUrlWithoutScheme, $appUrlWithoutScheme)) {
+            return redirect($redirectUrl);
+        }
+        return redirect(route('index'));
+    }
+
     public static function validatorMessages()
     {
         return [
