@@ -51,8 +51,8 @@ class ApiV0Test extends TestCase
         ]);
         $this->seeJSON([
             'errors' => [
-                'validation.required',
-                'validation.required'
+                'Pole gps lat je vyžadováno.',
+                'Pole gps lon je vyžadováno.'
             ]
         ]);
         $this->seeStatusCode(422);
@@ -67,8 +67,8 @@ class ApiV0Test extends TestCase
         ]);
         $this->seeJSON([
             'errors' => [
-                'validation.between.numeric',
-                'validation.between.numeric'
+                'Pole gps lat neobsahuje hodnotu v rozmezí od -90 do 90.',
+                'Pole gps lon neobsahuje hodnotu v rozmezí od -180 do 180.'
             ]
         ]);
         $this->seeStatusCode(422);
@@ -80,8 +80,8 @@ class ApiV0Test extends TestCase
         ]);
         $this->seeJSON([
             'errors' => [
-                'validation.between.numeric',
-                'validation.between.numeric'
+                'Pole gps lat neobsahuje hodnotu v rozmezí od -90 do 90.',
+                'Pole gps lon neobsahuje hodnotu v rozmezí od -180 do 180.'
             ]
         ]);
         $this->seeStatusCode(422);
@@ -115,7 +115,7 @@ class ApiV0Test extends TestCase
         ]);
         $this->seeJSON([
             'errors' => [
-                'validation.required'
+                'Pole qth locator je vyžadováno.'
             ]
         ]);
         $this->seeStatusCode(422);
