@@ -119,7 +119,7 @@
                         </li>
                         <li class="nav-item">
                         @foreach (config('ctvero.locales') as $lang)
-                            {{ $loop->index > 0 ? '|' : '' }} <a class="nav-link tm-text-gray d-inline-block" href="{{ route('lang', [ 'lang' => $lang ]) }}">{{ strtoupper($lang) }}</a>
+                            {!! $loop->index > 0 ? '<span class="text-muted">|</span>' : '' !!} <a class="nav-link tm-text-gray d-inline-block" href="{{ route('lang', [ 'lang' => $lang ]) }}">{{ strtoupper($lang) }}</a>
                         @endforeach
                         </li>
                     </ul>
