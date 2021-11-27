@@ -15,6 +15,15 @@ html {
     padding: 0px 30px;
 }
 
+.navbar-light a.navbar-brand {
+    text-shadow: 0px 0px 7px white;
+}
+
+.navbar-light button.navbar-toggler {
+    background: white;
+    opacity: 0.5;
+}
+
 .navbar-light .navbar-nav .nav-link {
     color: rgba(0, 0, 0, 0.6)
 }
