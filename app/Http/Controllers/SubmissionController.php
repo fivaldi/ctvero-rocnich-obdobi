@@ -18,7 +18,8 @@ use App\Exceptions\SubmissionException;
 
 class SubmissionController extends Controller
 {
-    function __construct() {
+    function __construct()
+    {
         foreach (config('ctvero.diaryUrlToProcessor') as $diaryUrlTemplate => $processor) {
             $diarySources[] = preg_replace('|^http(s)?://([^/]+)/.*|', '$2', $diaryUrlTemplate);
         }
@@ -35,7 +36,9 @@ class SubmissionController extends Controller
             'gt' => __('Pole :attribute neobsahuje hodnotu větší než :value.'),
         ];
     }
-    public function processCbdxCz() {
+
+    public function processCbdxCz()
+    {
         $doc = new Document($this->diaryUrl, true);
         if ($doc->first('table tr:nth-child(1) td')->text() == 'Název expedice') {
             $this->callSign = preg_replace('|^\s+|u', '', $doc->first('table tr:nth-child(1) td:nth-child(2)')->text());
@@ -56,7 +59,9 @@ class SubmissionController extends Controller
             $this->qsoCount = trim($this->qsoCount);
         }
     }
-    public function processCbpmrCz() {
+
+    public function processCbpmrCz()
+    {
         $doc = new Document($this->diaryUrl, true, 'ISO-8859-2');
         if ($doc->first('table.tbl tr:nth-child(5) td')->text() == 'Volačka') {
             $this->callSign = trim($doc->first('table.tbl tr:nth-child(5) td:nth-child(2)')->text());
@@ -71,7 +76,9 @@ class SubmissionController extends Controller
             $this->qsoCount = trim($doc->first('table.tbl tr:nth-child(17) td:nth-child(2)')->text());
         }
     }
-    public function processCbpmrInfo() {
+
+    public function processCbpmrInfo()
+    {
         $this->diaryUrl = preg_replace('|^http:|', 'https:', $this->diaryUrl);
         $context = stream_context_create([ 'http' => [ 'follow_location' => false ] ]);
         $html = file_get_contents($this->diaryUrl, false, $context);
@@ -92,6 +99,7 @@ class SubmissionController extends Controller
         $this->qthLocator = $data->locator;
         $this->qsoCount = $data->totalCalls;
     }
+
     public function show(Request $request, $resetStep = false)
     {
         $step = $resetStep ? 1 : intval(request()->input('step', 1));
@@ -105,6 +113,7 @@ class SubmissionController extends Controller
                                     'step' => $step,
                                     'diarySources' => $diarySources ]);
     }
+
     public function submit(Request $request)
     {
         Utilities::validateCsrfToken();
