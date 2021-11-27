@@ -9,9 +9,7 @@
     <section class="tm-section-2 my-5 py-4">
         <div class="row">
             <div class="col-xl-20 col-lg-20 col-md-12">
-                <header>
                 <h2>{{ __('Novinky a oznámení') }}</h2>
-                </header>
                 {{ Utilities::getAppContent('news') }}
             </div>
         </div>
@@ -21,9 +19,7 @@
         <div class="row">
             <div class="col-md-6 tm-mb-sm-4 tm-2col-l">
                 <div class="h-100 tm-box-3">
-                    <header>
                     <h3>{{ __('Termíny') }}</h3>
-                    </header>
                     <p class="small">{{ __('obvykle sobota 0:00 až neděle 24:00') }}</p>
                     <ul class="list-group">
                     @foreach ($lastYearContests as $contest)
@@ -38,32 +34,22 @@
                     @endforeach
                     </ul>
 
-                    <header>
                     <h3 class="mt-5">{{ __('Spojení') }}</h3>
-                    </header>
                     {{ Utilities::getAppContent('connections') }}
 
-                    <header>
                     <h3 class="mt-5">{{ __('Deník') }}</h3>
-                    </header>
                     {{ Utilities::getAppContent('logbook') }}
                 </div>
             </div>
             <div class="col-md-6 tm-2col-r">
                 <div class="h-100 tm-box-3">
-                    <header>
                     <h3>{{ trans_choice('Kategorie', 2) }}</h3>
-                    </header>
                     {{ Utilities::getAppContent('categories') }}
 
-                    <header>
                     <h3 class="mt-5">{{ __('Technika') }}</h3>
-                    </header>
                     {{ Utilities::getAppContent('equipment') }}
 
-                    <header>
                     <h3 class="mt-5">{{ __('Hodnocení') }}</h3>
-                    </header>
                     {{ Utilities::getAppContent('scoring') }}
 
                     <p class="mt-5"><b>{{ __('Všem přeji dobré podmínky, málo rušení a mnoho dalekých spojení. 73\'') }}</b></p>
@@ -74,9 +60,7 @@
 
     <section class="tm-section-12 tm-section-mb">
             <div class="col-lg-12 col-md-12 col-sm-12 pl-lg-0">
-                <header>
                 <h2 class="mb-4">{{ __('Nejlepší trojka') }} - {{ Utilities::contestL10n($lastContest->name) }}{!! Utilities::contestInProgress($lastContest->name) !!}</h2>
-                </header>
                 @foreach ($categories as $category)
                 <div class="media tm-media">
                     <img src="{{ $category['image_src'] }}" alt="Category" class="img-responsive tm-media-img">

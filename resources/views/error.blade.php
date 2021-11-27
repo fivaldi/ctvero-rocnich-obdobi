@@ -7,10 +7,13 @@
     <section class="tm-section-2 my-5 py-4">
         <div class="row">
             <div class="col-xl-20 col-lg-20 col-md-12">
-                <header>
                 <h2>{{ $msg }}</h2>
-                <h3 class="mt-3">{!! __('Pokud se skutečně jedná o problém, <a href=":issueReportLink">tady ho lze nahlásit.</a>', [ 'issueReportLink' => config('ctvero.issuesReportUrl') ]) !!}</h3>
-                </header>
+                <!-- h3 intentionally unused - too large -->
+                <h4 class="mt-5">{{ __('Možnosti dalšího postupu') }}…</h4>
+                <ul>
+                    <li><h5 class="mt-3"><a href="{{ route('contact') }}">{{ __('Věc se týká soutěže nebo uživatelského přístupu a dat.') }}</a></h5></li>
+                    <li><h5 class="mt-3"><a href="{{ config('ctvero.issuesReportUrl') }}">{{ __('Jedná se o přetrvávající chybu aplikace nebo jiný problém.') }}</a></h5></li>
+                </ul>
             </div>
         </div>
     </section>
