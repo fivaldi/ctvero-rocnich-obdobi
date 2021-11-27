@@ -31,6 +31,11 @@ $router->get('/calendar', [
 $router->get('/kalendar', function () {
     return redirect(route('calendar', [ 'contest' => request()->input('soutez') ]));
 });
+$router->get('/contact', [
+    'as' => 'contact', function () {
+        return redirect(route('index') . '#contact-message');
+    }
+]);
 $router->post('/message', [
     'as' => 'message',
     'uses' => '\App\Http\Controllers\MessageController@send'
