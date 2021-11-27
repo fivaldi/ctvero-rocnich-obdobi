@@ -38,9 +38,4 @@ $(document).ready(function () {
             scrollTop: $(location.hash).offset().top
         });
     }
-
-    // Init QTH locator map if present
-    if (typeof(initQthLocatorMap) == 'function') {
-        initQthLocatorMap();
-    }
 });

@@ -11,37 +11,6 @@
 
                 @if (! empty($diaries))
                 <div id="map" style="height: 480px;" class="w-100"></div>
-
-                <x-leaflet-map/>
-
-                <script>
-                    var locatorDiaries = @json($diaries);
-                    for (const [locator, diaries] of Object.entries(locatorDiaries)) {
-                        var markerColor = '#836953';
-                        var popups = [];
-
-                        diaries.forEach(function(diary) {
-                            markerColor = diaries.length > 1 ? markerColor : diary['categoryMapMarkerColor'];
-                            var diaryLink = diary['diaryUrl'] !== null ? `<a href="${diary['diaryUrl']}"><i class="fa fa-book"></i> {{ __('Deník') }}</a>` : '';
-                            popups.push(`<div class="pl-2 text-large" style="position: relative; border-left: 4px solid ${diary['categoryMapMarkerColor']};">
-                                             <div class="diary-popup-dot" style="background-color: ${diary['categoryMapMarkerColor']};"></div>
-                                             <b>${diary['callSign']}</b><br>
-                                             ${diary['qthName']} (${diary['qthLocator']})<br>
-                                             {{ trans_choice('Kategorie', 1) }}: ${diary['categoryName']}<br>
-                                             {{ __('Počet spojení') }}: ${diary['qsoCount']}<br>
-                                             ${diaryLink}
-                                         </div>`);
-                        });
-                        var marker = L.divIcon({
-                            html: `<i class="fa fa-flag fa-2x" style="color: ${markerColor}"></i>`,
-                            className: 'no-class',
-                        });
-
-                        /* Note: In case of multi-diaries popup for a single marker, QTH locator lon/lat
-                        should always be the same. Thus, it's OK to take the first diary's QTH locator lon/lat. */
-                        L.marker([diaries[0]['qthLocatorLat'], diaries[0]['qthLocatorLon']], {icon: marker}).addTo(map).bindPopup(popups.join('<hr>'));
-                    }
-                </script>
                 @endif
 
                 <h3 class="mt-5 mb-4">{{ __('Hlavní údaje') }}</h3>
@@ -57,5 +26,42 @@
             </div>
         </div>
     </section>
+
+@endsection
+
+@section('scripts')
+
+    @if (! empty($diaries))
+    <x-leaflet-map/>
+
+    <script>
+        var locatorDiaries = @json($diaries);
+        for (const [locator, diaries] of Object.entries(locatorDiaries)) {
+            var markerColor = '#836953';
+            var popups = [];
+
+            diaries.forEach(function(diary) {
+                markerColor = diaries.length > 1 ? markerColor : diary['categoryMapMarkerColor'];
+                var diaryLink = diary['diaryUrl'] !== null ? `<a href="${diary['diaryUrl']}"><i class="fa fa-book"></i> {{ __('Deník') }}</a>` : '';
+                popups.push(`<div class="pl-2 text-large" style="position: relative; border-left: 4px solid ${diary['categoryMapMarkerColor']};">
+                                 <div class="diary-popup-dot" style="background-color: ${diary['categoryMapMarkerColor']};"></div>
+                                 <b>${diary['callSign']}</b><br>
+                                 ${diary['qthName']} (${diary['qthLocator']})<br>
+                                 {{ trans_choice('Kategorie', 1) }}: ${diary['categoryName']}<br>
+                                 {{ __('Počet spojení') }}: ${diary['qsoCount']}<br>
+                                 ${diaryLink}
+                             </div>`);
+            });
+            var marker = L.divIcon({
+                html: `<i class="fa fa-flag fa-2x" style="color: ${markerColor}"></i>`,
+                className: 'no-class',
+            });
+
+            /* Note: In case of multi-diaries popup for a single marker, QTH locator lon/lat
+            should always be the same. Thus, it's OK to take the first diary's QTH locator lon/lat. */
+            L.marker([diaries[0]['qthLocatorLat'], diaries[0]['qthLocatorLon']], {icon: marker}).addTo(map).bindPopup(popups.join('<hr>'));
+        }
+    </script>
+    @endif
 
 @endsection

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MessageMail;
-use App\Http\Utilities;
-use App\Exceptions\MessageException;
 
-class MessageController extends BaseController
+use App\Exceptions\MessageException;
+use App\Http\Utilities;
+use App\Mail\MessageMail;
+
+class MessageController extends Controller
 {
     public function send(Request $request)
     {

@@ -113,96 +113,6 @@
                                 </div>
                                 <div class="modal-body">
                                     <div id="map" style="height: 480px;" class="w-100"></div>
-
-                                    <x-leaflet-map/>
-
-                                    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.6.0/dist/geosearch.css"/>
-                                    <script src="https://unpkg.com/leaflet-geosearch@3.6.0/dist/geosearch.umd.js"></script>
-
-                                    <script>
-                                        function qthLocatorPopup(gpsLatLon, qthLocator) {
-                                            $('#modal-map').data('qth-locator', qthLocator);
-                                            var popup = L.popup()
-                                                .setLatLng(gpsLatLon)
-                                                .setContent(`<div class="text-center">
-                                                                 <h5>${qthLocator}</h5>
-                                                                 <a href="#">
-                                                                     <h6 style="line-height: 1.5;">
-                                                                         {{ __('Potvrdit lokátor') }}<br>
-                                                                         <i class="fa fa-thumb-tack fa-lg"></i>
-                                                                     </h6>
-                                                                 </a>
-                                                             </div>`)
-                                                .openOn(map);
-                                            $(popup._contentNode).find('a').click(function(e) {
-                                                e.preventDefault();
-                                                $('input#qthLocator').val(qthLocator);
-                                                $('#modal-map').modal('hide');
-                                            });
-                                            map.flyTo(gpsLatLon);
-                                        }
-
-                                        function initQthLocatorMap() {
-                                            $('#modal-map').on('shown.bs.modal', function () {
-                                                // Fix map size within modal after loading
-                                                map.invalidateSize(true);
-
-                                                if ($('input#qthLocator').val() !== '' && $('input#qthLocator').val().toUpperCase() !== $('#modal-map').data('qth-locator')) {
-                                                    $.post('/api/v0/util/locatorToGps', {qthLocator: $('input#qthLocator').val().toUpperCase(), _token: '{{ Utilities::getSessionSafeToken() }}'}, function(data) {
-                                                        if (data.qthLocator !== null && data.gpsLon !== null && data.gpsLat !== null) {
-                                                            qthLocatorPopup([data.gpsLat, data.gpsLon], data.qthLocator);
-                                                        }
-                                                    });
-                                                }
-                                            })
-                                        }
-
-                                        function qthLocatorMapClick(e) {
-                                            $.post('/api/v0/util/gpsToLocator', {gpsLon: e.latlng.lng, gpsLat: e.latlng.lat, _token: '{{ Utilities::getSessionSafeToken() }}'}, function(data) {
-                                                qthLocatorPopup([e.latlng.lat, e.latlng.lng], data.qthLocator);
-                                            });
-                                        }
-                                        map.on('click', qthLocatorMapClick);
-
-                                        class MapboxProvider extends GeoSearch.JsonProvider {
-                                            endpoint({query, type}) {
-                                                return this.getUrl('https://api.mapbox.com/geocoding/v5/mapbox.places/' + query + '.json', {
-                                                    access_token: '{{ config("ctvero.mapboxAccessToken") }}',
-                                                    language: '{{ app("translator")->getLocale() }}',
-                                                    proximity: [defaultCenterPos[1], defaultCenterPos[0]].join(',')
-                                                });
-                                            }
-                                            parse({data}) {
-                                                return data.features.map((d) => ({
-                                                    x: d.center[0],
-                                                    y: d.center[1],
-                                                    label: d.place_name,
-                                                    bounds: d.bbox ? [
-                                                        [d.bbox[1], d.bbox[0]],
-                                                        [d.bbox[3], d.bbox[2]],
-                                                    ] : []
-                                                }));
-                                            }
-                                        }
-                                        search = GeoSearch.GeoSearchControl({
-                                            provider: new MapboxProvider(),
-                                            style: 'bar',
-                                            showMarker: false,
-                                            showPopup: true,
-                                            popupFormat: function(d) {
-                                                $.post('/api/v0/util/gpsToLocator', {gpsLon: d.result.x, gpsLat: d.result.y, _token: '{{ Utilities::getSessionSafeToken() }}'}, function(data) {
-                                                    qthLocatorPopup([d.result.y, d.result.x], data.qthLocator);
-                                                });
-                                                return null;
-                                            },
-                                            animateZoom: false,
-                                            autoClose: true,
-                                            searchLabel: '{{ __("Vyhledat místo") }}',
-                                            keepResult: true,
-                                            updateMap: true
-                                        });
-                                        map.addControl(search);
-                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -227,5 +137,99 @@
             </div>
         </div>
     </section>
+
+@endsection
+
+@section('scripts')
+
+    @if ($step == 2)
+    <x-leaflet-map/>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.6.0/dist/geosearch.css"/>
+    <script src="https://unpkg.com/leaflet-geosearch@3.6.0/dist/geosearch.umd.js"></script>
+
+    <script>
+        function qthLocatorPopup(gpsLatLon, qthLocator) {
+            $('#modal-map').data('qth-locator', qthLocator);
+            var popup = L.popup()
+                .setLatLng(gpsLatLon)
+                .setContent(`<div class="text-center">
+                                 <h5>${qthLocator}</h5>
+                                 <a href="#">
+                                     <h6 style="line-height: 1.5;">
+                                         {{ __('Potvrdit lokátor') }}<br>
+                                         <i class="fa fa-thumb-tack fa-lg"></i>
+                                     </h6>
+                                 </a>
+                             </div>`)
+                .openOn(map);
+            $(popup._contentNode).find('a').click(function(e) {
+                e.preventDefault();
+                $('input#qthLocator').val(qthLocator);
+                $('#modal-map').modal('hide');
+            });
+            map.flyTo(gpsLatLon);
+        }
+
+        function qthLocatorMapClick(e) {
+            $.post('/api/v0/util/gpsToLocator', {gpsLon: e.latlng.lng, gpsLat: e.latlng.lat, _token: '{{ Utilities::getSessionSafeToken() }}'}, function(data) {
+                qthLocatorPopup([e.latlng.lat, e.latlng.lng], data.qthLocator);
+            });
+        }
+        map.on('click', qthLocatorMapClick);
+
+        class MapboxProvider extends GeoSearch.JsonProvider {
+            endpoint({query, type}) {
+                return this.getUrl('https://api.mapbox.com/geocoding/v5/mapbox.places/' + query + '.json', {
+                    access_token: '{{ config("ctvero.mapboxAccessToken") }}',
+                    language: '{{ app("translator")->getLocale() }}',
+                    proximity: [defaultCenterPos[1], defaultCenterPos[0]].join(',')
+                });
+            }
+            parse({data}) {
+                return data.features.map((d) => ({
+                    x: d.center[0],
+                    y: d.center[1],
+                    label: d.place_name,
+                    bounds: d.bbox ? [
+                        [d.bbox[1], d.bbox[0]],
+                        [d.bbox[3], d.bbox[2]],
+                    ] : []
+                }));
+            }
+        }
+        search = GeoSearch.GeoSearchControl({
+            provider: new MapboxProvider(),
+            style: 'bar',
+            showMarker: false,
+            showPopup: true,
+            popupFormat: function(d) {
+                $.post('/api/v0/util/gpsToLocator', {gpsLon: d.result.x, gpsLat: d.result.y, _token: '{{ Utilities::getSessionSafeToken() }}'}, function(data) {
+                    qthLocatorPopup([d.result.y, d.result.x], data.qthLocator);
+                });
+                return null;
+            },
+            animateZoom: false,
+            autoClose: true,
+            searchLabel: '{{ __("Vyhledat místo") }}',
+            keepResult: true,
+            updateMap: true
+        });
+        map.addControl(search);
+
+        $('#modal-map').on('shown.bs.modal', function () {
+            // Fix map size within modal after loading
+            map.invalidateSize(true);
+
+            if ($('input#qthLocator').val() !== '' && $('input#qthLocator').val().toUpperCase() !== $('#modal-map').data('qth-locator')) {
+                $.post('/api/v0/util/locatorToGps', {qthLocator: $('input#qthLocator').val().toUpperCase(), _token: '{{ Utilities::getSessionSafeToken() }}'}, function(data) {
+                    if (data.qthLocator !== null && data.gpsLon !== null && data.gpsLat !== null) {
+                        qthLocatorPopup([data.gpsLat, data.gpsLon], data.qthLocator);
+                    }
+                });
+            }
+        })
+    </script>
+    @endif
 
 @endsection

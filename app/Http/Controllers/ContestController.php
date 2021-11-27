@@ -39,6 +39,7 @@ class ContestController extends Controller
                                  'contest' => $contest,
                                  'diaries' => $diaries ?? [] ]);
     }
+
     public function showAll(Request $request)
     {
         return view('contests', [ 'title' => __('Soutěžní kola'),
