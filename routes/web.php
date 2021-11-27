@@ -51,10 +51,7 @@ $router->get('/lang/{lang}', [
     'as' => 'lang', function ($lang) {
         if (in_array($lang, config('ctvero.locales'))) {
             request()->session()->put('locale', $lang);
-            if (str_starts_with(request()->header('referer'), config('app.url'))) {
-                return redirect(request()->header('referer'));
-            }
-            return redirect(route('index'));
+            return Utilities::smartRedirect();
         }
         throw new AppException(422, array(__('Neznámá lokalizace')));
     }
