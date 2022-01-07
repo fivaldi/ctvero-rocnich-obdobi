@@ -1,9 +1,10 @@
-<p class="alert alert-info small">Diese Version der Neuigkeiten ist nicht aktuell. Bitte beachten Sie die <a href="/lang/cs">tschechische Variante</a>.</p>
+**Ich danke allen für die bisherige Teilnahme, es würde mich freuen, auch in der nächsten Runde von Euch zu hören. Danke sehr auch für die Berichte!**
 
-**Ich danke allen für die bisherige Teilnahme, es würde mich freuen, auch in der nächsten Runde von Euch zu hören.**
+Die nächste Termine von Den Vier Jahreszeiten 2022 erscheinen auch in Kürze im Absatz/Sektion _Termine_, damit sie heruntergeladen und zum Kalender hinzugefügt werden können:
 
-Wenn sich ein Webmaster finden würde, der mir in seiner Freizeit bei der Anpassung einiger Funktionen helfen könnte, wäre ich sehr froh. Ich habe mir alles selbst beigebracht, und so sieht es dann auch aus. :-)
+- Frühling: März 26. - 27.
+- Sommer: Juni 25. - 26.
+- Herbst: September 24. - 25.
+- Winter: Dezember 10. - 11.
 
-**NEU: Aufgrund der DX-Störungen auf dem CB Band, die eine lokale Verbindung erschweren, habe ich mich entschieden, eine Kategorie für alternative Frequenzbänder hinzuzufügen. Vielleicht gelingt damit eine Verbindung?**
-
-<span class="text-info">Achtung: Seid bitte in dieser besonderen Zeit und auch während des Verlaufs dieser Aktivität alle verantwortungsbewusst, verhaltet Euch so, dass Ihr Euch und Eure Umgebung nicht gefährdet. **Befolgt beim Funken im Freien, und fern von Eurem Wohnort, die örtlichen Empfehlungen und Vorschriften.**</span>
+**Ich freue sehr, bis zu hören, 73' Radek Lichnov**
