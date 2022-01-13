@@ -1,5 +1,7 @@
 .phpunit.result.cache
 /.idea
+/.kdev4/
+/ctvero-rocnich-obdobi.kdev4
 /deploy-prod-files/.env
 /vendor
 Homestead.json
