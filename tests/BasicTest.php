@@ -11,6 +11,8 @@ class BasicTest extends TestCase
 
     public function testIndex()
     {
+        $this->get('/lang/cs');
+
         $this->get('/');
         $this->response->assertSeeTextInOrder([
             'Čtvero ročních období',
@@ -39,12 +41,32 @@ class BasicTest extends TestCase
         $this->seeStatusCode(200);
     }
 
+    public function testIndexEnLocale()
+    {
+        $this->get('/', $headers = [ 'Accept-Language' => 'en-US' ]);
+        $this->response->assertSeeTextInOrder([
+            'The Four Seasons',
+            'CB-Contest',
+        ]);
+        $this->seeStatusCode(200);
+    }
+
     public function testIndexMultipleLocalesDePreferred()
     {
         $this->get('/', $headers = [ 'Accept-Language' => 'de-AT,cs' ]);
         $this->response->assertSeeTextInOrder([
             'Die vier Jahreszeiten',
             'CB-Wettbewerb',
+        ]);
+        $this->seeStatusCode(200);
+    }
+
+    public function testIndexMultipleLocalesEnPreferred()
+    {
+        $this->get('/', $headers = [ 'Accept-Language' => 'en-US,cs' ]);
+        $this->response->assertSeeTextInOrder([
+            'The Four Seasons',
+            'CB-Contest',
         ]);
         $this->seeStatusCode(200);
     }
@@ -121,6 +143,8 @@ class BasicTest extends TestCase
 
     public function testSubmissionFormInvalidStep()
     {
+        $this->get('/lang/cs');
+
         $this->get('/submission?step=999999999');
         $this->response->assertSeeText('Neplatný formulářový krok');
         $this->seeStatusCode(422);
