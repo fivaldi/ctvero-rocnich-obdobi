@@ -1,0 +1,1 @@
+The logbook can be written in any format. It should contain the date and time, the call sign (identification or name) of the opposite station, the QTH (preferably also the grid locator) of the opposite station and the signal report sent and received.

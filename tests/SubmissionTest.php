@@ -13,6 +13,8 @@ class SubmissionTest extends TestCase
     {
         parent::setUp();
 
+        $this->get('/lang/cs');
+
         $this->contest = Contest::factory()->create();
         $this->seeInDatabase('contest', [ 'name' => $this->contest->name ]);
         $this->usersToDelete = array();
