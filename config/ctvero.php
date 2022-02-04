@@ -2,7 +2,7 @@
 
 return [
 
-    'locales' => [ 'cs', 'de' ],
+    'locales' => [ 'cs', 'de', 'en' ],
 
     'ownerMail' => env('CTVERO_OWNER_MAIL'),
 

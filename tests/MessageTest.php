@@ -8,6 +8,7 @@ class MessageTest extends TestCase
     {
         parent::setUp();
 
+        $this->get('/lang/cs');
         $this->get('/');
 
         // CSRF

@@ -9,6 +9,7 @@ class ApiV0Test extends TestCase
     {
         parent::setUp();
 
+        $this->get('/lang/cs');
         $this->get('/');
 
         $this->sessionSafeToken = Utilities::getSessionSafeToken();
