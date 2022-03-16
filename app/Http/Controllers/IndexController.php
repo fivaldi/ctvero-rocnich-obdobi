@@ -13,12 +13,16 @@ class IndexController extends Controller
     {
         $lastContest = Contest::lastContest();
         $useScorePoints = ($lastContest->options['criterion'] ?? NULL == 'score_points') or false;
-        $lastYearContests = Contest::lastYear();
+        $currentAndNextTwo = Contest::currentAndNextTwo();
+        $recentAndFutureContests = (Contest::previousOne())->merge($currentAndNextTwo);
+        $activeContests = (Contest::runningOrdered())->merge(Contest::submissionActiveOrdered());
+        $highlightContestId = $activeContests->merge($currentAndNextTwo)->first()->id ?? NULL;
         $lastContestDiaries = DiaryController::getContestDiaries($lastContest);
         $categories = Category::allOrdered();
 
         return view('index', [ 'title' => 'Home',
-                               'lastYearContests' => $lastYearContests,
+                               'recentAndFutureContests' => $recentAndFutureContests,
+                               'highlightContestId' => $highlightContestId,
                                'useScorePoints' => $useScorePoints,
                                'lastContestDiaries' => $lastContestDiaries,
                                'categories' => $categories,
