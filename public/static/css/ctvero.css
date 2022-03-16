@@ -33,6 +33,10 @@ html {
     color: rgba(0, 0, 0, 0.9)
 }
 
+.list-group-item.highlight-contest {
+    box-shadow: -4px 0px 2px -2px yellow, 4px 0px 2px -2px yellow;
+}
+
 .form-group.required label:after {
     content: "*";
     color: red;

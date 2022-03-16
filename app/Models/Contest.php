@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -36,9 +37,23 @@ class Contest extends Model
         return $this->hasMany(Diary::class);
     }
 
-    public function scopeLastYear($query)
+    public function getIsActiveSubmissionAttribute()
     {
-        return $query->whereRaw('contest_start > DATE_SUB(NOW(), INTERVAL 1 YEAR) ORDER BY contest_start DESC LIMIT 4')->get();
+        $now = Carbon::now();
+        if ($now >= $this->submission_start && $now <= $this->submission_end) {
+            return true;
+        }
+        return false;
+    }
+
+    public function scopePreviousOne($query)
+    {
+        return $query->whereRaw('contest_start < NOW() ORDER BY contest_start DESC LIMIT 1')->get();
+    }
+
+    public function scopeCurrentAndNextTwo($query)
+    {
+        return $query->whereRaw('contest_start >= NOW() ORDER BY contest_start ASC LIMIT 3')->get();
     }
 
     public function scopeLastContest($query)
@@ -49,6 +64,11 @@ class Contest extends Model
     public function scopeAllOrdered($query)
     {
         return $query->orderBy('contest_start', 'desc')->get();
+    }
+
+    public function scopeRunningOrdered($query)
+    {
+        return $query->whereRaw('NOW() BETWEEN contest_start AND contest_end ORDER BY contest_start DESC')->get();
     }
 
     public function scopeSubmissionActiveOrdered($query)

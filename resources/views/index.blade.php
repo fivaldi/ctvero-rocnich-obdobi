@@ -22,8 +22,8 @@
                     <h3>{{ __('Termíny') }}</h3>
                     <p class="small">{{ __('obvykle sobota 0:00 až neděle 24:00') }}</p>
                     <ul class="list-group">
-                    @foreach ($lastYearContests as $contest)
-                        <li class="list-group-item list-group-item-action">
+                    @foreach ($recentAndFutureContests as $contest)
+                        <li class="list-group-item list-group-item-action{{ $contest->id == $highlightContestId ? ' highlight-contest' : '' }}">
                             <div class="d-flex w-100 justify-content-between">
                                 <h4 class="mb-1"><a href="{{ route('contest', [ 'name' => Str::replace(' ', '-', $contest->name) ]) . '#scroll' }}">{{ Utilities::contestL10n($contest->name) }}</a></h4>
                                 <p><a class="ml-2" href="{{ route('calendar', [ 'contest' => $contest->name ]) }}"><i class="fa fa-calendar"></i></a></p>
@@ -33,6 +33,7 @@
                         </li>
                     @endforeach
                     </ul>
+                    <p class="mt-3 text-center"><a href="{{ route('contests') }}">{{ __('Všechna soutěžní kola') }}...</a></p>
 
                     <h3 class="mt-5">{{ __('Spojení') }}</h3>
                     {{ Utilities::getAppContent('connections') }}

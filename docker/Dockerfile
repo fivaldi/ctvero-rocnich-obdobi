@@ -18,4 +18,8 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 RUN docker-php-ext-install pdo_mysql
 
 # Requirements for production deployment
-RUN apk add findutils gnupg lftp
+RUN apk add findutils gnupg lftp tzdata
+
+# Set timezone
+RUN cp /usr/share/zoneinfo/Europe/Prague /etc/localtime && \
+    echo "Europe/Prague" > /etc/timezone

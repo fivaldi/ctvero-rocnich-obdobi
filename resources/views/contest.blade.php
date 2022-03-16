@@ -17,7 +17,12 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">{{ __('Začátek soutěže') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->contest_start) }}</span></li>
                     <li class="list-group-item">{{ __('Konec soutěže') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->contest_end) }}</span></li>
-                    <li class="list-group-item">{{ __('Termín odeslání hlášení do') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->submission_end) }}</span></li>
+                    <li class="list-group-item">
+                        {{ __('Termín odeslání hlášení do') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->submission_end) }}</span>
+                        @if ($contest->isActiveSubmission)
+                        <br><a href="{{ route('submissionForm') }}"><i class="fa fa-file-text"></i> {{ __('Odeslat hlášení') }}</a>
+                        @endif
+                    </li>
                     <li class="list-group-item"><a href="{{ route('calendar', [ 'contest' => $contest->name ]) }}"><i class="fa fa-calendar"></i> {{ __('Stáhnout kalendář se všemi daty') }}</a></li>
                     @if ($contest->diaries->isNotEmpty())
                     <li class="list-group-item"><a href="{{ route('results') . '#' . Str::replace(' ', '-', $contest->name) }}"><i class="fa fa-list"></i> {{ __('Výsledková listina') }}{!! Utilities::contestInProgress($contest->name) !!}</a></li>
