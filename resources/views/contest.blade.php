@@ -15,8 +15,11 @@
 
                 <h3 class="mt-5 mb-4">{{ __('Hlavní údaje') }}</h3>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{{ __('Začátek soutěže') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->contest_start) }}</span></li>
-                    <li class="list-group-item">{{ __('Konec soutěže') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->contest_end) }}</span></li>
+                    <li class="list-group-item">{{ __('Není potřebná žádná registrace.') }}</li>
+                    <li class="list-group-item">
+                        {{ __('Začátek soutěže') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->contest_start) }}</span><br>
+                        {{ __('Konec soutěže') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->contest_end) }}</span>
+                    </li>
                     <li class="list-group-item">
                         {{ __('Termín odeslání hlášení do') }}: <span class="text-nowrap">{{ Utilities::normalDateTime($contest->submission_end) }}</span>
                         @if ($contest->isActiveSubmission)
