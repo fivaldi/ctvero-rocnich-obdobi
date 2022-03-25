@@ -29,6 +29,8 @@
                         @endif
                     </div>
                     <script>location.hash = '#scroll'</script>
+                @elseif ($data->contests->all() && ! Auth::check())
+                    <p class="alert alert-info">{{ __('Doporučení: Pro spárování soutěžního hlášení s vlastním uživatelským účtem je zapotřebí se nejdříve přihlásit přes hlavní menu.') }}</p>
                 @endif
 
                 @if (empty($data->contests->all()))
