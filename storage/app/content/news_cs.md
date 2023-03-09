@@ -1,4 +1,4 @@
-**V ročníku 2023 jsem připravil pro všechny účastníky motivační premii. po skonšení všech 4 kol bude ze všech odeslaný deníků vylosovány 3 kterří dostanou odměnu. Nezáleží tedy na výsledku ale na účasti. Tak nevahejte a posílejte hlášení**
+**V ročníku 2023 jsem připravil pro všechny účastníky motivační premii. Po skončení všech 4 kol budou ze všech odeslaný deníků vylosovány 3 kteří dostanou odměnu. Nezáleží tedy na výsledku, ale na účasti. Tak nevahejte a posílejte hlášení**
 
 **Ceny:**
 - poukaz v hodnotě 1000,- v eshopu https://www.vysilacky.com/ - věnovala firma **Vysilacky-space s.r.o.**
