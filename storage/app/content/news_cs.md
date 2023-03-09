@@ -1,9 +1,8 @@
-**V sobotu 11. prosince se budu těšit na slyšenou v posledním zimním kole 4RO a chtěl bych Vás pozvat na další kolo v roce 2023, do kterého se chystá několik drobných novinek:**
+**V ročníku 2023 jsem připravil pro všechny účastníky motivační premii. po skonšení všech 4 kol bude ze všech odeslaný deníků vylosovány 3 kterří dostanou odměnu. Nezáleží tedy na výsledku ale na účasti. Tak nevahejte a posílejte hlášení**
 
-**- Podařilo se sehnat nějaké podporovatele (sponzory), takže na konci roku ze všech zúčastněných bude vylosováno několik šťastlivců a ten nejšťastnější se může těšit na poukázku v hodnotě 1000,- na nákup radiotechniky.**
+**Ceny:**
+- poukaz v hodnotě 1000,- v eshopu https://www.vysilacky.com/ - věnovala firma **Vysilacky-space s.r.o.**
+- roční předplatné aplikace https://www.cbpmr.info/  - věnoval Apache Znojmo
+- láhev destilovaného ovoce - věnoval Jindra Závišice
 
-**- Další úpravou bude opožděné zobrazování deníků (aby nedocházelo ke kolizím s pravidly jiných závodů).**
-
-**- A snad možná se dočkáme i galerie fotografií od jednotlivých expedic.**
-
-**Budu se těšit, na slyšenou 73' Radek Lichnov**
+**Budu se těšit 25. 3., na slyšenou 73' Radek Lichnov**
