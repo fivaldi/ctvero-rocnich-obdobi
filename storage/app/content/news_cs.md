@@ -5,4 +5,6 @@
 - roční předplatné aplikace https://www.cbpmr.info/  - věnoval Apache Znojmo
 - láhev destilovaného ovoce - věnoval Jindra Závišice
 
+- pro všechny **8% sleva** na nákup v eshopu https://www.vysilacky.com/ - věnovala firma **Vysilacky-space s.r.o.**
+
 **Budu se těšit 25. 3., na slyšenou 73' Radek Lichnov**
